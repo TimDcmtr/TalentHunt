@@ -135,13 +135,13 @@
       <div class="container">
         <div class="cta-card glass-card">
           <div class="cta-content">
-            <h2 class="cta-title">Prêt à démarrer votre carrière ?</h2>
+            <h2 class="cta-title">Prêt à recruter de nouveaux talents ?</h2>
             <p class="cta-description">
-              Rejoignez des milliers d'étudiants qui ont trouvé leur opportunité idéale sur TalentHub.
+              Rejoignez des milliers d’entreprises qui ont trouvé leurs meilleurs talents grâce à TalentHub.
             </p>
             <div class="cta-buttons">
-              <a href="/login" class="btn-primary btn-large">Créer mon compte</a>
-              <a href="/offres" class="btn-secondary btn-large">Voir les offres</a>
+              <a href="/login" class="btn-primary btn-large">Créer mon compte entreprise</a>
+              <a href="/offres" class="btn-secondary btn-large">Trouver des talents</a>
             </div>
           </div>
           <div class="cta-visual">
