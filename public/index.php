@@ -12,14 +12,6 @@ define('ROOT_PATH', dirname(__DIR__) . '/');
 define('ASSETS_PATH', 'assets/');
 
 // ===============================================
-// INCLUSION DES HELPERS/COMPOSANTS
-// ===============================================
-
-// Inclusion des composants (Navbar, Footer, etc.)
-require_once ROOT_PATH . 'app/helpers/Navbar.php';
-require_once ROOT_PATH . 'app/helpers/Footer.php';
-
-// ===============================================
 // ROUTAGE SIMPLE
 // ===============================================
 
