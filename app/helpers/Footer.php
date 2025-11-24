@@ -90,7 +90,6 @@
 
 <style>
 .footer {
-  position: relative;
   margin-top: var(--spacing-xl);
   padding: var(--spacing-xl) 0 var(--spacing-lg);
   background: var(--bg-secondary);
