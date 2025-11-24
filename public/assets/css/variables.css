@@ -125,6 +125,10 @@ body {
   background-clip: text;
 }
 
+a {
+  text-decoration: none;
+}
+
 /* Animations */
 @keyframes fadeIn {
   from {
