@@ -160,8 +160,8 @@
     </section>
   </main>
 
-  <?php include __DIR__ . '../app/helpers/Footer.php'; ?>
+  <?php include __DIR__ . 'app/helpers/Footer.php'; ?>
   
-  <script src="../public/assets/js/navbar.js"></script>
+  <script src="public/assets/js/navbar.js"></script>
 </body>
 </html>
