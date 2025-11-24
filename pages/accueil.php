@@ -140,7 +140,7 @@
               Rejoignez des milliers d'étudiants qui ont trouvé leur opportunité idéale sur TalentHub.
             </p>
             <div class="cta-buttons">
-              <a href="/register" class="btn-primary btn-large">Créer mon compte</a>
+              <a href="/login" class="btn-primary btn-large">Créer mon compte</a>
               <a href="/offres" class="btn-secondary btn-large">Voir les offres</a>
             </div>
           </div>
