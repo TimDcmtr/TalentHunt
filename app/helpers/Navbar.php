@@ -37,17 +37,12 @@
 
 <style>
 .navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  position: relative;
   z-index: 1000;
   padding: var(--spacing-sm) 0;
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   border-bottom: 1px solid var(--glass-border);
-  box-shadow: var(--shadow-md);
-  margin-bottom: 5vh;
 }
 
 .navbar-container {
