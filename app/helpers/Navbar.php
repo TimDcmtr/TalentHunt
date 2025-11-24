@@ -19,15 +19,12 @@
     </div>
 
     <div class="navbar-menu" id="navbarMenu">
-      <a href="/offres" class="nav-link">Offres</a>
-      <a href="/entreprises" class="nav-link">Entreprises</a>
-      <a href="/etudiants" class="nav-link">Étudiants</a>
-      <a href="/a-propos" class="nav-link">À propos</a>
+      <a href="/etudiant-main" class="nav-link">Offres</a>
+      <a href="/pro-main" class="nav-link">Entreprises</a>
     </div>
 
     <div class="navbar-actions">
       <a href="/login" class="btn-secondary nav-btn">Connexion</a>
-      <a href="/register" class="btn-primary nav-btn">S'inscrire</a>
     </div>
 
     <button class="mobile-menu-toggle" id="mobileMenuToggle">
