@@ -47,6 +47,7 @@
   backdrop-filter: var(--glass-blur);
   border-bottom: 1px solid var(--glass-border);
   box-shadow: var(--shadow-md);
+  margin-bottom: 5vh;
 }
 
 .navbar-container {
