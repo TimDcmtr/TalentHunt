@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-  <?php include __DIR__ . 'app/helpers/Navbar.php'; ?>
+  <?php 'app/helpers/Navbar.php'; ?>
 
   <main class="main-content">
     <!-- Hero Section -->
