@@ -97,17 +97,6 @@
   overflow: hidden;
 }
 
-.footer-gradient {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  height: 200px;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
-  pointer-events: none;
-}
-
 .footer-content {
   display: grid;
   grid-template-columns: 2fr repeat(4, 1fr);
