@@ -160,7 +160,7 @@
     </section>
   </main>
 
-  <?php include __DIR__ . 'app/helpers/Footer.php'; ?>
+  <?php 'app/helpers/Footer.php'; ?>
   
   <script src="public/assets/js/navbar.js"></script>
 </body>
