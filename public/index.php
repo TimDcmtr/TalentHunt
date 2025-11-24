@@ -99,25 +99,13 @@ if (file_exists($page_file)) {
 </head>
 <body>
 
-    <?php 
-    // Affiche le composant Navbar
-    // Assurez-vous que la fonction ou la classe Navbar est définie dans Navbar.php
-    display_navbar(); 
-    ?>
-
     <main id="content">
         <?php 
         // Inclusion du contenu de la page demandée
         require_once $page_file; 
         ?>
     </main>
-
-    <?php 
-    // Affiche le composant Footer
-    // Assurez-vous que la fonction ou la classe Footer est définie dans Footer.php
-    display_footer(); 
-    ?>
-
+    
     <!-- Chargement des scripts JS -->
     <script src="<?php echo ASSETS_PATH; ?>js/navbar.js"></script>
     
