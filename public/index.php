@@ -5,6 +5,6 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Salut !</h1>
+    <h1>Salut ! BG</h1>
 </body>
 </html>
