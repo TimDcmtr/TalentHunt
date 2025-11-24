@@ -6,7 +6,7 @@ $viewDir = '/pages/';
 switch ($request) {
     case '':
     case '/':
-        require __DIR__ . $viewDir . 'accueil.php';
+        require '../pages/accueil.php';
         break;
 
     case '/views/users':
