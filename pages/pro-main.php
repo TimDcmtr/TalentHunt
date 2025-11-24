@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Espace Entreprise - TalentHub</title>
-  <link rel="stylesheet" href="public/assets/css/variables.css">
-  <link rel="stylesheet" href="public/assets/css/pro.css">
+  <link rel="stylesheet" href="assets/css/variables.css">
+  <link rel="stylesheet" href="assets/css/pro.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -295,7 +295,7 @@
 
   <?php require_once ROOT_PATH . 'app/helpers/Footer.php'; ?>
   
-  <script src="public/assets/js/navbar.js"></script>
-  <script src="public/assets/js/pro.js"></script>
+  <script src="assets/js/navbar.js"></script>
+  <script src="assets/js/pro.js"></script>
 </body>
 </html>
