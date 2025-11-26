@@ -59,6 +59,10 @@
   box-sizing: border-box;
 }
 
+*:focus {
+  outline: none;
+}
+
 body {
   font-family: var(--font-body);
   background: linear-gradient(135deg, var(--bg-primary) 0%, #1a1f3a 100%);
@@ -75,6 +79,17 @@ body {
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
+}
+
+.form-input {
+  flex: 1;
+  padding: .5rem .75rem;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-weight: 600;
+  text-align: center;
 }
 
 .btn-primary {
