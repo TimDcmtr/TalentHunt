@@ -28,8 +28,8 @@
         <!-- Tabs -->
         <div class="auth-tabs">
           <button class="auth-tab active" data-tab="login">Connexion</button>
-          <button class="auth-tab" data-tab="register1">Inscription Étudiant</button>
-          <button class="auth-tab" data-tab="register2">Inscription Entreprise</button>
+          <button class="auth-tab" data-tab="register">Inscription Étudiant</button>
+          <button class="auth-tab" data-tab="registerEN">Inscription Entreprise</button>
         </div>
 
         <!-- Login Form -->
@@ -75,7 +75,7 @@
         </form>
 
         <!-- Register Form -->
-        <form id="registerForm1" class="auth-form" method="POST" action="/register1">
+        <form id="registerFormEN" class="auth-form" method="POST" action="/register1">
           <div class="form-row">
             <div class="form-group">
               <label for="register-firstname" class="form-label">Prénom</label>
