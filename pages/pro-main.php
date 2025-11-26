@@ -41,7 +41,6 @@
           <div class="stat-info">
             <p class="stat-label">Offres actives</p>
             <p class="stat-value">12</p>
-            <p class="stat-change positive">+2 ce mois</p>
           </div>
         </div>
 
@@ -57,7 +56,6 @@
           <div class="stat-info">
             <p class="stat-label">Candidatures reçues</p>
             <p class="stat-value">247</p>
-            <p class="stat-change positive">+45 cette semaine</p>
           </div>
         </div>
 
@@ -70,7 +68,6 @@
           <div class="stat-info">
             <p class="stat-label">Taux de réponse</p>
             <p class="stat-value">89%</p>
-            <p class="stat-change positive">+5% vs. mois dernier</p>
           </div>
         </div>
 
