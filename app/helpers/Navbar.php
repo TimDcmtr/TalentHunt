@@ -57,8 +57,6 @@
         $response = curl_exec($ch);
         curl_close($ch);
 
-        // (Optionnel) Pour voir si ça a marché
-        echo "Réponse API : " . $response;
       }
       ?>
 
