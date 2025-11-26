@@ -178,29 +178,16 @@
           </button>
         </form>
         <form id="registerENForm" class="auth-form" method="POST" action="/register2">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="register-firstname" class="form-label">Prénom</label>
-              <input 
-                type="text" 
-                id="register-firstname" 
-                name="firstname" 
-                class="form-input" 
-                placeholder="Jean"
-                required
-              >
-            </div>
-            <div class="form-group">
-              <label for="register-lastname" class="form-label">Nom</label>
-              <input 
-                type="text" 
-                id="register-lastname" 
-                name="lastname" 
-                class="form-input" 
-                placeholder="Dupont"
-                required
-              >
-            </div>
+          <div class="form-group">
+            <label for="register-firstname" class="form-label">Nom de l’entreprise</label>
+            <input 
+              type="text" 
+              id="register-entreprisename" 
+              name="firstname" 
+              class="form-input" 
+              placeholder="peugeot"
+              required
+            >
           </div>
 
           <div class="form-group">
@@ -239,17 +226,6 @@
           </div>
 
           <div class="form-group">
-            <label for="register-school" class="form-label">École</label>
-            <input 
-              type="text" 
-              id="register-school" 
-              name="school" 
-              class="form-input" 
-              placeholder="Nom de votre école"
-            >
-          </div>
-
-          <div class="form-group">
             <label for="register-region" class="form-label">Région</label>
             <select id="register-region" name="region" class="form-input">
               <option value="">Sélectionnez une région</option>
@@ -263,7 +239,7 @@
           </div>
 
           <div class="form-group">
-            <label for="register-domain" class="form-label">Domaine d'études</label>
+            <label for="register-domain" class="form-label">Domaine de travail</label>
             <input 
               type="text" 
               id="register-domain" 

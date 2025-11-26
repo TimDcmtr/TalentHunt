@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Form validation
   const loginForm = document.getElementById('loginForm');
   const registerForm = document.getElementById('registerForm');
+  const registerENForm = document.getElementById('registerENForm');
 
   if (loginForm) {
     loginForm.addEventListener('submit', function(e) {
@@ -64,6 +65,40 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Validation
       if (!formData.firstname || !formData.lastname) {
+        alert('Veuillez remplir tous les champs obligatoires');
+        return;
+      }
+
+      if (!validateEmail(formData.email)) {
+        showError('register-email', 'Veuillez entrer un email valide');
+        return;
+      }
+
+      if (formData.password.length < 8) {
+        showError('register-password', 'Le mot de passe doit contenir au moins 8 caractères');
+        return;
+      }
+
+      // TODO: Envoyer au backend
+      console.log('Register:', formData);
+      // this.submit(); // Décommenter pour soumettre réellement
+    });
+  }
+  if (registerENForm) {
+    registerENForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = {
+        entreprisename: document.getElementById('register-entreprisename').value,
+        email: document.getElementById('register-email').value,
+        tel: document.getElementById('register-tel').value,
+        password: document.getElementById('register-password').value,
+        region: document.getElementById('register-region').value,
+        domain: document.getElementById('register-domain').value
+      };
+
+      // Validation
+      if (!formData.entreprisename) {
         alert('Veuillez remplir tous les champs obligatoires');
         return;
       }
