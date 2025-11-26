@@ -79,7 +79,7 @@
 
 .footer-content {
   display: grid;
-  grid-template-columns: 2fr repeat(4, 1fr);
+  grid-template-columns: 2fr repeat(2, 1fr);
   gap: var(--spacing-xl);
   margin-bottom: var(--spacing-lg);
 }
