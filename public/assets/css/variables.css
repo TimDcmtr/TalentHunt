@@ -79,7 +79,7 @@ body {
 
 .form-input {
   flex: 1;
-  padding: 0.75rem 1rem;
+  padding: .5rem .75rem;
   background: var(--bg-tertiary);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-sm);
