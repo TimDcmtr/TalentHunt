@@ -75,7 +75,7 @@
         </form>
 
         <!-- Register Form -->
-        <form id="registerFormEN" class="auth-form" method="POST" action="/register1">
+        <form id="registerForm" class="auth-form" method="POST" action="/register1">
           <div class="form-row">
             <div class="form-group">
               <label for="register-firstname" class="form-label">Prénom</label>
@@ -177,7 +177,7 @@
             </svg>
           </button>
         </form>
-        <form id="registerForm2" class="auth-form" method="POST" action="/register2">
+        <form id="registerENForm" class="auth-form" method="POST" action="/register2">
           <div class="form-row">
             <div class="form-group">
               <label for="register-firstname" class="form-label">Prénom</label>
