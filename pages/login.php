@@ -28,7 +28,7 @@
         <!-- Tabs -->
         <div class="auth-tabs">
           <button class="auth-tab active" data-tab="login">Connexion</button>
-          <button class="auth-tab" data-tab="register">Inscription</button>
+          <button class="auth-tab" data-tab="register">Inscription Étudiant</button>
         </div>
 
         <!-- Login Form -->
