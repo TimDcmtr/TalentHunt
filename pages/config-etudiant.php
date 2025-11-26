@@ -22,10 +22,6 @@
               <span>JD</span>
             </div>
             <h3>Jean Dupont</h3>
-            <p class="profile-status">Profil à 75%</p>
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: 75%"></div>
-            </div>
           </div>
 
           <nav class="config-nav">
@@ -331,33 +327,6 @@
               <div class="form-group">
                 <label for="salary-min" class="form-label">Salaire minimum souhaité (€/mois)</label>
                 <input type="number" id="salary-min" name="salary_min" class="form-input" placeholder="1000">
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">Notifications</label>
-                <div class="notification-options">
-                  <label class="switch-option">
-                    <span>Nouvelles offres correspondant à mon profil</span>
-                    <label class="switch">
-                      <input type="checkbox" checked>
-                      <span class="slider"></span>
-                    </label>
-                  </label>
-                  <label class="switch-option">
-                    <span>Actualités de mes candidatures</span>
-                    <label class="switch">
-                      <input type="checkbox" checked>
-                      <span class="slider"></span>
-                    </label>
-                  </label>
-                  <label class="switch-option">
-                    <span>Newsletter hebdomadaire</span>
-                    <label class="switch">
-                      <input type="checkbox">
-                      <span class="slider"></span>
-                    </label>
-                  </label>
-                </div>
               </div>
 
               <div class="form-actions">
