@@ -169,12 +169,6 @@
               placeholder="Ex: Informatique, Marketing..."
             >
           </div>
-
-          <label class="checkbox-label">
-            <input type="checkbox" name="terms" required>
-            <span>J'accepte les <a href="/conditions" class="link">conditions d'utilisation</a></span>
-          </label>
-
           <button type="submit" class="btn-primary btn-full">
             Créer mon compte
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
