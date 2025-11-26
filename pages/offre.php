@@ -167,21 +167,6 @@
                             <?php endforeach; ?>
                         </div>
                     </section>
-
-                    <!-- Similar Offers -->
-                    <section class="similar-offers">
-                        <h3>Offres similaires</h3>
-                        <div class="similar-grid">
-                            <?php for ($i = 0; $i < 3; $i++): ?>
-                                <a href="/offre/<?php echo $i + 2; ?>" class="similar-card glass-card">
-                                    <div class="similar-logo">🎨</div>
-                                    <h4>Designer UI/UX</h4>
-                                    <p>DesignLab • Lyon</p>
-                                    <span class="similar-salary">1500-1800€</span>
-                                </a>
-                            <?php endfor; ?>
-                        </div>
-                    </section>
                 </div>
 
                 <!-- Sidebar -->
@@ -315,6 +300,7 @@
     </div>
 
     <?php require_once ROOT_PATH . 'app/helpers/Navbar.php'; ?>
+    <?php require_once ROOT_PATH . 'app/helpers/Footer.php'; ?>
 
     <script src="assets/js/navbar.js"></script>
     <script src="assets/js/offre-detail.js"></script>
