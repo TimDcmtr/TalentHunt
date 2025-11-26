@@ -75,7 +75,6 @@
   $stats = [
     'total' => count($candidatures),
     'en_attente' => count(array_filter($candidatures, fn($c) => $c['status'] === 'en_attente')),
-    'entretien' => count(array_filter($candidatures, fn($c) => $c['status'] === 'entretien')),
     'accepte' => count(array_filter($candidatures, fn($c) => $c['status'] === 'accepte'))
   ];
   ?>
@@ -119,19 +118,6 @@
         </div>
 
         <div class="feed-stat-card glass-card">
-          <div class="stat-icon-small" style="background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-              <circle cx="9" cy="7" r="4"/>
-            </svg>
-          </div>
-          <div>
-            <p class="stat-label-small">Entretiens</p>
-            <p class="stat-value-small"><?php echo $stats['entretien']; ?></p>
-          </div>
-        </div>
-
-        <div class="feed-stat-card glass-card">
           <div class="stat-icon-small" style="background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polyline points="20 6 9 17 4 12"/>
@@ -153,12 +139,6 @@
           <button class="filter-tab" data-filter="en_attente">
             En attente
           </button>
-          <button class="filter-tab" data-filter="vue">
-            Vues
-          </button>
-          <button class="filter-tab" data-filter="entretien">
-            Entretiens
-          </button>
           <button class="filter-tab" data-filter="accepte">
             Acceptés
           </button>
@@ -166,12 +146,6 @@
             Refusés
           </button>
         </div>
-
-        <select class="sort-select-small">
-          <option value="recent">Plus récentes</option>
-          <option value="old">Plus anciennes</option>
-          <option value="company">Par entreprise</option>
-        </select>
       </div>
 
       <!-- Candidatures List -->
@@ -202,7 +176,6 @@
               </div>
 
               <?php if ($cand['status'] !== 'en_attente'): ?>
-                <div class="timeline-line completed"></div>
                 <div class="timeline-item completed">
                   <div class="timeline-dot"></div>
                   <div class="timeline-content">
@@ -220,7 +193,6 @@
                   </div>
                 </div>
               <?php else: ?>
-                <div class="timeline-line"></div>
                 <div class="timeline-item">
                   <div class="timeline-dot"></div>
                   <div class="timeline-content">
