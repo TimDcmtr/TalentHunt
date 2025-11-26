@@ -59,26 +59,6 @@
           <li><a href="/solutions">Nos solutions</a></li>
         </ul>
       </div>
-
-      <div class="footer-section">
-        <h4 class="footer-title">Ressources</h4>
-        <ul class="footer-links">
-          <li><a href="/blog">Blog</a></li>
-          <li><a href="/faq">FAQ</a></li>
-          <li><a href="/contact">Contact</a></li>
-          <li><a href="/aide">Centre d'aide</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-section">
-        <h4 class="footer-title">Légal</h4>
-        <ul class="footer-links">
-          <li><a href="/confidentialite">Confidentialité</a></li>
-          <li><a href="/conditions">Conditions d'utilisation</a></li>
-          <li><a href="/mentions-legales">Mentions légales</a></li>
-          <li><a href="/cookies">Cookies</a></li>
-        </ul>
-      </div>
     </div>
 
     <div class="footer-bottom">

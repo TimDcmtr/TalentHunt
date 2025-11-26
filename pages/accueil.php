@@ -39,9 +39,6 @@
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
             </a>
-            <a href="/offres" class="btn-secondary btn-large">
-              Explorer les offres
-            </a>
           </div>
 
           <div class="hero-stats">
