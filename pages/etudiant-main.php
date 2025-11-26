@@ -18,7 +18,7 @@
         <!-- Sidebar -->
         <aside class="sidebar glass-card">
           <div class="sidebar-header">
-            <h3>Filtres BB</h3>
+            <h3>Filtres</h3>
             <button class="btn-reset">Réinitialiser</button>
           </div>
 
