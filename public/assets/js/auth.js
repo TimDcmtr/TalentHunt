@@ -21,7 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Form validation
   const loginForm = document.getElementById('loginForm');
-  const registerForm = document.getElementById('registerForm');
+  const registerForm1 = document.getElementById('registerForm1');
+  const registerForm2 = document.getElementById('registerForm2');
 
   if (loginForm) {
     loginForm.addEventListener('submit', function(e) {
@@ -47,8 +48,44 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  if (registerForm) {
-    registerForm.addEventListener('submit', function(e) {
+  if (registerForm1) {
+    registerForm1.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = {
+        firstname: document.getElementById('register-firstname').value,
+        lastname: document.getElementById('register-lastname').value,
+        email: document.getElementById('register-email').value,
+        tel: document.getElementById('register-tel').value,
+        password: document.getElementById('register-password').value,
+        school: document.getElementById('register-school').value,
+        region: document.getElementById('register-region').value,
+        domain: document.getElementById('register-domain').value
+      };
+
+      // Validation
+      if (!formData.firstname || !formData.lastname) {
+        alert('Veuillez remplir tous les champs obligatoires');
+        return;
+      }
+
+      if (!validateEmail(formData.email)) {
+        showError('register-email', 'Veuillez entrer un email valide');
+        return;
+      }
+
+      if (formData.password.length < 8) {
+        showError('register-password', 'Le mot de passe doit contenir au moins 8 caractères');
+        return;
+      }
+
+      // TODO: Envoyer au backend
+      console.log('Register:', formData);
+      // this.submit(); // Décommenter pour soumettre réellement
+    });
+  }
+  if (registerForm2) {
+    registerForm2.addEventListener('submit', function(e) {
       e.preventDefault();
       
       const formData = {

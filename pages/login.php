@@ -28,7 +28,8 @@
         <!-- Tabs -->
         <div class="auth-tabs">
           <button class="auth-tab active" data-tab="login">Connexion</button>
-          <button class="auth-tab" data-tab="register">Inscription Étudiant</button>
+          <button class="auth-tab" data-tab="register1">Inscription Étudiant</button>
+          <button class="auth-tab" data-tab="register2">Inscription Entreprise</button>
         </div>
 
         <!-- Login Form -->
@@ -74,7 +75,109 @@
         </form>
 
         <!-- Register Form -->
-        <form id="registerForm" class="auth-form" method="POST" action="/register">
+        <form id="registerForm1" class="auth-form" method="POST" action="/register1">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="register-firstname" class="form-label">Prénom</label>
+              <input 
+                type="text" 
+                id="register-firstname" 
+                name="firstname" 
+                class="form-input" 
+                placeholder="Jean"
+                required
+              >
+            </div>
+            <div class="form-group">
+              <label for="register-lastname" class="form-label">Nom</label>
+              <input 
+                type="text" 
+                id="register-lastname" 
+                name="lastname" 
+                class="form-input" 
+                placeholder="Dupont"
+                required
+              >
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="register-email" class="form-label">Email</label>
+            <input 
+              type="email" 
+              id="register-email" 
+              name="email" 
+              class="form-input" 
+              placeholder="votre@email.com"
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="register-tel" class="form-label">Téléphone</label>
+            <input 
+              type="tel" 
+              id="register-tel" 
+              name="tel" 
+              class="form-input" 
+              placeholder="+33 6 12 34 56 78"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="register-password" class="form-label">Mot de passe</label>
+            <input 
+              type="password" 
+              id="register-password" 
+              name="password" 
+              class="form-input" 
+              placeholder="••••••••"
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="register-school" class="form-label">École</label>
+            <input 
+              type="text" 
+              id="register-school" 
+              name="school" 
+              class="form-input" 
+              placeholder="Nom de votre école"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="register-region" class="form-label">Région</label>
+            <select id="register-region" name="region" class="form-input">
+              <option value="">Sélectionnez une région</option>
+              <option value="idf">Île-de-France</option>
+              <option value="aura">Auvergne-Rhône-Alpes</option>
+              <option value="paca">Provence-Alpes-Côte d'Azur</option>
+              <option value="occitanie">Occitanie</option>
+              <option value="nouvelle-aquitaine">Nouvelle-Aquitaine</option>
+              <option value="autres">Autres</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="register-domain" class="form-label">Domaine d'études</label>
+            <input 
+              type="text" 
+              id="register-domain" 
+              name="domain" 
+              class="form-input" 
+              placeholder="Ex: Informatique, Marketing..."
+            >
+          </div>
+          <button type="submit" class="btn-primary btn-full">
+            Créer mon compte
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </form>
+        <form id="registerForm2" class="auth-form" method="POST" action="/register2">
           <div class="form-row">
             <div class="form-group">
               <label for="register-firstname" class="form-label">Prénom</label>
