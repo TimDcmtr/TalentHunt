@@ -28,8 +28,8 @@
         <!-- Tabs -->
         <div class="auth-tabs">
           <button class="auth-tab active" data-tab="login">Connexion</button>
-          <button class="auth-tab" data-tab="register">Inscription Étudiant</button>
-          <button class="auth-tab" data-tab="registerEN">Inscription Entreprise</button>
+          <button class="auth-tab" data-tab="register">Étudiant</button>
+          <button class="auth-tab" data-tab="registerEN">Entreprise</button>
         </div>
 
         <!-- Login Form -->
@@ -185,7 +185,7 @@
               id="register-entreprisename" 
               name="firstname" 
               class="form-input" 
-              placeholder="peugeot"
+              placeholder="TalentHub"
               required
             >
           </div>
