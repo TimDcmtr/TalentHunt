@@ -26,6 +26,9 @@
     <div class="navbar-actions">
       <a href="/login" class="btn-secondary nav-btn">Connexion</a>
 
+
+
+
       <!-- A SUPPRIMER APRÈS TEST -->
 
       <?php
@@ -67,6 +70,8 @@
       <!-- A SUUPRIMER APRÈS TEST -->
 
 
+
+      
     </div>
 
     <button class="mobile-menu-toggle" id="mobileMenuToggle">
