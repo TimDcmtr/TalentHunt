@@ -21,7 +21,7 @@
     // Simulation données - À remplacer par requête DB
     $offre = [
         'id' => 1,
-        'title' => 'Développeur Full Stack TIMEO > MARION',
+        'title' => 'Développeur Full Stack',
         'company' => 'TechCorp',
         'company_logo' => '🚀',
         'location' => 'Paris, France',
