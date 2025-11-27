@@ -591,11 +591,11 @@
 }
 
 .offres-preview::-webkit-scrollbar-track {
-  background: #1e293b;
+  background: var(--glass-bg);
 }
 
 .offres-preview::-webkit-scrollbar-thumb {
-  background: #38bdf8;
+  background: var(--primary-light);
   border-radius: 4px;
 }
 
