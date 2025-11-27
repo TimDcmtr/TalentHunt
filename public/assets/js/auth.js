@@ -1,12 +1,12 @@
 // /public/assets/js/auth.js
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const tabs = document.querySelectorAll('.auth-tab');
   const forms = document.querySelectorAll('.auth-form');
 
   // Switch between login and register forms
   tabs.forEach(tab => {
-    tab.addEventListener('click', function() {
+    tab.addEventListener('click', function () {
       const targetTab = this.getAttribute('data-tab');
 
       // Remove active class from all tabs and forms
@@ -25,9 +25,9 @@ document.addEventListener('DOMContentLoaded', function() {
   const registerENForm = document.getElementById('registerENForm');
 
   if (loginForm) {
-    loginForm.addEventListener('submit', function(e) {
+    loginForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      
+
       const email = document.getElementById('login-email').value;
       const password = document.getElementById('login-password').value;
 
@@ -49,9 +49,9 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   if (registerForm) {
-    registerForm.addEventListener('submit', function(e) {
+    registerForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      
+
       const formData = {
         firstname: document.getElementById('register-firstname').value,
         lastname: document.getElementById('register-lastname').value,
@@ -85,9 +85,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   if (registerENForm) {
-    registerENForm.addEventListener('submit', function(e) {
+    registerENForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      
+
       const formData = {
         entreprisename: document.getElementById('register-entreprisename').value,
         email: document.getElementById('register-email').value,
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // this.submit(); // Décommenter pour soumettre réellement
     });
   }
-  
+
 
   // Email validation
   function validateEmail(email) {
@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function showError(inputId, message) {
     const input = document.getElementById(inputId);
     input.style.borderColor = 'var(--accent)';
-    
+
     // Remove existing error message
     const existingError = input.parentElement.querySelector('.error-message');
     if (existingError) {
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function() {
     input.parentElement.appendChild(errorDiv);
 
     // Remove error on input
-    input.addEventListener('input', function() {
+    input.addEventListener('input', function () {
       this.style.borderColor = '';
       const error = this.parentElement.querySelector('.error-message');
       if (error) error.remove();
@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function() {
     toggleBtn.addEventListener('mouseenter', () => toggleBtn.style.opacity = '1');
     toggleBtn.addEventListener('mouseleave', () => toggleBtn.style.opacity = '0.6');
 
-    toggleBtn.addEventListener('click', function() {
+    toggleBtn.addEventListener('click', function () {
       const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
       input.setAttribute('type', type);
       this.innerHTML = type === 'password' ? '👁️' : '🙈';
@@ -187,18 +187,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
     wrapper.appendChild(toggleBtn);
   });
-});
 
-// Redirection de Form Test
 
-document.addEventListener("DOMContentLoaded", () => {
+
   const params = new URLSearchParams(window.location.search);
   const tab = params.get("tab");
 
   if (tab) {
-    const button = document.querySelector('.auth-tab[data-tab="${tab}"]');
+    const button = document.querySelector(`.data-tab="${tab}"`);
     if (button) {
       button.click();
     }
   }
 });
+
+
+
+
