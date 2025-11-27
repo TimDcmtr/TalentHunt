@@ -5,13 +5,11 @@
 
 // Chemin absolu vers le dossier racine du projet (talenthub/)
 // Utile pour inclure les fichiers PHP sans se soucier de l'emplacement actuel.
-define('DS', DIRECTORY_SEPARATOR);
-define('ROOT_PATH', __DIR__ . DS);
+define('ROOT_PATH', dirname(__DIR__) . '/');
 
 // Chemin relatif pour les assets (CSS/JS) côté client
 // /public/assets/
 define('ASSETS_PATH', 'assets/');
-
 
 // ===============================================
 // ROUTAGE SIMPLE
@@ -31,7 +29,7 @@ if (empty($route) || $route === 'index.php') {
 }
 
 // 3. Définition du fichier de page à charger
-$page_file = ROOT_PATH . 'pages' . DS . str_replace('/', DS, $route) . '.php';
+$page_file = ROOT_PATH . 'pages/' . $route . '.php';
 
 // Vérifier si le fichier de la page existe
 if (file_exists($page_file)) {
