@@ -367,14 +367,16 @@
 
 @media (max-width: 768px) {
   .dashboard-header {
+    display: flex;
+    justify-content: center;   /* centre le bouton horizontalement */
+    align-items: center;
     flex-direction: column;
-    align-items: flex-start;
     gap: var(--spacing-md);
   }
 
   .dashboard-header .btn-primary {
     width: 100%;
-    justify-content: left;
+    justify-content: center;
   }
 
   .header-content h1 {
