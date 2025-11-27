@@ -11,41 +11,37 @@ define('ROOT_PATH', dirname(__DIR__) . '/');
 // /public/assets/
 define('ASSETS_PATH', 'assets/');
 
-// Sécurité : Empêcher de remonter dans les dossiers (Directory Traversal)
-// On interdit les ".." dans l'URL
-if (strpos($route, '..') !== false) {
-    http_response_code(400);
-    die('Requête invalide.');
+// ===============================================
+// ROUTAGE SIMPLE
+// ===============================================
+
+// 1. Récupérer l'URI demandée (ex: /login, /etudiant-main, /accueil)
+$request_uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+// 2. Nettoyer et normaliser l'URI
+// Retire le chemin du répertoire 'public' s'il est présent
+$public_dir_name = basename(dirname($_SERVER['SCRIPT_NAME']));
+$route = trim(str_replace('/' . $public_dir_name, '', $request_uri), '/');
+
+// Cas de la racine (URI vide)
+if (empty($route) || $route === 'index.php') {
+    $route = 'accueil';
 }
 
+// 3. Définition du fichier de page à charger
+$page_file = ROOT_PATH . 'pages/' . $route . '.php';
 
-// Chemin de base des pages
-$pages_path = ROOT_PATH . 'pages/';
-
-// On prépare deux chemins possibles :
-// 1. Le fichier direct : pages/company/dashboard.php
-$target_file = $pages_path . $route . '.php';
-
-// 2. Le dossier avec index : pages/company/dashboard/index.php
-$target_index = $pages_path . $route . '/index.php';
-
-// Vérification de l'existence
-if (file_exists($target_file)) {
-    $page_file = $target_file;
-    // Titre basé sur le nom du fichier final
-    $page_title = ucfirst(basename($route)); 
-} 
-elseif (is_dir($pages_path . $route) && file_exists($target_index)) {
-    $page_file = $target_index;
-    // Titre basé sur le nom du dossier
-    $page_title = ucfirst(basename($route));
-} 
-else {
+// Vérifier si le fichier de la page existe
+if (file_exists($page_file)) {
+    // La page existe, on prépare le titre (simple capitalisation ici)
+    $page_title = ucfirst(str_replace('-', ' ', $route));
+} else {
     // Page non trouvée (404)
     http_response_code(404);
-    $page_file = $pages_path . '404.php';
+    $page_file = ROOT_PATH . 'pages/404.php'; // Assurez-vous d'avoir une page 404.php
     $page_title = 'Page non trouvée';
 }
+
 // ===============================================
 // TEMPLATE PRINCIPAL
 // ===============================================
