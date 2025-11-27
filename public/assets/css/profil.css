@@ -586,8 +586,16 @@
   overflow-x: hidden;
 }
 
+.offres-preview::-webkit-scrollbar {
+  width: 8px;
+}
+
 .offres-preview::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: #1e293b;
+}
+
+.offres-preview::-webkit-scrollbar-thumb {
+  background: #38bdf8;
   border-radius: 4px;
 }
 
