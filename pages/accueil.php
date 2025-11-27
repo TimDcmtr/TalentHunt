@@ -33,7 +33,7 @@
           </p>
           
           <div class="hero-cta">
-            <a href="/login#registerENForm" class="btn-primary btn-large">
+            <a href="/login?tab=register" class="btn-primary btn-large">
               Commencer gratuitement
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M5 12h14M12 5l7 7-7 7"/>
