@@ -3,49 +3,72 @@
 // DÉFINITION DES CHEMINS ET CONSTANTES
 // ===============================================
 
-// Chemin absolu vers le dossier racine du projet (talenthub/)
-// Utile pour inclure les fichiers PHP sans se soucier de l'emplacement actuel.
 define('ROOT_PATH', dirname(__DIR__) . '/');
-
-// Chemin relatif pour les assets (CSS/JS) côté client
-// /public/assets/
 define('ASSETS_PATH', 'assets/');
+// On définit le chemin absolu vers le dossier des pages pour la sécurité
+define('PAGES_PATH', ROOT_PATH . 'pages/');
 
 // ===============================================
-// ROUTAGE SIMPLE
+// ROUTAGE AVANCÉ
 // ===============================================
 
-// 1. Récupérer l'URI demandée (ex: /login, /etudiant-main, /accueil)
+// 1. Récupérer l'URI demandée
 $request_uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-// 2. Nettoyer et normaliser l'URI
-// Retire le chemin du répertoire 'public' s'il est présent
-$public_dir_name = basename(dirname($_SERVER['SCRIPT_NAME']));
-$route = trim(str_replace('/' . $public_dir_name, '', $request_uri), '/');
+// 2. Nettoyer l'URI (Méthode robuste)
+// On calcule le chemin du dossier contenant index.php (ex: /mon-site/public)
+$script_dir = dirname($_SERVER['SCRIPT_NAME']);
 
-// Cas de la racine (URI vide)
+// On retire ce préfixe de l'URL demandée pour avoir le chemin relatif
+// Si le script est à la racine, $script_dir vaut "/" ou "\", on gère ces cas
+if ($script_dir === '/' || $script_dir === '\\') {
+    $route = trim($request_uri, '/');
+} else {
+    // On retire le dossier d'installation de l'URL
+    $route = trim(str_replace($script_dir, '', $request_uri), '/');
+}
+
+// Cas de la racine
 if (empty($route) || $route === 'index.php') {
     $route = 'home';
 }
 
-// 3. Définition du fichier de page à charger
-$page_file = ROOT_PATH . 'pages/' . $route . '.php';
+// 3. Construction du chemin cible
+// Cela fonctionne pour "home", mais aussi "admin/dashboard" ou "user/compte/params"
+$target_file = PAGES_PATH . $route . '.php';
 
-// Vérifier si le fichier de la page existe
-if (file_exists($page_file)) {
-    // La page existe, on prépare le titre (simple capitalisation ici)
-    $page_title = ucfirst(str_replace('-', ' ', $route));
+// ===============================================
+// SÉCURITÉ & VÉRIFICATION
+// ===============================================
+
+// realpath() retourne le chemin absolu canonique (résout les ../) ou false si introuvable
+$real_path = realpath($target_file);
+
+// A. On vérifie que le fichier existe ($real_path n'est pas false)
+// B. On vérifie que le fichier final commence bien par le dossier PAGES_PATH
+//    (Ceci empêche les attaques de type Directory Traversal vers ../../etc/passwd)
+if ($real_path && strpos($real_path, realpath(PAGES_PATH)) === 0) {
+    
+    $page_file = $real_path;
+    
+    // Titre dynamique : on prend la dernière partie du chemin (ex: dashboard)
+    $filename = basename($route); 
+    $page_title = ucfirst(str_replace('-', ' ', $filename));
+
 } else {
-    // Page non trouvée (404)
+    // 404 Not Found
     http_response_code(404);
-    $page_file = ROOT_PATH . 'pages/404.php'; // Assurez-vous d'avoir une page 404.php
+    $page_file = PAGES_PATH . '404.php';
     $page_title = 'Page non trouvée';
+    
+    // Sécurité supplémentaire : si même la 404 n'existe pas
+    if (!file_exists($page_file)) {
+        die("Erreur critique : Page 404 manquante.");
+    }
 }
 
 // ===============================================
 // TEMPLATE PRINCIPAL
 // ===============================================
 
-
-// Inclusion du contenu de la page demandée
 require_once $page_file;
