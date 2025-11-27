@@ -373,8 +373,8 @@
 
   .dashboard-header .btn-primary {
     display: flex;
-    width: 100%;
-    justify-content: center;
+    width: auto;
+    justify-content: left;
   }
 
   .header-content h1 {
