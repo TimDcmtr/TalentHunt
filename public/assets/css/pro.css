@@ -99,7 +99,7 @@
 
 .section-header-inline {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-bottom: var(--spacing-lg);
   padding-bottom: var(--spacing-md);
@@ -107,8 +107,6 @@
 }
 
 .section-header-inline h2 {
-  display: flex;
-  justify-content: center;
   font-family: var(--font-heading);
   font-size: 1.5rem;
 }
