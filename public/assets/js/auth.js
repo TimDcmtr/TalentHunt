@@ -188,3 +188,17 @@ document.addEventListener('DOMContentLoaded', function() {
     wrapper.appendChild(toggleBtn);
   });
 });
+
+// Redirection de Form Test
+
+document.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+  const tab = params.get("tab");
+
+  if (tab) {
+    const button = document.querySelector('.auth-tab[data-tab="${tab}"]');
+    if (button) {
+      button.click();
+    }
+  }
+});
