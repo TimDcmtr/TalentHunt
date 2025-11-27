@@ -69,7 +69,6 @@
           <div class="avatar-card glass-card">
             <div class="avatar-header">
               <div class="avatar-xl"><?php echo $etudiant['avatar_initials']; ?></div>
-              <span class="status-badge-online">Disponible</span>
             </div>
             
             <h2 class="profil-name"><?php echo $etudiant['prenom'] . ' ' . $etudiant['nom']; ?></h2>
@@ -87,26 +86,17 @@
                 <span class="stat-number"><?php echo $etudiant['candidatures']; ?></span>
                 <span class="stat-label">Candidatures</span>
               </div>
-              <div class="stat-divider-small"></div>
-              <div class="stat-item-small">
-                <span class="stat-number">2</span>
-                <span class="stat-label">Entretiens</span>
-              </div>
             </div>
 
             <div class="profil-actions">
-              <button class="btn-primary btn-full">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                </svg>
-                Contacter
-              </button>
+
               <button class="btn-secondary btn-full">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
                 </svg>
-                Sauvegarder
+                Contacter
               </button>
+              
             </div>
 
             <div class="profil-meta">
