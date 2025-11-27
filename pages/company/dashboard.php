@@ -91,7 +91,6 @@
         <section class="dashboard-section glass-card">
           <div class="section-header-inline">
             <h2>Mes offres</h2>
-            <a href="#voir-tout" class="link">Voir tout</a>
           </div>
 
           <div class="offers-list">
@@ -173,7 +172,6 @@
         <section class="dashboard-section glass-card">
           <div class="section-header-inline">
             <h2>Candidatures</h2>
-            <a href="#voir-tout" class="link">Voir tout</a>
           </div>
 
           <div class="applications-list">
