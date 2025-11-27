@@ -370,11 +370,10 @@
     display: flex;
     justify-content: center;   /* centre le bouton horizontalement */
     align-items: center;
-    flex-direction: column;
-    gap: var(--spacing-md);
   }
 
   .dashboard-header .btn-primary {
+    display: flex;
     width: 100%;
     justify-content: center;
   }
