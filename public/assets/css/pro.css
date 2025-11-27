@@ -368,7 +368,7 @@
 @media (max-width: 768px) {
   .dashboard-header {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: center;  
   }
 
