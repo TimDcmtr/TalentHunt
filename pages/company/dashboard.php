@@ -181,29 +181,21 @@
                 'name' => 'Marie Durant',
                 'position' => 'Développeur Full Stack',
                 'avatar' => 'MD',
-                'time' => 'Il y a 2h',
-                'match' => 95
               ],
               [
                 'name' => 'Thomas Martin',
                 'position' => 'Designer UI/UX',
                 'avatar' => 'TM',
-                'time' => 'Il y a 5h',
-                'match' => 88
               ],
               [
                 'name' => 'Sophie Bernard',
                 'position' => 'Data Analyst',
                 'avatar' => 'SB',
-                'time' => 'Hier',
-                'match' => 92
               ],
               [
                 'name' => 'Lucas Petit',
                 'position' => 'Développeur Full Stack',
                 'avatar' => 'LP',
-                'time' => 'Hier',
-                'match' => 85
               ]
             ];
 
@@ -213,20 +205,6 @@
                 <div class="app-info">
                   <h4><?php echo $app['name']; ?></h4>
                   <p><?php echo $app['position']; ?></p>
-                  <span class="app-time"><?php echo $app['time']; ?></span>
-                </div>
-                <div class="app-match">
-                  <div class="match-circle" style="--match: <?php echo $app['match']; ?>">
-                    <svg width="50" height="50" viewBox="0 0 50 50">
-                      <circle cx="25" cy="25" r="20" fill="none" stroke="var(--bg-tertiary)" stroke-width="4"/>
-                      <circle cx="25" cy="25" r="20" fill="none" stroke="var(--primary)" stroke-width="4" 
-                              stroke-dasharray="<?php echo 2 * 3.14159 * 20; ?>"
-                              stroke-dashoffset="<?php echo 2 * 3.14159 * 20 * (1 - $app['match'] / 100); ?>"
-                              stroke-linecap="round"
-                              transform="rotate(-90 25 25)"/>
-                    </svg>
-                    <span><?php echo $app['match']; ?>%</span>
-                  </div>
                 </div>
                 <a href="/candidature/<?php echo $app['name']; ?>" class="btn-secondary btn-sm">Voir le profil</a>
               </div>
