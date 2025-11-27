@@ -46,15 +46,17 @@
       
 
         <div class="stat-card glass-card">
-          <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);">
+          <div class="stat-icon" style="background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
             </svg>
           </div>
           <div class="stat-info">
-            <p class="stat-label">Profils sauvegardés</p>
-            <p class="stat-value">34</p>
-            <p class="stat-change">En attente</p>
+            <p class="stat-label">Candidatures reçues</p>
+            <p class="stat-value">247</p>
           </div>
         </div>
       </div>
