@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const tab = params.get("tab");
 
   if (tab) {
+    console.log(`Switching to tab: ${tab}`);
     const button = document.querySelector(`.auth-tab[data-tab="${tab}]"`);
     if (button) {
       button.click();
