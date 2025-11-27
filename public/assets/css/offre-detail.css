@@ -420,6 +420,10 @@
   gap: var(--spacing-lg);
 }
 
+.link{
+  color: var(--primary-light);
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .offre-layout {
