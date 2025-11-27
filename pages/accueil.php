@@ -137,7 +137,7 @@
               Rejoignez des milliers d’entreprises qui ont trouvé leurs meilleurs talents grâce à TalentHub.
             </p>
             <div class="cta-buttons">
-              <a href="/login" class="btn-primary btn-large">Créer mon compte entreprise</a>
+              <a href="/login?tab=registerEN" class="btn-primary btn-large">Créer mon compte entreprise</a>
               <a href="/offres" class="btn-secondary btn-large">Trouver des talents</a>
             </div>
           </div>
