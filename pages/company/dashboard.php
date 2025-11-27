@@ -59,32 +59,6 @@
           </div>
         </div>
 
-        <div class="stat-card glass-card">
-          <div class="stat-icon" style="background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-            </svg>
-          </div>
-          <div class="stat-info">
-            <p class="stat-label">Taux de réponse</p>
-            <p class="stat-value">89%</p>
-          </div>
-        </div>
-
-        <div class="stat-card glass-card">
-          <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-          </div>
-          <div class="stat-info">
-            <p class="stat-label">Profils sauvegardés</p>
-            <p class="stat-value">34</p>
-            <p class="stat-change">En attente</p>
-          </div>
-        </div>
-      </div>
-
       <!-- Quick Actions & Recent Activity -->
       <div class="dashboard-grid">
         <!-- My Offers -->
