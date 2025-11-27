@@ -20,7 +20,10 @@
 
     <div class="navbar-menu" id="navbarMenu">
       <a href="/offers" class="nav-link">Offres</a>
-      <a href="/company/dashboard" class="nav-link">Entreprises</a>
+      <a href="/student/feed" class="nav-link">Feed</a>
+      <a href="/student/config" class="nav-link">Profil</a>
+      <a href="/company/dashboard" class="nav-link">Dashboard</a>
+      <a href="/company/config" class="nav-link">Profil</a>
     </div>
 
     <div class="navbar-actions">

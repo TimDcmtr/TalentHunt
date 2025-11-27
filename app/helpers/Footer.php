@@ -53,20 +53,18 @@
       <div class="footer-section">
         <h4 class="footer-title">Étudiants</h4>
         <ul class="footer-links">
-          <li><a href="/recherche-offres">Rechercher des offres</a></li>
-          <li><a href="/creer-profil">Créer un profil</a></li>
-          <li><a href="/mes-candidatures">Mes candidatures</a></li>
-          <li><a href="/conseils">Conseils carrière</a></li>
+          <li><a href="/offers">Rechercher des offres</a></li>
+          <li><a href="/student/config">Créer un profil</a></li>
+          <li><a href="/student/feed">Mes candidatures</a></li>
         </ul>
       </div>
 
       <div class="footer-section">
         <h4 class="footer-title">Entreprises</h4>
         <ul class="footer-links">
-          <li><a href="/publier-offre">Publier une offre</a></li>
-          <li><a href="/recruter">Recruter</a></li>
-          <li><a href="/gestion-candidatures">Gérer les candidatures</a></li>
-          <li><a href="/solutions">Nos solutions</a></li>
+          <li><a href="/company/dashboard">Gérer les offres</a></li>
+          <li><a href="/company/new-offer">Recruter</a></li>
+          <li><a href="/company/config">Modifier mon entreprise</a></li>
         </ul>
       </div>
     </div>
