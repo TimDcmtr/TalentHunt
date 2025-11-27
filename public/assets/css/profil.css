@@ -25,10 +25,6 @@
   margin-bottom: var(--spacing-xl);
 }
 
-.company-layout {
-  margin-top: 0;
-}
-
 /* Sidebar */
 .profil-sidebar {
   display: flex;
