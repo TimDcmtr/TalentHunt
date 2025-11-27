@@ -1,11 +1,8 @@
 <?php
-// ===============================================
-// DÉFINITION DES CHEMINS ET CONSTANTES
-// ===============================================
+
 
 define('ROOT_PATH', dirname(__DIR__) . '/');
 define('ASSETS_PATH', 'assets/');
-// On définit le chemin absolu vers le dossier des pages pour la sécurité
 define('PAGES_PATH', ROOT_PATH . 'pages/');
 
 // 1. DÉFINITION DE LA CONSTANTE (Indispensable)
