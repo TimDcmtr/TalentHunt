@@ -25,7 +25,7 @@ $route = trim(str_replace('/' . $public_dir_name, '', $request_uri), '/');
 
 // Cas de la racine (URI vide)
 if (empty($route) || $route === 'index.php') {
-    $route = 'accueil';
+    $route = 'home';
 }
 
 // 3. Définition du fichier de page à charger
