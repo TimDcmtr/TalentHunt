@@ -236,57 +236,6 @@
           </div>
         </section>
       </div>
-
-      <!-- Quick Actions -->
-      <section class="quick-actions">
-        <h2>Actions rapides</h2>
-        <div class="actions-grid">
-          <a href="#publier-offre" class="action-card glass-card">
-            <div class="action-icon">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="12" y1="5" x2="12" y2="19"/>
-                <line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
-            </div>
-            <h3>Publier une offre</h3>
-            <p>Créez une nouvelle opportunité</p>
-          </a>
-
-          <a href="#recherche-candidats" class="action-card glass-card">
-            <div class="action-icon">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="8"/>
-                <path d="m21 21-4.35-4.35"/>
-              </svg>
-            </div>
-            <h3>Rechercher des talents</h3>
-            <p>Parcourez les profils étudiants</p>
-          </a>
-
-          <a href="#profil-entreprise" class="action-card glass-card">
-            <div class="action-icon">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
-                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-              </svg>
-            </div>
-            <h3>Profil entreprise</h3>
-            <p>Configurez votre profil</p>
-          </a>
-
-          <a href="#statistiques" class="action-card glass-card">
-            <div class="action-icon">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="20" x2="18" y2="10"/>
-                <line x1="12" y1="20" x2="12" y2="4"/>
-                <line x1="6" y1="20" x2="6" y2="14"/>
-              </svg>
-            </div>
-            <h3>Statistiques</h3>
-            <p>Analysez vos performances</p>
-          </a>
-        </div>
-      </section>
     </div>
   </main>
 
