@@ -24,7 +24,7 @@
       <div class="container">
         <div class="hero-content fade-in">
           <h1 class="hero-title">
-            Trouvez votre
+            Trouvez votre A
             <span class="gradient-text">opportunité parfaite</span>
           </h1>
           <p class="hero-subtitle">
