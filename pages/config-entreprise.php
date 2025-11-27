@@ -21,10 +21,6 @@
           <div class="profile-preview">
             <div class="avatar-large company-avatar">🚀</div>
             <h3>TechCorp</h3>
-            <p class="profile-status">Profil à 85%</p>
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: 85%"></div>
-            </div>
           </div>
 
           <nav class="config-nav">
@@ -41,14 +37,6 @@
                 <polyline points="14 2 14 8 20 8"/>
               </svg>
               Description
-            </a>
-            <a href="#medias" class="nav-item">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                <circle cx="8.5" cy="8.5" r="1.5"/>
-                <polyline points="21 15 16 10 5 21"/>
-              </svg>
-              Médias
             </a>
             <a href="#secteur" class="nav-item">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -171,7 +159,7 @@
                     <button type="button" class="btn-remove-value">×</button>
                   </div>
                 </div>
-                <button type="button" class="btn-add" id="addValue">
+                <button type="button" class="btn-add btn-secondary" id="addValue">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="12" y1="5" x2="12" y2="19"/>
                     <line x1="5" y1="12" x2="19" y2="12"/>
@@ -184,39 +172,6 @@
                 <button type="submit" class="btn-primary">Enregistrer</button>
               </div>
             </form>
-          </section>
-
-          <!-- Section Médias -->
-          <section id="medias" class="config-section glass-card">
-            <div class="section-header">
-              <h2>Photos et vidéos</h2>
-              <p>Partagez l'ambiance de votre entreprise</p>
-            </div>
-
-            <div class="media-upload-area">
-              <input type="file" id="media-files" accept="image/*,video/*" multiple hidden>
-              <label for="media-files" class="media-upload-zone">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                  <circle cx="8.5" cy="8.5" r="1.5"/>
-                  <polyline points="21 15 16 10 5 21"/>
-                </svg>
-                <h4>Ajouter des médias</h4>
-                <p>Photos des bureaux, équipe, événements...</p>
-                <span class="file-types">JPG, PNG, MP4 (max 10MB par fichier)</span>
-              </label>
-            </div>
-
-            <div class="media-gallery">
-              <div class="media-item">
-                <img src="/placeholder-office.jpg" alt="Bureau" style="width: 100%; height: 200px; object-fit: cover; background: var(--bg-tertiary); border-radius: var(--radius-md);">
-                <button class="btn-remove-media">×</button>
-              </div>
-              <div class="media-item">
-                <img src="/placeholder-team.jpg" alt="Équipe" style="width: 100%; height: 200px; object-fit: cover; background: var(--bg-tertiary); border-radius: var(--radius-md);">
-                <button class="btn-remove-media">×</button>
-              </div>
-            </div>
           </section>
 
           <!-- Section Secteur -->
@@ -311,10 +266,10 @@
                   <div class="social-input-group">
                     <span class="social-icon">
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                        <path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
                       </svg>
                     </span>
-                    <input type="url" name="twitter" class="form-input" placeholder="https://twitter.com/...">
+                    <input type="url" name="website" class="form-input" placeholder="https://monsite.com/...">
                   </div>
                 </div>
               </div>
