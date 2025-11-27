@@ -588,7 +588,6 @@
 
 .offres-preview::-webkit-scrollbar {
   width: 8px;
-  margin-right: 12px;
 }
 
 .offres-preview::-webkit-scrollbar-track {
@@ -606,6 +605,7 @@
   border-radius: var(--radius-md);
   text-decoration: none;
   transition: all var(--transition-base);
+  margin-right: 7px;
 }
 
 .offre-preview-card:hover {
