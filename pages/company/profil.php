@@ -179,7 +179,6 @@
             <div class="valeurs-grid">
               <?php foreach ($entreprise['valeurs'] as $valeur): ?>
                 <div class="valeur-card">
-                  <div class="valeur-icon">✨</div>
                   <h4><?php echo $valeur; ?></h4>
                 </div>
               <?php endforeach; ?>
