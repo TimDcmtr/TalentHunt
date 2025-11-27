@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-  <?php require_once ROOT_PATH . 'app/helpers/Navbar.php'; ?>
+  <?php require_once ROOT_PATH . '/helpers/Navbar.php'; ?>
 
   <main class="main-content">
     <!-- Hero Section -->
@@ -156,7 +156,7 @@
     </section>
   </main>
 
-  <?php require_once ROOT_PATH . 'app/helpers/Footer.php'; ?>
+  <?php require_once ROOT_PATH . '/helpers/Footer.php'; ?>
   
   <script src="public/assets/js/navbar.js"></script>
 </body>
