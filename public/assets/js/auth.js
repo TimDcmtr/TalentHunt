@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const tab = params.get("tab");
 
   if (tab) {
-    const button = document.querySelector(`.data-tab="${tab}"`);
+    const button = document.querySelector(`.auth-tab[data-tab="${tab}]"`);
     if (button) {
       button.click();
     }
