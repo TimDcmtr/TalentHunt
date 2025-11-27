@@ -194,10 +194,9 @@ document.addEventListener('DOMContentLoaded', function () {
   if (tab) {
     console.log(`Switching to tab: ${tab}`);
     const button = document.querySelector(`.auth-tab[data-tab="${tab}]"`);
-    if (button) {
-      console.log(`Clicking tab button for: ${tab}`);
-      button.click();
-    }
+
+    button.click();
+
   }
 
 });
