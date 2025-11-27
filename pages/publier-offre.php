@@ -342,19 +342,6 @@
                   </div>
                 </div>
 
-                <div class="form-group">
-                  <label class="checkbox-label-large">
-                    <input type="checkbox" name="terms" required>
-                    <span>J'accepte les <a href="/conditions" class="link">conditions de publication</a> et confirme que cette offre est conforme à la législation en vigueur.</span>
-                  </label>
-                </div>
-
-                <div class="publication-options">
-                  <label class="checkbox-label">
-                    <input type="checkbox" name="save_draft">
-                    <span>Enregistrer comme brouillon</span>
-                  </label>
-                </div>
               </div>
             </section>
 
