@@ -8,6 +8,13 @@ define('ASSETS_PATH', 'assets/');
 // On définit le chemin absolu vers le dossier des pages pour la sécurité
 define('PAGES_PATH', ROOT_PATH . 'pages/');
 
+// 1. DÉFINITION DE LA CONSTANTE (Indispensable)
+$script_dir = dirname($_SERVER['SCRIPT_NAME']);
+$url_calculee = rtrim($script_dir, '/\\') . '/';
+
+// On stocke ça dans une CONSTANTE nommée 'BASE_URL'
+define('BASE_URL', $url_calculee);
+
 // ===============================================
 // ROUTAGE AVANCÉ
 // ===============================================
@@ -71,4 +78,23 @@ if ($real_path && strpos($real_path, realpath(PAGES_PATH)) === 0) {
 // TEMPLATE PRINCIPAL
 // ===============================================
 
+
+// 1. On démarre l'enregistrement de la sortie
+ob_start();
+
+// 2. On inclut la page (son HTML est capturé en mémoire, pas affiché)
 require_once $page_file;
+
+// 3. On récupère tout le contenu HTML dans une variable
+$html_content = ob_get_clean();
+
+// 4. On prépare la balise <base>
+$base_tag = "\n\t<base href=\"" . BASE_URL . "\">";
+
+// 5. On injecte la balise juste après l'ouverture du <head>
+// On utilise str_replace pour trouver <head> et le remplacer par <head> + <base>
+// Si la page n'a pas de <head>, rien ne sera cassé (mais le CSS ne marchera pas)
+$final_html = str_replace('<head>', '<head>' . $base_tag, $html_content);
+
+// 6. On affiche le résultat final au navigateur
+echo $final_html;
