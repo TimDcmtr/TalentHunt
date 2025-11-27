@@ -4,19 +4,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const tabs = document.querySelectorAll('.auth-tab');
   const forms = document.querySelectorAll('.auth-form');
 
-
-  const params = new URLSearchParams(window.location.search);
-  const tab = params.get("tab");
-
-  if (tab) {
-    console.log(`Switching to tab: ${tab}`);
-    const button = document.querySelector(`.auth-tab[data-tab="${tab}]"`);
-    if (button) {
-      console.log(`Clicking tab button for: ${tab}`);
-      button.click();
-    }
-  }
-
   // Switch between login and register forms
   tabs.forEach(tab => {
     tab.addEventListener('click', function () {
@@ -200,6 +187,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     wrapper.appendChild(toggleBtn);
   });
+
+  const params = new URLSearchParams(window.location.search);
+  const tab = params.get("tab");
+
+  if (tab) {
+    console.log(`Switching to tab: ${tab}`);
+    const button = document.querySelector(`.auth-tab[data-tab="${tab}]"`);
+    if (button) {
+      console.log(`Clicking tab button for: ${tab}`);
+      button.click();
+    }
+  }
 
 });
 
