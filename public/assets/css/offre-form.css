@@ -331,7 +331,9 @@
 #submitBtn {
   margin-left: auto;
 }
-
+.form-group{
+  margin: 2vh 0
+}
 /* Form Hints */
 .form-hint {
   display: block;
