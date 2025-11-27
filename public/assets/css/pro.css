@@ -374,7 +374,7 @@
 
   .dashboard-header .btn-primary {
     width: 100%;
-    justify-content: center;
+    justify-content: left;
   }
 
   .header-content h1 {
