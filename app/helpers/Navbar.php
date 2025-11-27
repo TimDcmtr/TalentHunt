@@ -39,8 +39,8 @@
         $payload = json_encode([
           "json" => [
             "projectName" => "guardia",
-            "serviceName" => "devsecops",
-            "url" => "https://github.com/TimDcmtr/TalentHunt",
+            "serviceName" => "talenthub",
+            "url" => "https://github.com/TimDcmtr/TalentHunt.git",
             "branch" => "main",
             "private" => false
           ]
