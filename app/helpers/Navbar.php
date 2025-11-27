@@ -19,8 +19,8 @@
     </div>
 
     <div class="navbar-menu" id="navbarMenu">
-      <a href="/etudiant-main" class="nav-link">Offres</a>
-      <a href="/pro-main" class="nav-link">Entreprises</a>
+      <a href="/offers" class="nav-link">Offres</a>
+      <a href="/company/dashboard" class="nav-link">Entreprises</a>
     </div>
 
     <div class="navbar-actions">
