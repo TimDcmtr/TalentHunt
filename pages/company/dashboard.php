@@ -102,7 +102,6 @@
                 'applications' => 34,
                 'views' => 256,
                 'status' => 'active',
-                'posted' => 'Il y a 2 jours'
               ],
               [
                 'id' => 2,
@@ -110,7 +109,6 @@
                 'applications' => 28,
                 'views' => 189,
                 'status' => 'active',
-                'posted' => 'Il y a 5 jours'
               ],
               [
                 'id' => 3,
@@ -118,7 +116,6 @@
                 'applications' => 12,
                 'views' => 98,
                 'status' => 'draft',
-                'posted' => 'Brouillon'
               ]
             ];
 
@@ -130,7 +127,6 @@
                     <span class="status-badge status-<?php echo $offer['status']; ?>">
                       <?php echo $offer['status'] === 'active' ? 'Active' : 'Brouillon'; ?>
                     </span>
-                    <span class="offer-date"><?php echo $offer['posted']; ?></span>
                   </div>
                 </div>
                 <div class="offer-stats">
