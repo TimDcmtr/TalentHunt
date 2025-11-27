@@ -3,7 +3,7 @@
 <nav class="navbar">
   <div class="container navbar-container">
     <div class="navbar-brand">
-      <a href="/accueil" class="logo">
+      <a href="/" class="logo">
         <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
           <circle cx="16" cy="16" r="14" fill="url(#gradient1)" />
           <path d="M16 8L12 14H16V20L20 14H16V8Z" fill="white" />
