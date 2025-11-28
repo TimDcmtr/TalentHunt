@@ -142,6 +142,7 @@
   align-items: center;
   gap: var(--spacing-md);
   transition: all var(--transition-base);
+  margin-right: 20px;
 }
 
 .offer-item:hover {
@@ -264,6 +265,7 @@
   align-items: center;
   gap: var(--spacing-md);
   transition: all var(--transition-base);
+  margin-right: 20px;
 }
 
 .application-item:hover {
