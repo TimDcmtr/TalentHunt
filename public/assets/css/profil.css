@@ -590,10 +590,6 @@
   width: 8px;
 }
 
-.offres-preview::-webkit-scrollbar-track {
-  background: var(--glass-bg);
-}
-
 .offres-preview::-webkit-scrollbar-thumb {
   background: linear-gradient(135deg, var(--primary) 0%, var(--secondary));
   border-radius: 4px;
