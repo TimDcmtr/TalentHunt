@@ -74,14 +74,15 @@ document.addEventListener('DOMContentLoaded', function () {
       setLoading(btn, true);
       
       const response = await sendAuthRequest('login', { email, password });
+      const data = JSON.parse(response.data);
 
       setLoading(btn, false, originalBtnText);
 
-      if (await response.ok && await response.data.status === true) {
+      if (await response.ok && await data.status === true) {
         // Redirection vers le dashboard ou la home
         window.location.href = 'dashboard.php'; // Ou index.php selon ta structure
       } else {
-        showError(this.querySelector('input[name="password"]'), response.data.message || 'Identifiants incorrects');
+        showError(this.querySelector('input[name="password"]'), data.message || 'Identifiants incorrects');
       }
     });
   }
