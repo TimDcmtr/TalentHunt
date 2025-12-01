@@ -11,8 +11,8 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 // 2. Inclusion des fichiers nécessaires
 // Adapte le chemin si tes dossiers sont ailleurs (ex: './app/controllers/...')
-include_once '../app/config/db.php';
-include_once './app/controllers/UserController.php';
+include_once 'app/config/db.php';
+include_once '.app/controllers/UserController.php';
 
 // 3. Récupération de l'action demandée via l'URL (ex: api.php?action=register)
 $action = isset($_GET['action']) ? $_GET['action'] : '';
