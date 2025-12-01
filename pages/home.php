@@ -28,7 +28,7 @@
       <div class="container">
         <div class="hero-content fade-in">
           <h1 class="hero-title">
-            <?php echo $currentUser ?>, Trouvez votre
+            <?php echo $isAuthenticated ?>, Trouvez votre
             <span class="gradient-text">opportunité parfaite</span>
           </h1>
           <p class="hero-subtitle">
