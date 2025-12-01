@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
       setLoading(btn, false, originalBtnText);
 
       if (await response.ok && await data.status === true) {
-        // Redirection vers le dashboard ou la home
+        localStorage.setItem('authToken', data.token);
         window.location.href = 'dashboard.php'; // Ou index.php selon ta structure
       } else {
         showError(this.querySelector('input[name="password"]'), data.message || 'Identifiants incorrects');
