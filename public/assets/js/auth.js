@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // --- 2. FONCTION D'ENVOI API GÉNÉRIQUE ---
   async function sendAuthRequest(action, data) {
     try {
-      const response = await fetch(`api.php?action=${action}`, {
+      const response = await fetch(`api?action=${action}`, {
         method: 'POST', 
         headers: {
           'Content-Type': 'application/json',
