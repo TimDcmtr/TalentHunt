@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       setLoading(btn, false, originalBtnText);
 
-      if (response.ok && response.data.status === true) {
+      if (await response.ok && await response.data.status === true) {
         // Redirection vers le dashboard ou la home
         window.location.href = 'dashboard.php'; // Ou index.php selon ta structure
       } else {
