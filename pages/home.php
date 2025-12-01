@@ -10,7 +10,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-  <?php require_once ROOT_PATH . 'app/helpers/Navbar.php'; ?>
+  <?php
+  require_once ROOT_PATH . 'app/helpers/Navbar.php';
+  require_once ROOT_PATH . 'app/helpers/UserSession.php';
+  
+  ?>
 
   <main class="main-content">
     <!-- Hero Section -->
@@ -24,7 +28,7 @@
       <div class="container">
         <div class="hero-content fade-in">
           <h1 class="hero-title">
-            Trouvez votre
+            <?php echo $currentUser['firstname']; ?>, Trouvez votre
             <span class="gradient-text">opportunité parfaite</span>
           </h1>
           <p class="hero-subtitle">

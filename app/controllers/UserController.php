@@ -206,5 +206,78 @@ class UserController
     private function base64UrlEncode($data) {
         return str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($data));
     }
+
+    public function getUserFromToken($jwt) {
+        // 1. Découpage du Token (Header . Payload . Signature)
+        $tokenParts = explode('.', $jwt);
+        
+        if (count($tokenParts) !== 3) {
+            return false; // Format invalide
+        }
+
+        list($header64, $payload64, $signature64) = $tokenParts;
+
+        // 2. Vérification de la Signature
+        // On recrée la signature avec NOTRE clé secrète et les données reçues
+        $validSignature = hash_hmac('sha256', $header64 . "." . $payload64, $this->secret_key, true);
+        $validSignature64 = $this->base64UrlEncode($validSignature);
+
+        // On compare la signature calculée avec celle du token (hash_equals protège des attaques temporelles)
+        if (!hash_equals($validSignature64, $signature64)) {
+            return false; // Signature falsifiée !
+        }
+
+        // 3. Décodage du Payload
+        $payloadJson = $this->base64UrlDecode($payload64);
+        $payload = json_decode($payloadJson, true);
+
+        if ($payload === null) {
+            return false; // JSON corrompu
+        }
+
+        // 4. Vérification de l'expiration (exp)
+        if (isset($payload['exp']) && $payload['exp'] < time()) {
+            return false; // Token expiré
+        }
+
+        // 5. Récupération des données fraîches en BDD
+        // Le token contient l'ID dans $payload['data']['id'] (voir fonction login)
+        if (isset($payload['data']['id'])) {
+            $userId = $payload['data']['id'];
+
+            // On utilise la méthode existante du modèle qui nettoie déjà le mot de passe
+            // et formate les données (JSON decode des compétences, etc.)
+            if ($this->user->getProfileById($userId)) {
+                return [
+                    "id" => $this->user->id,
+                    "firstname" => $this->user->firstname,
+                    "lastname" => $this->user->lastname,
+                    "email" => $this->user->email,
+                    "phone" => $this->user->phone,
+                    "school" => $this->user->school,
+                    "location" => $this->user->location,
+                    "field_of_study" => $this->user->field_of_study,
+                    "bio" => $this->user->bio,
+                    "role" => isset($this->user->search_type) ? 'student' : 'company', // Simplification
+                    // ... Ajoute les autres champs dont tu as besoin
+                    "avatar_initials" => $this->user->avatar_initials
+                ];
+            }
+        }
+
+        return false; // Utilisateur introuvable en BDD (supprimé entre temps ?)
+    }
+
+    /**
+     * Décodage Base64Url (Inverse de base64UrlEncode)
+     */
+    private function base64UrlDecode($data) {
+        $remainder = strlen($data) % 4;
+        if ($remainder) {
+            $padlen = 4 - $remainder;
+            $data .= str_repeat('=', $padlen);
+        }
+        return base64_decode(str_replace(['-', '_'], ['+', '/'], $data));
+    }
 }
 ?>
