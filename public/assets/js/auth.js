@@ -1,162 +1,238 @@
-// /public/assets/js/auth.js
-
 document.addEventListener('DOMContentLoaded', function () {
   const tabs = document.querySelectorAll('.auth-tab');
   const forms = document.querySelectorAll('.auth-form');
 
-  // Switch between login and register forms
+  // --- 1. GESTION DES ONGLETS (TABS) ---
   tabs.forEach(tab => {
     tab.addEventListener('click', function () {
       const targetTab = this.getAttribute('data-tab');
 
-      // Remove active class from all tabs and forms
+      // Reset active classes
       tabs.forEach(t => t.classList.remove('active'));
       forms.forEach(f => f.classList.remove('active'));
 
-      // Add active class to clicked tab and corresponding form
+      // Activate clicked tab
       this.classList.add('active');
-      document.getElementById(targetTab + 'Form').classList.add('active');
+      
+      // Target form ID logic
+      // Note: Assure-toi que les IDs dans ton HTML sont bien: loginForm, registerForm, registerENForm
+      const targetForm = document.getElementById(targetTab + 'Form');
+      if(targetForm) targetForm.classList.add('active');
     });
   });
 
-  // Form validation
+  // --- 2. FONCTION D'ENVOI API GÉNÉRIQUE ---
+  async function sendAuthRequest(action, data) {
+    try {
+      const response = await fetch(`index.php?action=${action}`, {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      // On tente de lire le JSON même si le statut est une erreur (400, 404, etc.)
+      const result = await response.json(); 
+      
+      return { 
+        ok: response.ok, 
+        status: response.status,
+        data: result 
+      };
+    } catch (error) {
+      console.error('Erreur réseau:', error);
+      return { ok: false, data: { message: "Une erreur technique est survenue." } };
+    }
+  }
+
+  // --- 3. GESTION DES FORMULAIRES ---
+
   const loginForm = document.getElementById('loginForm');
   const registerForm = document.getElementById('registerForm');
   const registerENForm = document.getElementById('registerENForm');
 
+  // === LOGIN ===
   if (loginForm) {
-    loginForm.addEventListener('submit', function (e) {
+    loginForm.addEventListener('submit', async function (e) {
       e.preventDefault();
+      const btn = this.querySelector('button[type="submit"]');
+      const originalBtnText = btn.innerHTML;
 
-      const email = document.getElementById('login-email').value;
-      const password = document.getElementById('login-password').value;
+      // Sélection contextuelle pour éviter les conflits d'ID
+      const email = this.querySelector('input[name="email"]').value;
+      const password = this.querySelector('input[name="password"]').value;
 
-      // Validation basique
+      // Validation Frontend
       if (!validateEmail(email)) {
-        showError('login-email', 'Veuillez entrer un email valide');
+        showError(this.querySelector('input[name="email"]'), 'Veuillez entrer un email valide');
         return;
       }
 
-      if (password.length < 6) {
-        showError('login-password', 'Le mot de passe doit contenir au moins 6 caractères');
-        return;
-      }
+      // Envoi Backend
+      setLoading(btn, true);
+      
+      const response = await sendAuthRequest('login', { email, password });
 
-      // TODO: Envoyer au backend
-      console.log('Login:', { email, password });
-      // this.submit(); // Décommenter pour soumettre réellement
+      setLoading(btn, false, originalBtnText);
+
+      if (response.ok && response.data.status === true) {
+        // Redirection vers le dashboard ou la home
+        window.location.href = 'dashboard.php'; // Ou index.php selon ta structure
+      } else {
+        showError(this.querySelector('input[name="password"]'), response.data.message || 'Identifiants incorrects');
+      }
     });
   }
 
+  // === REGISTER STUDENT ===
   if (registerForm) {
-    registerForm.addEventListener('submit', function (e) {
+    registerForm.addEventListener('submit', async function (e) {
       e.preventDefault();
+      const btn = this.querySelector('button[type="submit"]');
+      const originalBtnText = btn.innerHTML;
 
+      // Construction de l'objet data (Mapping HTML -> PHP Controller)
+      // On utilise this.querySelector pour cibler les inputs DE CE formulaire
       const formData = {
-        firstname: document.getElementById('register-firstname').value,
-        lastname: document.getElementById('register-lastname').value,
-        email: document.getElementById('register-email').value,
-        tel: document.getElementById('register-tel').value,
-        password: document.getElementById('register-password').value,
-        school: document.getElementById('register-school').value,
-        region: document.getElementById('register-region').value,
-        domain: document.getElementById('register-domain').value
+        firstname: this.querySelector('input[name="firstname"]').value,
+        lastname: this.querySelector('input[name="lastname"]').value,
+        email: this.querySelector('input[name="email"]').value,
+        tel: this.querySelector('input[name="tel"]')?.value || '', // tel -> phone (géré dans le controller)
+        password: this.querySelector('input[name="password"]').value,
+        school: this.querySelector('input[name="school"]')?.value || '',
+        region: this.querySelector('select[name="region"]')?.value || '', // region -> location
+        domain: this.querySelector('input[name="domain"]')?.value || '', // domain -> field_of_study
+        type: 'student' // Utile si tu veux différencier plus tard
       };
 
       // Validation
-      if (!formData.firstname || !formData.lastname) {
-        alert('Veuillez remplir tous les champs obligatoires');
-        return;
-      }
-
       if (!validateEmail(formData.email)) {
-        showError('register-email', 'Veuillez entrer un email valide');
+        showError(this.querySelector('input[name="email"]'), 'Email invalide');
         return;
       }
-
       if (formData.password.length < 8) {
-        showError('register-password', 'Le mot de passe doit contenir au moins 8 caractères');
+        showError(this.querySelector('input[name="password"]'), 'Min. 8 caractères');
         return;
       }
 
-      // TODO: Envoyer au backend
-      console.log('Register:', formData);
-      // this.submit(); // Décommenter pour soumettre réellement
+      // Envoi
+      setLoading(btn, true);
+      const response = await sendAuthRequest('register', formData);
+      setLoading(btn, false, originalBtnText);
+
+      if (response.ok) {
+        alert("Compte créé avec succès ! Connectez-vous.");
+        this.reset();
+        document.querySelector('.auth-tab[data-tab="login"]').click();
+      } else {
+        alert("Erreur : " + (response.data.message || "Impossible de créer le compte"));
+      }
     });
   }
+
+  // === REGISTER COMPANY (Entreprise) ===
   if (registerENForm) {
-    registerENForm.addEventListener('submit', function (e) {
+    registerENForm.addEventListener('submit', async function (e) {
       e.preventDefault();
+      const btn = this.querySelector('button[type="submit"]');
+      const originalBtnText = btn.innerHTML;
+
+      // Mapping spécifique pour l'entreprise
+      // Le modèle User attend firstname/lastname. On adapte.
+      const entreprisename = this.querySelector('input[name="firstname"]')?.value || ''; // ID html: register-entreprisename
 
       const formData = {
-        entreprisename: document.getElementById('register-entreprisename').value,
-        email: document.getElementById('register-email').value,
-        tel: document.getElementById('register-tel').value,
-        password: document.getElementById('register-password').value,
-        region: document.getElementById('register-region').value,
-        domain: document.getElementById('register-domain').value
+        firstname: entreprisename, // On met le nom de l'entreprise ici
+        lastname: 'Entreprise',    // Valeur par défaut pour satisfaire la BDD
+        email: this.querySelector('input[name="email"]').value,
+        tel: this.querySelector('input[name="tel"]')?.value || '',
+        password: this.querySelector('input[name="password"]').value,
+        region: this.querySelector('select[name="region"]')?.value || '',
+        domain: this.querySelector('input[name="domain"]')?.value || '',
+        type: 'company'
       };
 
       // Validation
-      if (!formData.entreprisename) {
-        alert('Veuillez remplir tous les champs obligatoires');
+      if (!formData.firstname) {
+        alert('Le nom de l\'entreprise est requis');
         return;
       }
-
       if (!validateEmail(formData.email)) {
-        showError('register-email', 'Veuillez entrer un email valide');
+        showError(this.querySelector('input[name="email"]'), 'Email invalide');
         return;
       }
 
-      if (formData.password.length < 8) {
-        showError('register-password', 'Le mot de passe doit contenir au moins 8 caractères');
-        return;
-      }
+      // Envoi
+      setLoading(btn, true);
+      const response = await sendAuthRequest('register', formData);
+      setLoading(btn, false, originalBtnText);
 
-      // TODO: Envoyer au backend
-      console.log('Register:', formData);
-      // this.submit(); // Décommenter pour soumettre réellement
+      if (response.ok) {
+        alert("Compte entreprise créé ! Connectez-vous.");
+        this.reset();
+        document.querySelector('.auth-tab[data-tab="login"]').click();
+      } else {
+        alert("Erreur : " + (response.data.message || "Impossible de créer le compte"));
+      }
     });
   }
 
+  // --- 4. UTILITAIRES ---
 
-  // Email validation
   function validateEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
   }
 
-  // Show error message
-  function showError(inputId, message) {
-    const input = document.getElementById(inputId);
-    input.style.borderColor = 'var(--accent)';
+  // Gestion UI du bouton pendant le chargement
+  function setLoading(btn, isLoading, originalText = '') {
+    if (isLoading) {
+      btn.disabled = true;
+      btn.innerHTML = '<span class="loader"></span> Chargement...'; // Tu peux ajouter du CSS pour .loader
+    } else {
+      btn.disabled = false;
+      btn.innerHTML = originalText;
+    }
+  }
 
-    // Remove existing error message
-    const existingError = input.parentElement.querySelector('.error-message');
+  // Affiche l'erreur sous l'input
+  function showError(inputElement, message) {
+    if(!inputElement) return;
+
+    inputElement.style.borderColor = 'var(--accent, #ff4d4f)';
+
+    // Supprime l'ancien message s'il existe
+    const parent = inputElement.parentElement;
+    const existingError = parent.querySelector('.error-message');
     if (existingError) {
       existingError.remove();
     }
 
-    // Add new error message
+    // Ajoute le nouveau message
     const errorDiv = document.createElement('div');
     errorDiv.className = 'error-message';
-    errorDiv.style.color = 'var(--accent)';
+    errorDiv.style.color = 'var(--accent, #ff4d4f)';
     errorDiv.style.fontSize = '0.85rem';
     errorDiv.style.marginTop = '4px';
     errorDiv.textContent = message;
-    input.parentElement.appendChild(errorDiv);
+    parent.appendChild(errorDiv);
 
-    // Remove error on input
-    input.addEventListener('input', function () {
+    // Retire l'erreur quand l'utilisateur tape
+    inputElement.addEventListener('input', function () {
       this.style.borderColor = '';
       const error = this.parentElement.querySelector('.error-message');
       if (error) error.remove();
     }, { once: true });
   }
 
-  // Password visibility toggle (optional enhancement)
+  // Toggle Password Visibility
   const passwordInputs = document.querySelectorAll('input[type="password"]');
   passwordInputs.forEach(input => {
+    // Création du wrapper si pas déjà présent (pour éviter duplication si script rechargé)
+    if(input.parentNode.style.position === 'relative') return;
+
     const wrapper = document.createElement('div');
     wrapper.style.position = 'relative';
     input.parentNode.insertBefore(wrapper, input);
@@ -174,10 +250,6 @@ document.addEventListener('DOMContentLoaded', function () {
     toggleBtn.style.cursor = 'pointer';
     toggleBtn.style.fontSize = '1.2rem';
     toggleBtn.style.opacity = '0.6';
-    toggleBtn.style.transition = 'opacity 0.2s';
-
-    toggleBtn.addEventListener('mouseenter', () => toggleBtn.style.opacity = '1');
-    toggleBtn.addEventListener('mouseleave', () => toggleBtn.style.opacity = '0.6');
 
     toggleBtn.addEventListener('click', function () {
       const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -188,18 +260,11 @@ document.addEventListener('DOMContentLoaded', function () {
     wrapper.appendChild(toggleBtn);
   });
 
+  // Gestion de l'URL parameter ?tab=register
   const params = new URLSearchParams(window.location.search);
   const tab = params.get("tab");
-
   if (tab) {
     const button = document.querySelector(`.auth-tab[data-tab="${tab}"]`);
-
     if (button) button.click();
-
   }
-
 });
-
-
-
-
