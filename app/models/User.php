@@ -120,9 +120,9 @@ class User
 
             // 4. JSON Decoding (Convert DB string to PHP Array)
             // The 'true' parameter in json_decode forces associative arrays
-            $this->skills = json_decode($row['skills'], true) ?? [];
-            $this->categories = json_decode($row['categories'], true) ?? [];
-            $this->work_mode = json_decode($row['work_mode'], true) ?? [];
+            $this->skills = json_decode($row['skills'] ?? '[]', true);
+            $this->categories = json_decode($row['categories'] ?? '[]', true);
+            $this->work_mode = json_decode($row['work_mode'] ?? '[]', true);
 
             // 5. Computed Field (Initials)
             // JD = First letter of firstname + First letter of lastname
