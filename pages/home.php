@@ -13,6 +13,8 @@
   <?php
   require_once ROOT_PATH . 'app/helpers/Navbar.php';
   require_once ROOT_PATH . 'app/helpers/UserSession.php';
+
+  requireLogin();
   
   ?>
 
