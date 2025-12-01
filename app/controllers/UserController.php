@@ -1,7 +1,7 @@
 <?php
 // On inclut la config et le modèle
-include_once '../config/Database.php';
-include_once '../models/User.php';
+require_once ROOT_PATH . 'app/config/db.php';
+require_once ROOT_PATH . 'app/models/User.php';
 
 class UserController {
     
