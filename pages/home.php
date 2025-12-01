@@ -12,7 +12,6 @@
 <body>
   <?php
   require_once ROOT_PATH . 'app/helpers/Navbar.php';
-  require_once ROOT_PATH . 'app/helpers/UserSession.php';
   ?>
 
   <main class="main-content">
@@ -27,7 +26,7 @@
       <div class="container">
         <div class="hero-content fade-in">
           <h1 class="hero-title">
-            <?php echo $currentUser['location'] ?>, Trouvez votre
+            Trouvez votre
             <span class="gradient-text">opportunité parfaite</span>
           </h1>
           <p class="hero-subtitle">
