@@ -159,6 +159,7 @@ class UserController
                 http_response_code(200);
                 return json_encode([
                     "message" => "Connexion réussie.",
+                    "status" => true,
                     "token" => $jwt, // LE SÉSAME !
                     "user" => [
                         "id" => $this->user->id,
