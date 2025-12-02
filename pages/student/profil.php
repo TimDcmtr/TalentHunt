@@ -18,6 +18,10 @@
   require_once ROOT_PATH . 'app/controllers/UserController.php';
   ?>
 
+<?php if (!$id): ?>
+    <h1> Erreur de Connexion </h1>
+<?php else: ?>
+
   <?php
   $id = $_GET['id'];
   $userController = new UserController();
@@ -47,9 +51,7 @@
   ];
   ?>
 
-  <?php if (!$id): ?>
-    <h1> Erreur de Connexion </h1>
-  <?php else: ?>
+  
   <main class="main-content">
     <div class="container">
       <div class="profil-layout">
