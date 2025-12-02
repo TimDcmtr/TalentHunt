@@ -19,6 +19,7 @@
   ?>
 
   <?php
+  $id = $_GET['id'];
   $userController = new UserController();
   $etudiant = $userController->getUserProfile($id);
 
