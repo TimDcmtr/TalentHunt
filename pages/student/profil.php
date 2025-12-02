@@ -18,7 +18,7 @@
   require_once ROOT_PATH . 'app/controllers/UserController.php';
   ?>
 
-<?php if (isset($_GET['id'])): ?>
+<?php if (!isset($_GET['id'])): ?>
     <h1> Erreur de Connexion </h1>
 <?php else: ?>
 
