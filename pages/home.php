@@ -12,6 +12,8 @@
 <body>
   <?php
   require_once ROOT_PATH . 'app/helpers/Navbar.php';
+
+  require_once ROOT_PATH . 'app/helpers/UserSession.php';
   ?>
 
   <main class="main-content">
@@ -26,6 +28,9 @@
       <div class="container">
         <div class="hero-content fade-in">
           <h1 class="hero-title">
+            <?php if ($isAuthenticated): ?>
+              <?= htmlspecialchars($currentUser['firstname']) ?> 
+            <?php endif; ?>
             Trouvez votre
             <span class="gradient-text">opportunité parfaite</span>
           </h1>
