@@ -10,32 +10,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <?php require_once ROOT_PATH . 'app/helpers/Navbar.php'; ?>
+    <?php require_once ROOT_PATH . 'app/helpers/Navbar.php';
+          require_once ROOT_PATH . 'app/controllers/UserController.php';
+    ?>
 
   <?php 
+    $etudiant = $this->user->getProfileById($id)
   
-  // Simulation données - À remplacer par requête DB
-  $etudiant = [
-    'id' => 1,
-    'prenom' => 'Jean',
-    'nom' => 'Dupont',
-    'email' => 'jean.dupont@email.com',
-    'telephone' => '+33 6 12 34 56 78',
-    'ecole' => 'École Polytechnique',
-    'region' => 'Île-de-France',
-    'domaine' => 'Informatique',
-    'bio' => 'Étudiant passionné par le développement web et mobile. J\'aime créer des solutions innovantes et travailler en équipe. Actuellement en recherche d\'un stage de fin d\'études pour approfondir mes compétences en développement Full Stack.',
-    'categories' => ['dev', 'data', 'marketing'],
-    'type_recherche' => 'stage',
-    'mode_travail' => ['onsite', 'hybrid'],
-    'salaire_min' => 1200,
-    'cv_uploaded' => true,
-    'cv_filename' => 'CV_Jean_Dupont.pdf',
-    'avatar_initials' => 'JD',
-    'member_since' => 'Novembre 2024',
-    'candidatures' => 12,
-    'competences' => ['React', 'Node.js', 'Python', 'MongoDB', 'TypeScript', 'Docker']
-  ];
 
   $categories_list = [
     'dev' => ['icon' => '💻', 'label' => 'Développement'],
