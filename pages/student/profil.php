@@ -46,6 +46,10 @@
   ];
   ?>
 
+  if (!$id) {
+    <h1> Erreur de Connexion </h1>
+  }
+  else {
   <main class="main-content">
     <div class="container">
       <div class="profil-layout">
@@ -57,14 +61,14 @@
               <div class="avatar-xl"><?php echo $etudiant['avatar_initials']; ?></div>
             </div>
 
-            <h2 class="profil-name"><?php echo $etudiant['prenom'] . ' ' . $etudiant['nom']; ?></h2>
+            <h2 class="profil-name"><?php echo $etudiant['firstname'] . ' ' . $etudiant['lastname']; ?></h2>
             <p class="profil-title"><?php echo $etudiant['domaine']; ?></p>
             <p class="profil-location">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                 <circle cx="12" cy="10" r="3" />
               </svg>
-              <?php echo $etudiant['region']; ?>
+              <?php echo $etudiant['location']; ?>
             </p>
 
             <div class="profil-stats">
@@ -98,7 +102,7 @@
               <span class="info-icon">🎓</span>
               <div>
                 <p class="info-label">École</p>
-                <p class="info-value"><?php echo $etudiant['ecole']; ?></p>
+                <p class="info-value"><?php echo $etudiant['school']; ?></p>
               </div>
             </div>
 
@@ -114,7 +118,7 @@
               <span class="info-icon">📱</span>
               <div>
                 <p class="info-label">Téléphone</p>
-                <p class="info-value"><?php echo $etudiant['telephone']; ?></p>
+                <p class="info-value"><?php echo $etudiant['phone']; ?></p>
               </div>
             </div>
 
@@ -122,7 +126,7 @@
               <span class="info-icon">💰</span>
               <div>
                 <p class="info-label">Salaire souhaité</p>
-                <p class="info-value">À partir de <?php echo $etudiant['salaire_min']; ?>€/mois</p>
+                <p class="info-value">À partir de <?php echo $etudiant['min_salary']; ?>€/mois</p>
               </div>
             </div>
           </div>
@@ -155,7 +159,7 @@
           <section class="profil-section glass-card">
             <h3 class="section-title">Compétences techniques</h3>
             <div class="competences-list">
-              <?php foreach ($etudiant['competences'] as $comp): ?>
+              <?php foreach ($etudiant['skills'] as $comp): ?>
                 <span class="competence-tag"><?php echo $comp; ?></span>
               <?php endforeach; ?>
             </div>
@@ -169,8 +173,8 @@
               <div class="recherche-item">
                 <h4>Type de contrat</h4>
                 <div class="recherche-value">
-                  <div class="type-badge type-<?php echo $etudiant['type_recherche']; ?>">
-                    <?php echo $types_contrat[$etudiant['type_recherche']]; ?>
+                  <div class="type-badge type-<?php echo $etudiant['search_type']; ?>">
+                    <?php echo $types_contrat[$etudiant['search_type']]; ?>
                   </div>
                 </div>
               </div>
@@ -178,7 +182,7 @@
               <div class="recherche-item">
                 <h4>Mode de travail</h4>
                 <div class="recherche-value">
-                  <?php foreach ($etudiant['mode_travail'] as $mode): ?>
+                  <?php foreach ($etudiant['work_mode'] as $mode): ?>
                     <div class="mode-badge">
                       <span><?php echo $modes_travail[$mode]['icon']; ?></span>
                       <span><?php echo $modes_travail[$mode]['label']; ?></span>
@@ -237,6 +241,7 @@
       </div>
     </div>
   </main>
+  }
 
   <?php require_once ROOT_PATH . 'app/helpers/Footer.php'; ?>
 
