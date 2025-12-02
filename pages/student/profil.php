@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,16 +8,20 @@
   <link rel="stylesheet" href="assets/css/variables.css">
   <link rel="stylesheet" href="assets/css/profil.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+    rel="stylesheet">
 </head>
-<body>
-    <?php require_once ROOT_PATH . 'app/helpers/Navbar.php';
-          require_once ROOT_PATH . 'app/controllers/UserController.php';
-    ?>
 
-  <?php 
-    $etudiant = $this->user->getProfileById($id)
-  
+<body>
+  <?php require_once ROOT_PATH . 'app/helpers/Navbar.php';
+  require_once ROOT_PATH . 'app/controllers/UserController.php';
+  ?>
+
+  <?php
+  $userController = new UserController();
+  $etudiant = $userController->getUserProfile($id);
+
 
   $categories_list = [
     'dev' => ['icon' => '💻', 'label' => 'Développement'],
@@ -51,13 +56,13 @@
             <div class="avatar-header">
               <div class="avatar-xl"><?php echo $etudiant['avatar_initials']; ?></div>
             </div>
-            
+
             <h2 class="profil-name"><?php echo $etudiant['prenom'] . ' ' . $etudiant['nom']; ?></h2>
             <p class="profil-title"><?php echo $etudiant['domaine']; ?></p>
             <p class="profil-location">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                <circle cx="12" cy="10" r="3"/>
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
               </svg>
               <?php echo $etudiant['region']; ?>
             </p>
@@ -73,7 +78,7 @@
 
               <button class="btn-secondary btn-full">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                  <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
                 </svg>
                 Partager
               </button>
@@ -88,7 +93,7 @@
           <!-- Quick Info Card -->
           <div class="quick-info-card glass-card">
             <h3>Informations rapides</h3>
-            
+
             <div class="info-item">
               <span class="info-icon">🎓</span>
               <div>
@@ -159,7 +164,7 @@
           <!-- Recherche Section -->
           <section class="profil-section glass-card">
             <h3 class="section-title">Recherche actuelle</h3>
-            
+
             <div class="recherche-info">
               <div class="recherche-item">
                 <h4>Type de contrat</h4>
@@ -188,12 +193,12 @@
           <?php if ($etudiant['cv_uploaded']): ?>
             <section class="profil-section glass-card">
               <h3 class="section-title">Curriculum Vitae</h3>
-              
+
               <div class="cv-display">
                 <div class="cv-file-display">
                   <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                    <polyline points="14 2 14 8 20 8"/>
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
                   </svg>
                   <div class="cv-info">
                     <h4><?php echo $etudiant['cv_filename']; ?></h4>
@@ -202,9 +207,9 @@
                 </div>
                 <a href="/download-cv/<?php echo $etudiant['id']; ?>" class="btn-primary">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="7 10 12 15 17 10"/>
-                    <line x1="12" y1="15" x2="12" y2="3"/>
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
                   </svg>
                   Télécharger
                 </a>
@@ -218,8 +223,8 @@
             <div class="disponibilite-card">
               <div class="disponibilite-icon">
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10"/>
-                  <polyline points="12 6 12 12 16 14"/>
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
                 </svg>
               </div>
               <div class="disponibilite-info">
@@ -234,8 +239,9 @@
   </main>
 
   <?php require_once ROOT_PATH . 'app/helpers/Footer.php'; ?>
-  
+
   <script src="assets/js/navbar.js"></script>
   <script src="assets/js/profil.js"></script>
 </body>
+
 </html>
