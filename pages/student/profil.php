@@ -47,10 +47,9 @@
   ];
   ?>
 
-  if (!$id) {
+  <?php if (!$id): ?>
     <h1> Erreur de Connexion </h1>
-  }
-  else {
+  <?php else: ?>
   <main class="main-content">
     <div class="container">
       <div class="profil-layout">
@@ -242,7 +241,7 @@
       </div>
     </div>
   </main>
-  }
+  <?php endif; ?>
 
   <?php require_once ROOT_PATH . 'app/helpers/Footer.php'; ?>
 
