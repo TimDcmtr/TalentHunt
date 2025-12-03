@@ -26,6 +26,7 @@
       $applicationController = new ApplicationController();
       $applications = json_decode($applicationController->getCompanyApplications($id), true);
       $totalApplications = is_array($applications) ? count($applications) : 0;
+      $candidates = $applicationController->getOfferApplications($id);
 
       requireCompanyLogin();
     ?>
@@ -112,7 +113,7 @@
                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
                         <circle cx="9" cy="7" r="4"/>
                       </svg>
-                      <span><?php echo $offer['applications']; ?></span>
+                      <span><?php echo count($candidates) ?></span>
                     </div>
                   </div>
                   <div class="offer-actions">
