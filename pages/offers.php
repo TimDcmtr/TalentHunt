@@ -127,7 +127,7 @@
             foreach ($jobs as $job): ?>
               <div class="job-card glass-card">
                 <div class="job-header">
-                  <div class="job-logo"><?php echo strtoupper(substr($jobs['company'], 0, 2)); ?></div>
+                  <div class="job-logo"><?php echo strtoupper(substr($job['company'], 0, 2)); ?></div>
                   <div class="job-main-info">
                     <h3 class="job-title"><?php echo $job['title']; ?></h3>
                     <div class="job-company">
