@@ -197,7 +197,7 @@
           </section>
 
           <!-- CV Section -->
-          <?php if ($etudiant['cv_uploaded']): ?>
+          <?php if ($etudiant['cv_filename']): ?>
             <section class="profil-section glass-card">
               <h3 class="section-title">Curriculum Vitae</h3>
 
