@@ -67,7 +67,7 @@
         </form>
 
                 <!-- Login EN Form -->
-        <form id="loginENForm" class="auth-form active" method="POST" action="/loginEN">
+        <form id="loginENForm" class="auth-form" method="POST" action="/loginEN">
           <div class="form-group">
             <label for="login-email" class="form-label">Email</label>
             <input type="email" id="login-email" name="email" class="form-input" placeholder="votre@email.com" required>
