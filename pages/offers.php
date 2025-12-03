@@ -11,6 +11,14 @@
 </head>
 <body>
   <?php require_once ROOT_PATH . 'app/helpers/Navbar.php'; ?>
+  <?php
+  require_once ROOT_PATH . 'app/controllers/JobOfferController.php';
+
+  $jobController = new JobOfferController();
+  $jobs = json_decode($jobController->findAllJobOffers(), true);
+
+  $totalJobs = is_array($jobs) ? count($jobs) : 0;
+  ?>
 
   <main class="main-content">
     <div class="container">
@@ -104,7 +112,7 @@
           <div class="results-header">
             <div class="results-info">
               <h2>Offres disponibles</h2>
-              <span class="results-count">247 résultats</span>
+              <span class="results-count"><?php echo $totalJobs; ?> résultats</span>
             </div>
             <select class="sort-select">
               <option value="recent">Plus récentes</option>
@@ -116,54 +124,6 @@
           <!-- Job Cards -->
           <div class="jobs-list">
             <?php
-            // Exemple de données - À remplacer par la vraie DB
-            $jobs = [
-              [
-                'id' => 1,
-                'title' => 'Développeur Full Stack',
-                'company' => 'TechCorp',
-                'location' => 'Paris, France',
-                'type' => 'Stage',
-                'remote' => 'Hybride',
-                'salary' => '1200-1500€',
-                'logo' => '🚀',
-                'tags' => ['React', 'Node.js', 'MongoDB']
-              ],
-              [
-                'id' => 2,
-                'title' => 'Designer UI/UX',
-                'company' => 'DesignLab',
-                'location' => 'Lyon, France',
-                'type' => 'Alternance',
-                'remote' => '100% remote',
-                'salary' => '1500-1800€',
-                'logo' => '🎨',
-                'tags' => ['Figma', 'Adobe XD', 'Prototyping']
-              ],
-              [
-                'id' => 3,
-                'title' => 'Data Analyst',
-                'company' => 'DataPro',
-                'location' => 'Bordeaux, France',
-                'type' => 'Stage',
-                'remote' => 'Sur site',
-                'salary' => '1000-1300€',
-                'logo' => '📊',
-                'tags' => ['Python', 'SQL', 'Tableau']
-              ],
-              [
-                'id' => 4,
-                'title' => 'Marketing Digital',
-                'company' => 'MarketGenius',
-                'location' => 'Toulouse, France',
-                'type' => 'CDD',
-                'remote' => 'Hybride',
-                'salary' => '2000-2500€',
-                'logo' => '📱',
-                'tags' => ['SEO', 'Social Media', 'Analytics']
-              ]
-            ];
-
             foreach ($jobs as $job): ?>
               <div class="job-card glass-card">
                 <div class="job-header">

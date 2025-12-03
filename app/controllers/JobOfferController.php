@@ -140,6 +140,58 @@ class JobOfferController
         http_response_code(200);
         return json_encode($offers_arr);
     }
+    /**
+     * Récupérer TOUTES les offres (toutes entreprises)
+     */
+    public function findAllJobOffers()
+    {
+        // Requête SQL pour récupérer toutes les offres
+        $query = "SELECT jo.*, c.name as company_name, c.logo as company_logo 
+                FROM job_offers jo 
+                LEFT JOIN companies c ON jo.company_id = c.id 
+                ORDER BY jo.created_at DESC";
+        
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        
+        $offers_arr = [];
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            
+            // Calcul du "Il y a X jours"
+            $created = new DateTime($row['created_at']);
+            $now = new DateTime();
+            $interval = $now->diff($created);
+            $posted_ago = "Il y a " . $interval->d . " jours"; 
+            if($interval->d == 0) $posted_ago = "Aujourd'hui";
+
+            $item = [
+                'id' => $row['id'],
+                'title' => $row['title'],
+                
+                // Infos Entreprise
+                'company' => $row['company_name'] ?? 'Entreprise inconnue',
+                'company_logo' => $row['company_logo'] ?? '❓',
+
+                'location' => $row['location'],
+                'type' => $row['type'],
+                'remote' => $row['remote'],
+                'salary' => $row['salary'],
+                'duration' => $row['duration'],
+                'start_date' => date("d/m/Y", strtotime($row['start_date'])),
+                'posted' => $posted_ago,
+                'views' => (int) $row['views'],
+                'applications' => (int) $row['applications_count'],
+                
+                'tags' => json_decode($row['tags'] ?? '[]', true),
+            ];
+
+            array_push($offers_arr, $item);
+        }
+
+        http_response_code(200);
+        return json_encode($offers_arr);
+    }
 
     /**
      * Créer une nouvelle offre
