@@ -41,7 +41,7 @@ class CompanyController
         $this->company->headquarters = $data['region'] ?? null;
         
         // HTML: name="site_web" -> DB: website
-        $this->company->website = $data['site_web'] ?? null;
+        $this->company->website = $data['site_web'] ?? '(Aucun site)';
         
         // HTML: name="secteur" -> DB: sector
         $this->company->sector = $data['domain'] ?? null;

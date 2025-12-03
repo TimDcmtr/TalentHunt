@@ -48,7 +48,7 @@ class Company
                     sector = :sector,
                     created_at = NOW(),
                     active_offers = 0,
-                    logo = '🏢'"; // Logo par défaut
+                    logo = 'E'"; // Logo par défaut
 
         $stmt = $this->conn->prepare($query);
 
