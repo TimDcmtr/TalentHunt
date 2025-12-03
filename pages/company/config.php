@@ -78,7 +78,7 @@
               <h2>Informations de l'entreprise</h2>
               <p>Les informations de base visibles par les étudiants</p>
 
-              <p><?= $company ?></p>
+              <script> console.log(<?= $company ?>)</script>
             </div>
 
             <form class="config-form" method="POST" action="/entreprise/update">
