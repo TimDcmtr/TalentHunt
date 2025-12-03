@@ -10,7 +10,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <?php require_once ROOT_PATH . 'app/helpers/Navbar.php'; ?>
+    <?php require_once ROOT_PATH . 'app/helpers/Navbar.php'; 
+      require_once ROOT_PATH . 'app/controllers/CompaniesController.php';
+    ?>
 
   <?php if (!isset($_GET['id'])): ?>
     <h1> Erreur de Connexion </h1>
@@ -18,30 +20,11 @@
 
   <?php 
 
-
-  // Simulation données - À remplacer par requête DB
-  $entreprise = [
-    'id' => 1,
-    'nom' => 'TechCorp',
-    'logo' => '🚀',
-    'taille' => '50-200 employés',
-    'annee_creation' => 2018,
-    'siege' => 'Paris, France',
-    'website' => 'https://techcorp.com',
-    'description_courte' => 'Scale-up innovante spécialisée dans le développement de solutions web et mobile.',
-    'description' => 'TechCorp est une scale-up française en pleine croissance, spécialisée dans le développement de solutions web et mobile innovantes. Nous travaillons avec des clients du monde entier pour créer des expériences numériques exceptionnelles. Notre équipe passionnée est composée de développeurs, designers et product managers qui partagent la même vision : créer des produits qui font la différence.',
-    'valeurs' => ['Innovation', 'Excellence', 'Collaboration', 'Transparence'],
-    'secteur' => 'Technologies',
-    'specialites' => ['web', 'mobile', 'cloud', 'data'],
-    'email' => 'contact@techcorp.com',
-    'telephone' => '+33 1 23 45 67 89',
-    'linkedin' => 'https://linkedin.com/company/techcorp',
-    'twitter' => 'https://twitter.com/techcorp',
-    'offres_actives' => 12,
-    'employes' => 150,
-    'member_since' => 'Janvier 2024'
-  ];
-
+  $id = $_GET['id'];
+  $userController = new CompaniesController();
+  $CompanyDb = $userController->getCompanyProfile($id);
+  $etudiant = json_decode($CompanyDb, true);
+  
   $specialites_list = [
     'web' => 'Web Development',
     'mobile' => 'Mobile',
@@ -60,17 +43,17 @@
           <!-- Logo Card -->
           <div class="company-logo-card glass-card">
             <div class="company-logo-xl"><?php echo $entreprise['logo']; ?></div>
-            <h2 class="company-name"><?php echo $entreprise['nom']; ?></h2>
-            <p class="company-tagline"><?php echo $entreprise['description_courte']; ?></p>
+            <h2 class="company-name"><?php echo $entreprise['name']; ?></h2>
+            <p class="company-tagline"><?php echo $entreprise['short_description']; ?></p>
 
             <div class="company-stats">
               <div class="stat-item-small">
-                <span class="stat-number"><?php echo $entreprise['offres_actives']; ?></span>
+                <span class="stat-number"><?php echo $entreprise['active_offers']; ?></span>
                 <span class="stat-label">Offres actives</span>
               </div>
               <div class="stat-divider-small"></div>
               <div class="stat-item-small">
-                <span class="stat-number"><?php echo $entreprise['employes']; ?></span>
+                <span class="stat-number"><?php echo $entreprise['employee_count']; ?></span>
                 <span class="stat-label">Employés</span>
               </div>
             </div>
@@ -100,7 +83,7 @@
               <span class="info-icon">👥</span>
               <div>
                 <p class="info-label">Taille</p>
-                <p class="info-value"><?php echo $entreprise['taille']; ?></p>
+                <p class="info-value"><?php echo $entreprise['size_range']; ?></p>
               </div>
             </div>
 
@@ -108,7 +91,7 @@
               <span class="info-icon">📅</span>
               <div>
                 <p class="info-label">Fondée en</p>
-                <p class="info-value"><?php echo $entreprise['annee_creation']; ?></p>
+                <p class="info-value"><?php echo $entreprise['founded_year']; ?></p>
               </div>
             </div>
 
@@ -116,7 +99,7 @@
               <span class="info-icon">📍</span>
               <div>
                 <p class="info-label">Siège social</p>
-                <p class="info-value"><?php echo $entreprise['siege']; ?></p>
+                <p class="info-value"><?php echo $entreprise['headquarters']; ?></p>
               </div>
             </div>
 
@@ -124,7 +107,7 @@
               <span class="info-icon">🏢</span>
               <div>
                 <p class="info-label">Secteur</p>
-                <p class="info-value"><?php echo $entreprise['secteur']; ?></p>
+                <p class="info-value"><?php echo $entreprise['sector']; ?></p>
               </div>
             </div>
 
@@ -157,7 +140,7 @@
               <span class="info-icon">📱</span>
               <div>
                 <p class="info-label">Téléphone</p>
-                <p class="info-value"><?php echo $entreprise['telephone']; ?></p>
+                <p class="info-value"><?php echo $entreprise['phone']; ?></p>
               </div>
             </div>
 
@@ -175,7 +158,7 @@
         <div class="profil-main">
           <!-- Description Section -->
           <section class="profil-section glass-card">
-            <h3 class="section-title">À propos de <?php echo $entreprise['nom']; ?></h3>
+            <h3 class="section-title">À propos de <?php echo $entreprise['name']; ?></h3>
             <p class="bio-text"><?php echo $entreprise['description']; ?></p>
           </section>
 
@@ -183,7 +166,7 @@
           <section class="profil-section glass-card">
             <h3 class="section-title">Nos valeurs</h3>
             <div class="valeurs-grid">
-              <?php foreach ($entreprise['valeurs'] as $valeur): ?>
+              <?php foreach ($entreprise['core_values'] as $valeur): ?>
                 <div class="valeur-card">
                   <h4><?php echo $valeur; ?></h4>
                 </div>
