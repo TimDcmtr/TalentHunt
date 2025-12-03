@@ -238,7 +238,7 @@
       </div>
     </div>
   </main>
-
+  <?php endif; ?>
   <?php require_once ROOT_PATH . 'app/helpers/Footer.php'; ?>
   
   <script src="assets/js/navbar.js"></script>
