@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
       };
     } catch (error) {
       console.error('Erreur réseau:', error);
-      return '{ ok: false, data: { message: "Une erreur technique est survenue." } }';
+      return { ok: false, data: { message: "Une erreur technique est survenue." } };
     }
   }
 
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
       setLoading(btn, true);
       
       const response = await sendAuthRequest('login', { email, password });
-      const data = JSON.parse(response.data);
+      const data = response.data.ok ? response.data : JSON.parse(response.data);
 
       setLoading(btn, false, originalBtnText);
 
@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       if (await response.ok && await data.status === true) {
         document.cookie= `authToken=${data.token}`;
-        window.location.href = '/company/dashboard'; // Ou index.php selon ta structure
+        window.location.href = '/company/dashboard';
       } else {
         showError(this.querySelector('input[name="password"]'), data.message || 'Identifiants incorrects');
       }
