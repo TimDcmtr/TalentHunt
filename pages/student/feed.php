@@ -147,13 +147,13 @@
           <button class="filter-tab active" data-filter="all">
             Tous (<?php echo count($candidatures); ?>)
           </button>
-          <button class="filter-tab" data-filter="en_attente">
+          <button class="filter-tab" data-filter="pending">
             En attente
           </button>
-          <button class="filter-tab" data-filter="accepte">
+          <button class="filter-tab" data-filter="accepted">
             Acceptés
           </button>
-          <button class="filter-tab" data-filter="refuse">
+          <button class="filter-tab" data-filter="refused">
             Refusés
           </button>
         </div>
