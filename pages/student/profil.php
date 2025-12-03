@@ -209,7 +209,6 @@
                   </svg>
                   <div class="cv-info">
                     <h4><?php echo $etudiant['cv_filename']; ?></h4>
-                    <p>PDF • Dernière mise à jour il y a 2 jours</p>
                   </div>
                 </div>
                 <a href="/uploads/cv/<?= $etudiant['cv_filename']; ?>" class="btn-primary">
