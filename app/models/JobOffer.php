@@ -17,7 +17,7 @@ class JobOffer
     public $created_at;     // Datetime
     public $views;
     public $applications_count;
-    
+
     // Arrays (JSON)
     public $tags;
     public $description;
@@ -67,7 +67,7 @@ class JobOffer
         $stmt->bindParam(":duration", $this->duration);
         $stmt->bindParam(":start_date", $this->start_date);
         $stmt->bindParam(":description", $this->description);
-        
+
         // JSON Encoding pour les tableaux
         $stmt->bindParam(":tags", json_encode($this->tags));
         $stmt->bindParam(":missions", json_encode($this->missions));
@@ -123,46 +123,48 @@ class JobOffer
     }
 
     // Helper pour "Il y a X jours"
-    private function timeElapsedString($datetime, $full = false) {
+    // DANS app/models/JobOffer.php
+
+    private function timeElapsedString($datetime, $full = false)
+    {
         $now = new DateTime;
         $ago = new DateTime($datetime);
         $diff = $now->diff($ago);
 
-        $diff->w = floor($diff->d / 7);
-        $diff->d -= $diff->w * 7;
+        // CORRECTION : On utilise une variable locale au lieu de toucher à $diff
+        $weeks = floor($diff->d / 7);
+        $days = $diff->d - ($weeks * 7);
 
         $string = array(
-            'y' => 'an', 'm' => 'mois', 'w' => 'semaine',
-            'd' => 'jour', 'h' => 'heure', 'i' => 'minute', 's' => 'seconde',
+            'y' => 'an',
+            'm' => 'mois',
+            'w' => 'semaine',
+            'd' => 'jour',
+            'h' => 'heure',
+            'i' => 'minute',
+            's' => 'seconde',
         );
+
         foreach ($string as $k => &$v) {
-            if ($diff->$k) {
-                $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+            // On gère le cas spécial des semaines (w) et des jours (d) manuellement
+            if ($k === 'w') {
+                $value = $weeks;
+            } elseif ($k === 'd') {
+                $value = $days;
+            } else {
+                $value = $diff->$k;
+            }
+
+            if ($value) {
+                $v = $value . ' ' . $v . ($value > 1 ? 's' : '');
             } else {
                 unset($string[$k]);
             }
         }
 
-        if (!$full) $string = array_slice($string, 0, 1);
+        if (!$full)
+            $string = array_slice($string, 0, 1);
         return $string ? 'Il y a ' . implode(', ', $string) : 'À l\'instant';
-    }
-
-    // --- DANS JobOffer.php ---
-
-    /**
-     * Récupère toutes les offres d'une entreprise spécifique
-     */
-    public function getAllByCompany($company_id)
-    {
-        $query = "SELECT * FROM " . $this->table_name . " 
-                  WHERE company_id = :company_id 
-                  ORDER BY created_at DESC";
-
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':company_id', $company_id);
-        $stmt->execute();
-
-        return $stmt; // On retourne l'objet PDOStatement pour boucler dessus dans le controller
     }
 }
 ?>
