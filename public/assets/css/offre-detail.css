@@ -46,6 +46,7 @@
   justify-content: center;
   font-size: 3rem;
   flex-shrink: 0;
+  color: var(--primary-light);
 }
 
 .offre-header-content {
@@ -356,6 +357,7 @@
   justify-content: center;
   font-size: 1.5rem;
   flex-shrink: 0;
+  color: var(--primary-light);
 }
 
 .company-header-small h5 {
