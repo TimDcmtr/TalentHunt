@@ -12,6 +12,7 @@
 <body>
     <?php require_once ROOT_PATH . 'app/helpers/Navbar.php'; 
       require_once ROOT_PATH . 'app/controllers/CompaniesController.php';
+      require_once ROOT_PATH . 'app/controllers/JobOfferController.php';
     ?>
 
   <?php if (!isset($_GET['id'])): ?>
@@ -199,14 +200,17 @@
 
             <div class="offres-preview">
               <?php
-              $offres = [
+              $offersController = new JobOfferController();
+              $offres = json_decode($offersController->findAllJobOffersCompany($id), true);
+
+              $tempoffers = [
                 ['id' => 1, 'title' => 'Développeur Full Stack', 'type' => 'Stage', 'location' => 'Paris'],
                 ['id' => 2, 'title' => 'Designer UI/UX', 'type' => 'Alternance', 'location' => 'Paris'],
                 ['id' => 3, 'title' => 'Data Analyst', 'type' => 'CDI', 'location' => 'Remote']
               ];
               
               foreach ($offres as $offre): ?>
-                <a href="/offre/<?php echo $offre['id']; ?>" class="offre-preview-card">
+                <a href="/offre?id=<?php echo $offre['id']; ?>" class="offre-preview-card">
                   <h4><?php echo $offre['title']; ?></h4>
                   <div class="offre-preview-meta">
                     <span><?php echo $offre['type']; ?></span>

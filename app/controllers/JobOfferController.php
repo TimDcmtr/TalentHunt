@@ -78,6 +78,69 @@ class JobOfferController
         }
     }
 
+    public function findAllJobOffersCompany($id_company)
+    {
+        // 1. Récupérer les infos de l'entreprise (Nom & Logo) pour les injecter dans les offres
+        // Cela évite de faire une requête SQL "Company" pour chaque offre trouvée
+        $companyData = ['name' => 'Unknown', 'logo' => '❓'];
+        
+        if ($this->companyModel->getProfileById($id_company)) {
+            $companyData = [
+                'name' => $this->companyModel->name,
+                'logo' => $this->companyModel->logo
+            ];
+        }
+
+        // 2. Récupérer les offres brutes depuis la BDD
+        $stmt = $this->job->getAllByCompany($id_company);
+        $offers_arr = [];
+
+        // 3. Boucle et formatage (Similaire à getJobDetails mais en boucle)
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            
+            // Calcul du "Il y a X jours" (On peut utiliser une fonction helper ou le faire ici)
+            // Note: Pour faire propre, rend la méthode timeElapsedString du modèle 'public' ou 'static'
+            // Ici je refais une logique simple pour l'exemple :
+            $created = new DateTime($row['created_at']);
+            $now = new DateTime();
+            $interval = $now->diff($created);
+            $posted_ago = "Il y a " . $interval->d . " jours"; 
+            if($interval->d == 0) $posted_ago = "Aujourd'hui";
+
+            $item = [
+                'id' => $row['id'],
+                'title' => $row['title'],
+                
+                // Infos Entreprise (Injectées)
+                'company' => $companyData['name'],
+                'company_logo' => $companyData['logo'],
+
+                'location' => $row['location'],
+                'type' => $row['type'],
+                'remote' => $row['remote'],
+                'salary' => $row['salary'],
+                'duration' => $row['duration'],
+                'start_date' => date("d/m/Y", strtotime($row['start_date'])),
+                'posted' => $posted_ago,
+                'views' => (int) $row['views'],
+                'applications' => (int) $row['applications_count'],
+                
+                // Décodage JSON pour la liste (si besoin d'afficher les tags dans la liste)
+                'tags' => json_decode($row['tags'] ?? '[]', true),
+                
+                // On n'envoie généralement pas la description complète/missions/benefits 
+                // dans une liste pour alléger le JSON, mais tu peux les ajouter si tu veux :
+                // 'description' => $row['description']
+            ];
+
+            array_push($offers_arr, $item);
+        }
+
+        // 4. Renvoi du JSON
+        http_response_code(200);
+        return json_encode($offers_arr);
+    }
+
     /**
      * Créer une nouvelle offre
      */
