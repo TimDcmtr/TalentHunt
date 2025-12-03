@@ -51,6 +51,8 @@
   ];
   ?>
 
+  <?= $etudiant ?>
+
   
   <main class="main-content">
     <div class="container">
