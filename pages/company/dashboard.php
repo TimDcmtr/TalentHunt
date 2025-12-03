@@ -142,7 +142,7 @@
 
             <div class="applications-list">
               <?php
-              $applications = [
+              $applicationsTests = [
                 [
                   'name' => 'Marie Durant',
                   'position' => 'Développeur Full Stack',
@@ -169,10 +169,10 @@
                 <div class="application-item">
                   <div class="app-avatar"><?php echo $app['avatar']; ?></div>
                   <div class="app-info">
-                    <h4><?php echo $app['name']; ?></h4>
-                    <p><?php echo $app['position']; ?></p>
+                    <h4><?php echo $app['candidate_name']; ?></h4>
+                    <p><?php echo $app['candidate_bio']; ?></p>
                   </div>
-                  <a href="/candidature/<?php echo $app['name']; ?>" class="btn-secondary btn-sm">Voir le profil</a>
+                  <a href="/student/profil?id=<?php echo $app['candidate_id']; ?>" class="btn-secondary btn-sm">Voir le profil</a>
                 </div>
               <?php endforeach; ?>
             </div>

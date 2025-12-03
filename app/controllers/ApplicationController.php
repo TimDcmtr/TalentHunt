@@ -137,7 +137,9 @@ class ApplicationController
             $cvFilename = null;
             if ($this->userModel->getProfileById($row['user_id'])) {
                 $candidateName = $this->userModel->firstname . ' ' . $this->userModel->lastname;
-                $cvFilename = $this->userModel->cv_filename;
+                $candidateId = $this->userModel->id;
+                $candidateAvatar = $this->userModel->avatar_initials;
+                $candidateBio = $this->userModel->bio;
             }
 
             // 2. Récupérer Titre de l'offre
@@ -157,6 +159,9 @@ class ApplicationController
             $item = [
                 'id' => $row['id'],
                 'candidate_name' => $candidateName,
+                'candidate_id' => $candidateId,
+                'candidate_avatar' => $candidateAvatar,
+                'candidate_bio' => $candidateBio,
                 'cv_filename' => $cvFilename, // Pour faire un lien de téléchargement
                 'offre' => $jobTitle,
                 'status' => $row['status'],
