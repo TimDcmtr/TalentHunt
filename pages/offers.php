@@ -177,7 +177,7 @@
 
                 <div class="job-footer">
                   <span class="job-salary"><?php echo $job['salary']; ?>/mois</span>
-                  <a href="/offre/<?php echo $job['id']; ?>" class="btn-view">
+                  <a href="/offer?id=<?php echo $job['id']; ?>" class="btn-view">
                     Voir l'offre
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M5 12h14M12 5l7 7-7 7"/>
