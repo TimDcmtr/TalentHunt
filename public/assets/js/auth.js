@@ -225,19 +225,13 @@ document.addEventListener('DOMContentLoaded', function () {
       const btn = this.querySelector('button[type="submit"]');
       const originalBtnText = btn.innerHTML;
 
-      // Mapping spécifique pour l'entreprise
-      // Le modèle User attend firstname/lastname. On adapte.
-      const entreprisename = this.querySelector('input[name="firstname"]')?.value || ''; // ID html: register-entreprisename
-
       const formData = {
-        firstname: entreprisename, // On met le nom de l'entreprise ici
-        lastname: 'Entreprise',    // Valeur par défaut pour satisfaire la BDD
+        name: this.querySelector('input[name="firstname"]')?.value,
         email: this.querySelector('input[name="email"]').value,
         tel: this.querySelector('input[name="tel"]')?.value || '',
         password: this.querySelector('input[name="password"]').value,
         region: this.querySelector('select[name="region"]')?.value || '',
         domain: this.querySelector('input[name="domain"]')?.value || '',
-        type: 'company'
       };
 
       // Validation
