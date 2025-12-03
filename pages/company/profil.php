@@ -178,7 +178,7 @@
           <section class="profil-section glass-card">
             <h3 class="section-title">Domaines d'expertise</h3>
             <div class="specialites-display">
-              <?php foreach ($entreprise['specialities'] as $spec_key): ?>
+              <?php foreach ($entreprise['specialties'] as $spec_key): ?>
                 <?php if (isset($specialites_list[$spec_key])): ?>
                   <div class="specialite-badge">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
