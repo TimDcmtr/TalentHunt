@@ -51,9 +51,6 @@
     'remote' => ['icon' => '🌍', 'label' => '100% remote']
   ];
   ?>
-
-  <?= $etudiant ?>
-
   
   <main class="main-content">
     <div class="container">
