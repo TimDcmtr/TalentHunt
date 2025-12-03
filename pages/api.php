@@ -13,7 +13,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 // Adapte le chemin si tes dossiers sont ailleurs (ex: './app/controllers/...')
 require_once ROOT_PATH . 'app/config/db.php';
 require_once ROOT_PATH . 'app/controllers/UserController.php';
-require_once ROOT_PATH . 'app/controllers/CompanyController.php';
+require_once ROOT_PATH . 'app/controllers/CompaniesController.php';
 
 // 3. Récupération de l'action demandée via l'URL (ex: api.php?action=register)
 $action = isset($_GET['action']) ? $_GET['action'] : '';
