@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const originalBtnText = btn.innerHTML;
 
       const formData = {
-        name: this.getElementById('register-entreprisename')?.value,
+        name: this.querySelector('input[name="firstname"]')?.value,
         email: this.querySelector('input[name="email"]').value,
         tel: this.querySelector('input[name="tel"]')?.value || '',
         password: this.querySelector('input[name="password"]').value,
@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', function () {
       };
 
       // Validation
-      if (!formData.firstname) {
+      if (!formData.name) {
         alert('Le nom de l\'entreprise est requis');
         return;
       }
