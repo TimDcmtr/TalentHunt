@@ -261,6 +261,7 @@ document.addEventListener('DOMContentLoaded', function () {
           // Succès (200, 201)
           if (typeof showNotification === 'function') {
             showNotification('Modifications enregistrées avec succès !', 'success');
+            location.reload();
           } else {
             alert('Modifications enregistrées !');
           }
