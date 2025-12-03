@@ -14,6 +14,9 @@
   require_once ROOT_PATH . 'app/controllers/JobOfferController.php';?>
 
   <?php
+  // Récupérer l'URL actuelle sans paramètres
+  $currentUrl = strtok($_SERVER["REQUEST_URI"], '?');
+  
   $filters = [
     'type' => $_GET['contract'] ?? [],
     'location' => $_GET['location'] ?? '',
@@ -23,7 +26,7 @@
   $jobController = new JobOfferController();
   $allJobs = json_decode($jobController->findAllJobOffers($filters), true);
   $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-  $limit = 2;
+  $limit = 9;
   $totalJobs = is_array($allJobs) ? count($allJobs) : 0;
   $totalPages = ceil($totalJobs / $limit);
   $offset = ($page - 1) * $limit;
@@ -35,10 +38,10 @@
       <div class="page-layout">
         <!-- Sidebar -->
         <aside class="sidebar glass-card">
-          <form method="GET" action="">
+          <form method="GET" action="<?php echo $currentUrl; ?>">
             <div class="sidebar-header">
               <h3>Filtres</h3>
-              <a href="?" class="btn-reset">Réinitialiser</a>
+              <a href="<?php echo $currentUrl; ?>" class="btn-reset">Réinitialiser</a>
             </div>
 
             <div class="filter-section">
@@ -114,9 +117,9 @@
         <div class="content-area">
           <!-- Search Bar -->
           <div class="search-section glass-card">
-            <form method="GET" action="" class="search-bar">
+            <form method="GET" action="<?php echo $currentUrl; ?>" class="search-bar">
               <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="8"/>
+                ircle cx="11" cy="11" r="8"/>
                 <path d="m21 21-4.35-4.35"/>
               </svg>
               <input 
@@ -184,7 +187,7 @@
                     <span class="job-detail">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                        <circle cx="12" cy="10" r="3"/>
+                        ircle cx="12" cy="10" r="3"/>
                       </svg>
                       <?php echo htmlspecialchars($job['location']); ?>
                     </span>
@@ -235,7 +238,16 @@
           <!-- Pagination -->
           <?php if ($totalPages > 1): ?>
           <div class="pagination">
-            <a href="?<?php echo http_build_query(array_merge($_GET, ['page' => max(1, $page-1)])); ?>" 
+            <?php
+            $prevPage = max(1, $page - 1);
+            $nextPage = min($totalPages, $page + 1);
+            
+            // Construire l'URL de base avec les filtres
+            $baseParams = $_GET;
+            unset($baseParams['page']);
+            ?>
+            
+            <a href="<?php echo $currentUrl . '?' . http_build_query(array_merge($baseParams, ['page' => $prevPage])); ?>" 
               class="pagination-btn" <?php echo $page <= 1 ? 'style="pointer-events:none;opacity:0.5"' : ''; ?>>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M15 18l-6-6 6-6"/>
@@ -243,13 +255,13 @@
             </a>
 
             <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-              <a href="?<?php echo http_build_query(array_merge($_GET, ['page' => $i])); ?>" 
+              <a href="<?php echo $currentUrl . '?' . http_build_query(array_merge($baseParams, ['page' => $i])); ?>" 
                 class="pagination-btn <?php echo $i == $page ? 'active' : ''; ?>">
                 <?php echo $i; ?>
               </a>
             <?php endfor; ?>
 
-            <a href="?<?php echo http_build_query(array_merge($_GET, ['page' => min($totalPages, $page+1)])); ?>" 
+            <a href="<?php echo $currentUrl . '?' . http_build_query(array_merge($baseParams, ['page' => $nextPage])); ?>" 
               class="pagination-btn" <?php echo $page >= $totalPages ? 'style="pointer-events:none;opacity:0.5"' : ''; ?>>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M9 18l6-6-6-6"/>
