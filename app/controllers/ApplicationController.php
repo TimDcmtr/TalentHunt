@@ -30,9 +30,14 @@ class ApplicationController
     public function apply($data)
     {
         // $data attend : user_id, job_offer_id
-        if (!isset($data['user_id']) || !isset($data['job_offer_id'])) {
+        if (!isset($data['user_id']) || !isset($data['offre_id'])) {
             http_response_code(400);
-            return json_encode(["message" => "Données manquantes."]);
+            return json_encode([
+                "message" => "Données manquantes.",
+                "debug_received" => $data, // On affiche ce qu'on a reçu
+                "has_user_id" => isset($data['user_id']),
+                "has_offre_id" => isset($data['offre_id'])
+            ]);
         }
 
         // 1. Vérifier doublon
