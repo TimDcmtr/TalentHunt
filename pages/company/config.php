@@ -78,7 +78,7 @@
               <h2>Informations de l'entreprise</h2>
               <p>Les informations de base visibles par les étudiants</p>
 
-              <script> console.log('<?= $company ?>')</script>
+              <p><?= $company['name'] ?> | <?= $company['size_range'] ?> | <?= $company['founded_year'] ?> | <?= $company['headquarters'] ?></p>
             </div>
 
             <form class="config-form" method="POST" action="/entreprise/update">
