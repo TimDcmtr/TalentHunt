@@ -21,82 +21,72 @@
   // Traitement du formulaire
   if (isset($_POST['submit_offer'])) {
       
-      // DEBUG: Vérifier que company_id existe
+      // Vérifier que company_id existe
       if (!isset($currentCompany) || empty($currentCompany)) {
           echo "<script>alert('❌ Erreur: Aucune entreprise connectée');</script>";
-          exit;
-      }
-      
-      // Préparer le salaire (format: "min-max")
-      $salary = '';
-      if (!empty($_POST['salary_min']) && !empty($_POST['salary_max'])) {
-          $salary = trim($_POST['salary_min']) . '-' . trim($_POST['salary_max']);
-      } elseif (!empty($_POST['salary_min'])) {
-          $salary = trim($_POST['salary_min']);
-      }
-      
-      // Préparer les tags (nettoyer les espaces et supprimer les vides)
-      $tags = [];
-      if (!empty($_POST['tags'])) {
-          $tagsArray = explode(',', $_POST['tags']);
-          foreach ($tagsArray as $tag) {
-              $cleanTag = trim($tag);
-              if (!empty($cleanTag)) {
-                  $tags[] = $cleanTag;
+      } else {
+          // Préparer le salaire (format: "min-max")
+          $salary = '';
+          if (!empty($_POST['salary_min']) && !empty($_POST['salary_max'])) {
+              $salary = trim($_POST['salary_min']) . '-' . trim($_POST['salary_max']);
+          } elseif (!empty($_POST['salary_min'])) {
+              $salary = trim($_POST['salary_min']);
+          }
+          
+          // Préparer les tags (nettoyer les espaces et supprimer les vides)
+          $tags = [];
+          if (!empty($_POST['tags'])) {
+              $tagsArray = explode(',', $_POST['tags']);
+              foreach ($tagsArray as $tag) {
+                  $cleanTag = trim($tag);
+                  if (!empty($cleanTag)) {
+                      $tags[] = $cleanTag;
+                  }
               }
           }
-      }
-      
-      // Filtrer les tableaux pour supprimer les éléments vides
-      $missions = isset($_POST['missions']) ? array_filter(array_map('trim', $_POST['missions'])) : [];
-      $requirements = isset($_POST['requirements']) ? array_filter(array_map('trim', $_POST['requirements'])) : [];
-      $benefits = isset($_POST['benefits']) ? array_filter(array_map('trim', $_POST['benefits'])) : [];
-      
-      // Convertir la date du format HTML (YYYY-MM-DD) au format attendu par le contrôleur (d/m/Y)
-      $startDate = '';
-      if (!empty($_POST['start_date'])) {
-          $dateObj = DateTime::createFromFormat('Y-m-d', $_POST['start_date']);
-          $startDate = $dateObj ? $dateObj->format('d/m/Y') : '';
-      }
-      
-      // Préparer toutes les données pour le contrôleur
-      $data = [
-          'company_id' => $currentCompany,
-          'title' => trim($_POST['title']),
-          'location' => trim($_POST['location']),
-          'type' => $_POST['contract_type'],
-          'remote' => $_POST['remote'],
-          'salary' => $salary,
-          'duration' => trim($_POST['duration'] ?? ''),
-          'start_date' => $startDate,
-          'description' => trim($_POST['description']),
-          'tags' => array_values($tags),
-          'missions' => array_values($missions),
-          'requirements' => array_values($requirements),
-          'benefits' => array_values($benefits)
-      ];
-      
-      // DEBUG: Afficher les données
-      // echo "<pre>"; print_r($data); echo "</pre>"; exit;
-      
-      // Créer l'offre dans la base de données
-      $jobController = new JobOfferController();
-      $result = json_decode($jobController->createOffer($data), true);
-      
-      // DEBUG: Afficher le résultat
-      // echo "<pre>"; print_r($result); echo "</pre>"; exit;
-      
-      if (isset($result['id'])) {
-          // Redirection vers la page de l'offre créée
-          $offerId = $result['id'];
-          echo "<script>
-              alert('✅ Offre publiée avec succès !');
-              window.location.href = '/offer?id=" . $offerId . "';
-          </script>";
-          exit;
-      } else {
-          $errorMsg = isset($result['message']) ? htmlspecialchars($result['message']) : 'Erreur inconnue';
-          echo "<script>alert('❌ Erreur: " . $errorMsg . "');</script>";
+          
+          // Filtrer les tableaux pour supprimer les éléments vides
+          $missions = isset($_POST['missions']) ? array_filter(array_map('trim', $_POST['missions'])) : [];
+          $requirements = isset($_POST['requirements']) ? array_filter(array_map('trim', $_POST['requirements'])) : [];
+          $benefits = isset($_POST['benefits']) ? array_filter(array_map('trim', $_POST['benefits'])) : [];
+          
+          // Convertir la date du format HTML (YYYY-MM-DD) au format attendu (d/m/Y)
+          $startDate = '';
+          if (!empty($_POST['start_date'])) {
+              $dateObj = DateTime::createFromFormat('Y-m-d', $_POST['start_date']);
+              $startDate = $dateObj ? $dateObj->format('d/m/Y') : '';
+          }
+          
+          // Préparer toutes les données
+          $data = [
+              'company_id' => $currentCompany,
+              'title' => trim($_POST['title']),
+              'location' => trim($_POST['location']),
+              'type' => $_POST['contract_type'],
+              'remote' => $_POST['remote'],
+              'salary' => $salary,
+              'duration' => trim($_POST['duration'] ?? ''),
+              'start_date' => $startDate,
+              'description' => trim($_POST['description']),
+              'tags' => array_values($tags),
+              'missions' => array_values($missions),
+              'requirements' => array_values($requirements),
+              'benefits' => array_values($benefits)
+          ];
+          
+          // Créer l'offre dans la base de données
+          $jobController = new JobOfferController();
+          $result = json_decode($jobController->createOffer($data), true);
+          
+          if (isset($result['id'])) {
+              // Redirection vers la page de l'offre créée
+              $offerId = $result['id'];
+              header("Location: /offer?id=" . $offerId);
+              exit;
+          } else {
+              $errorMsg = isset($result['message']) ? htmlspecialchars($result['message']) : 'Erreur inconnue';
+              echo "<script>alert('❌ Erreur: " . $errorMsg . "');</script>";
+          }
       }
   }
   ?>
@@ -158,7 +148,8 @@
             <p>Créez une offre attractive pour trouver les meilleurs talents</p>
           </div>
 
-          <form id="offreForm" method="POST" action="">
+          <!-- ⭐ CHANGEMENT D'ID pour éviter l'interception du JS -->
+          <form id="offreFormReal" method="POST" action="">
             <!-- Step 1: Informations générales -->
             <section class="form-step active" data-step="1">
               <div class="step-card glass-card">
@@ -464,6 +455,18 @@
   </main>
 
   <?php require_once ROOT_PATH . 'app/helpers/Footer.php'; ?>
+  
+  <!-- ⭐ ASTUCE : Ajouter un script pour forcer la soumission -->
+  <script>
+    // Intercepter le clic sur le bouton submit
+    document.getElementById('submitBtn')?.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // Soumettre directement le formulaire sans passer par le JS
+      document.getElementById('offreFormReal').submit();
+    });
+  </script>
   
   <script src="assets/js/navbar.js"></script>
   <script src="assets/js/offre-form.js"></script>
