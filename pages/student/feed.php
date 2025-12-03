@@ -10,11 +10,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-<?php require_once ROOT_PATH . 'app/helpers/Navbar.php'; ?>
+<?php require_once ROOT_PATH . 'app/helpers/Navbar.php'; 
+      require_once ROOT_PATH . 'app/controllers/ApplicationController.php';
+      require_once ROOT_PATH . 'app/helpers/UserSession.php';
+?>
   <?php 
+  requireLogin(); // Protection de la page
+
+  $applicationController = new ApplicationController();
+  $candidatures = json_decode($applicationController->getStudentApplications($currentUser));
   
   // Simulation données
-  $candidatures = [
+  $candidaturesTemp = [
     [
       'id' => 1,
       'offre' => 'Développeur Full Stack',
@@ -74,8 +81,8 @@
 
   $stats = [
     'total' => count($candidatures),
-    'en_attente' => count(array_filter($candidatures, fn($c) => $c['status'] === 'en_attente')),
-    'accepte' => count(array_filter($candidatures, fn($c) => $c['status'] === 'accepte'))
+    'en_attente' => count(array_filter($candidatures, fn($c) => $c['status'] === 'pending')),
+    'accepte' => count(array_filter($candidatures, fn($c) => $c['status'] === 'accepted'))
   ];
   ?>
 
