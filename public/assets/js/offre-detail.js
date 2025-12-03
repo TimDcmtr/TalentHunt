@@ -9,26 +9,25 @@ document.addEventListener('DOMContentLoaded', function() {
             // 1. Vérification Token (Connecté ?)
             const token = getCookie('authToken');
             if (!token) {
-                // Si pas connecté, on redirige ou on notifie
                 showNotification("Vous devez être connecté pour postuler.", "error");
+                // On attend 1.5s pour que l'utilisateur lise le message avant de rediriger
                 setTimeout(() => window.location.href = '/login', 1500);
                 return;
             }
 
             // 2. Gestion UI (Chargement)
-            const originalText = this.innerHTML;
+            const originalHTML = this.innerHTML;
             this.disabled = true;
-            this.innerHTML = '<span class="loader-small"></span> Envoi...'; // Tu peux mettre juste "Envoi..."
+            this.innerHTML = 'Envoi...'; // Feedback immédiat
+            this.style.opacity = '0.7';
 
             // 3. Récupération de l'ID de l'offre depuis l'attribut HTML
             const offreId = this.getAttribute('data-offre-id');
 
-            // 4. Préparation des données (Minimaliste)
-            // Le backend ApplicationController attend 'offre_id' et 'user_id' (ajouté par l'API via le token)
-            // On peut envoyer un message vide ou null pour cover_letter
+            // 4. Préparation des données
             const payload = {
                 offre_id: offreId,
-                cover_letter: "Candidature rapide", 
+                cover_letter: "Candidature simplifiée (One-Click)", 
                 availability: null
             };
 
@@ -44,45 +43,57 @@ document.addEventListener('DOMContentLoaded', function() {
                     body: JSON.stringify(payload)
                 });
 
+                // On tente de lire la réponse JSON
                 let result;
                 try {
                     result = await response.json();
                 } catch(e) {
-                    throw new Error("Erreur serveur (Réponse invalide)");
+                    throw new Error("Réponse serveur invalide");
                 }
 
                 if (response.ok) {
-                    // SUCCÈS
+                    // --- SUCCÈS ---
                     showNotification('🚀 Candidature envoyée avec succès !', 'success');
                     
-                    // On change le bouton définitivement
+                    // On change le bouton définitivement pour montrer que c'est fait
                     applyBtn.innerHTML = `
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polyline points="20 6 9 17 4 12"/>
                         </svg>
-                        Candidature envoyée
+                        Déjà postulé
                     `;
-                    applyBtn.classList.add('btn-success'); // Tu peux styliser cette classe en vert
+                    applyBtn.classList.add('btn-success'); // Tu peux styliser ça en vert en CSS
+                    applyBtn.style.backgroundColor = '#10b981'; // Vert (Tailwind emerald-500)
+                    applyBtn.style.borderColor = '#10b981';
+                    applyBtn.style.opacity = '1';
                 } else {
-                    // ERREUR (ex: Déjà postulé, Erreur 409)
+                    // --- ERREUR LOGIQUE (ex: Déjà postulé) ---
                     const msg = result.message || 'Erreur lors de la candidature.';
-                    showNotification(msg, 'info'); // 'info' car souvent c'est "Déjà postulé"
                     
-                    // On remet le bouton normal
-                    applyBtn.disabled = false;
-                    applyBtn.innerHTML = originalText;
+                    if (response.status === 409) {
+                        showNotification('Vous avez déjà postulé à cette offre.', 'info');
+                        applyBtn.innerHTML = 'Déjà candidaté';
+                    } else {
+                        showNotification(msg, 'error');
+                        // On remet le bouton normal pour réessayer
+                        applyBtn.disabled = false;
+                        applyBtn.innerHTML = originalHTML;
+                        applyBtn.style.opacity = '1';
+                    }
                 }
 
             } catch (error) {
+                // --- ERREUR TECHNIQUE ---
                 console.error(error);
-                showNotification('Erreur technique. Vérifiez votre connexion.', 'error');
+                showNotification('Erreur de connexion. Réessayez.', 'error');
                 applyBtn.disabled = false;
-                applyBtn.innerHTML = originalText;
+                applyBtn.innerHTML = originalHTML;
+                applyBtn.style.opacity = '1';
             }
         });
     }
 
-    // --- SAVE OFFER (Favoris) ---
+    // --- FAVORIS (Sauvegarder l'offre) ---
     const saveBtn = document.querySelector('.offre-sidebar .btn-secondary');
     if (saveBtn) {
         saveBtn.addEventListener('click', function() {
@@ -91,6 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (this.classList.contains('saved')) {
                 svg.setAttribute('fill', 'currentColor');
+                // On met à jour le texte tout en gardant l'icône
                 this.innerHTML = `
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
                         <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
@@ -108,7 +120,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 `;
                 showNotification('Offre retirée des favoris', 'info');
             }
-            // TODO: Appel API pour sauvegarder
         });
     }
 
@@ -116,7 +127,9 @@ document.addEventListener('DOMContentLoaded', function() {
     trackOfferView();
 });
 
-// --- UTILITAIRES ---
+// ==========================================
+// FONCTIONS UTILITAIRES
+// ==========================================
 
 function getCookie(name) {
     const value = `; ${document.cookie}`;
@@ -126,21 +139,19 @@ function getCookie(name) {
 }
 
 function trackOfferView() {
-    // Logique analytics simple
-    const offreId = window.location.search.split('id=')[1];
+    const offreId = new URLSearchParams(window.location.search).get('id');
     if(offreId) console.log('View tracked for offer:', offreId);
 }
 
-// Système de notification (Style Tailwind/Glassmorphism)
+// Système de notification joli et moderne
 function showNotification(message, type = 'info') {
-    // Supprime l'ancienne notif s'il y en a une pour éviter l'empilement
+    // Supprime l'ancienne notif s'il y en a une
     const existing = document.querySelector('.custom-notification');
     if(existing) existing.remove();
 
     const notification = document.createElement('div');
-    notification.className = 'custom-notification'; // Classe pour ciblage facile
+    notification.className = 'custom-notification';
     
-    // Couleurs selon le type
     let borderColor = 'var(--primary)';
     let icon = '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>';
     
@@ -151,26 +162,28 @@ function showNotification(message, type = 'info') {
         borderColor = '#ef4444'; // Rouge
     }
 
+    // CSS injecté directement pour éviter les dépendances
     notification.style.cssText = `
         position: fixed;
         top: 20px;
-        right: 20px; /* En haut à droite c'est plus standard */
+        right: 20px;
         padding: 1rem 1.5rem;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(0,0,0,0.1);
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(0,0,0,0.05);
         border-left: 4px solid ${borderColor};
         border-radius: 8px;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
         color: #333;
         z-index: 99999;
         font-family: 'Inter', sans-serif;
         font-weight: 500;
+        font-size: 0.95rem;
         display: flex;
         align-items: center;
         gap: 12px;
-        transform: translateX(100%);
-        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        transform: translateX(120%);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     `;
     
     notification.innerHTML = `
@@ -182,14 +195,14 @@ function showNotification(message, type = 'info') {
     
     document.body.appendChild(notification);
     
-    // Animation d'entrée (petit délai pour laisser le DOM se mettre à jour)
+    // Animation d'entrée
     requestAnimationFrame(() => {
         notification.style.transform = 'translateX(0)';
     });
     
-    // Disparition automatique
+    // Disparition auto
     setTimeout(() => {
         notification.style.transform = 'translateX(120%)';
-        setTimeout(() => notification.remove(), 300);
+        setTimeout(() => notification.remove(), 400);
     }, 4000);
 }
