@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
       setLoading(btn, false, originalBtnText);
 
       if (await response.ok && await data.status === true) {
-        document.cookie= `authToken=${data.token}`;
+        document.cookie= `authToken=${data.token}; path=/; SameSite=Lax`;
         window.location.href = '/company/dashboard';
       } else {
         showError(this.querySelector('input[name="password"]'), data.message || 'Identifiants incorrects');
