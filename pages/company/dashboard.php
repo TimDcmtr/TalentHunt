@@ -167,7 +167,7 @@
 
               foreach ($applications as $app): ?>
                 <div class="application-item">
-                  <div class="app-avatar"><?php echo $app['avatar']; ?></div>
+                  <div class="app-avatar"><?php echo $app['candidate_avatar']; ?></div>
                   <div class="app-info">
                     <h4><?php echo $app['candidate_name']; ?></h4>
                     <p><?php echo $app['candidate_bio']; ?></p>
