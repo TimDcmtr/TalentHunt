@@ -98,7 +98,7 @@
                     <?php endif; ?>
 
                     <option value="1-10">1-10 employés</option>
-                    <option value="11-50" selected>11-50 employés</option>
+                    <option value="11-50">11-50 employés</option>
                     <option value="51-200">51-200 employés</option>
                     <option value="201-500">201-500 employés</option>
                     <option value="500+">500+ employés</option>
