@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // --- 3. GESTION DES FORMULAIRES ---
 
   const loginForm = document.getElementById('loginForm');
+  const loginENForm = document.getElementById('loginENForm');
   const registerForm = document.getElementById('registerForm');
   const registerENForm = document.getElementById('registerENForm');
 
@@ -80,7 +81,41 @@ document.addEventListener('DOMContentLoaded', function () {
 
       if (await response.ok && await data.status === true) {
         document.cookie= `authToken=${data.token}`;
-        window.location.href = 'dashboard.php'; // Ou index.php selon ta structure
+        window.location.href = '/offers'; // Ou index.php selon ta structure
+      } else {
+        showError(this.querySelector('input[name="password"]'), data.message || 'Identifiants incorrects');
+      }
+    });
+  }
+
+    // === LOGIN ENTREPRISE ===
+  if (loginENForm) {
+    loginForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const btn = this.querySelector('button[type="submit"]');
+      const originalBtnText = btn.innerHTML;
+
+      // Sélection contextuelle pour éviter les conflits d'ID
+      const email = this.querySelector('input[name="email"]').value;
+      const password = this.querySelector('input[name="password"]').value;
+
+      // Validation Frontend
+      if (!validateEmail(email)) {
+        showError(this.querySelector('input[name="email"]'), 'Veuillez entrer un email valide');
+        return;
+      }
+
+      // Envoi Backend
+      setLoading(btn, true);
+      
+      const response = await sendAuthRequest('loginEN', { email, password });
+      const data = JSON.parse(response.data);
+
+      setLoading(btn, false, originalBtnText);
+
+      if (await response.ok && await data.status === true) {
+        document.cookie= `authToken=${data.token}`;
+        window.location.href = '/company/dashboard'; // Ou index.php selon ta structure
       } else {
         showError(this.querySelector('input[name="password"]'), data.message || 'Identifiants incorrects');
       }

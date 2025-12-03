@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,8 +8,11 @@
   <link rel="stylesheet" href="assets/css/variables.css">
   <link rel="stylesheet" href="assets/css/auth.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+    rel="stylesheet">
 </head>
+
 <body>
   <?php require_once ROOT_PATH . 'app/helpers/Navbar.php'; ?>
 
@@ -27,35 +31,23 @@
 
         <!-- Tabs -->
         <div class="auth-tabs">
-          <button class="auth-tab active" data-tab="login">Connexion</button>
-          <button class="auth-tab" data-tab="register">Étudiant</button>
-          <button class="auth-tab" data-tab="registerEN">Entreprise</button>
+          <button class="auth-tab active" data-tab="login">Connexion Étudiant</button>
+          <button class="auth-tab" data-tab="register">Inscription Étudiant</button>
+          <button class="auth-tab" data-tab="loginEN">Connexion Entreprise</button>
+          <button class="auth-tab" data-tab="registerEN">Inscription Entreprise</button>
         </div>
 
         <!-- Login Form -->
         <form id="loginForm" class="auth-form active" method="POST" action="/login">
           <div class="form-group">
             <label for="login-email" class="form-label">Email</label>
-            <input 
-              type="email" 
-              id="login-email" 
-              name="email" 
-              class="form-input" 
-              placeholder="votre@email.com"
-              required
-            >
+            <input type="email" id="login-email" name="email" class="form-input" placeholder="votre@email.com" required>
           </div>
 
           <div class="form-group">
             <label for="login-password" class="form-label">Mot de passe</label>
-            <input 
-              type="password" 
-              id="login-password" 
-              name="password" 
-              class="form-input" 
-              placeholder="••••••••"
-              required
-            >
+            <input type="password" id="login-password" name="password" class="form-input" placeholder="••••••••"
+              required>
           </div>
 
           <div class="form-options">
@@ -69,7 +61,36 @@
           <button type="submit" class="btn-primary btn-full">
             Se connecter
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </button>
+        </form>
+
+                <!-- Login EN Form -->
+        <form id="loginENForm" class="auth-form active" method="POST" action="/loginEN">
+          <div class="form-group">
+            <label for="login-email" class="form-label">Email</label>
+            <input type="email" id="login-email" name="email" class="form-input" placeholder="votre@email.com" required>
+          </div>
+
+          <div class="form-group">
+            <label for="login-password" class="form-label">Mot de passe</label>
+            <input type="password" id="login-password" name="password" class="form-input" placeholder="••••••••"
+              required>
+          </div>
+
+          <div class="form-options">
+            <label class="checkbox-label">
+              <input type="checkbox" name="remember">
+              <span>Se souvenir de moi</span>
+            </label>
+            <a href="/forgot-password" class="link">Mot de passe oublié ?</a>
+          </div>
+
+          <button type="submit" class="btn-primary btn-full">
+            Se connecter
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
           </button>
         </form>
@@ -79,72 +100,36 @@
           <div class="form-row">
             <div class="form-group">
               <label for="register-firstname" class="form-label">Prénom</label>
-              <input 
-                type="text" 
-                id="register-firstname" 
-                name="firstname" 
-                class="form-input" 
-                placeholder="Jean"
-                required
-              >
+              <input type="text" id="register-firstname" name="firstname" class="form-input" placeholder="Jean"
+                required>
             </div>
             <div class="form-group">
               <label for="register-lastname" class="form-label">Nom</label>
-              <input 
-                type="text" 
-                id="register-lastname" 
-                name="lastname" 
-                class="form-input" 
-                placeholder="Dupont"
-                required
-              >
+              <input type="text" id="register-lastname" name="lastname" class="form-input" placeholder="Dupont"
+                required>
             </div>
           </div>
 
           <div class="form-group">
             <label for="register-email" class="form-label">Email</label>
-            <input 
-              type="email" 
-              id="register-email" 
-              name="email" 
-              class="form-input" 
-              placeholder="votre@email.com"
-              required
-            >
+            <input type="email" id="register-email" name="email" class="form-input" placeholder="votre@email.com"
+              required>
           </div>
 
           <div class="form-group">
             <label for="register-tel" class="form-label">Téléphone</label>
-            <input 
-              type="tel" 
-              id="register-tel" 
-              name="tel" 
-              class="form-input" 
-              placeholder="+33 6 12 34 56 78"
-            >
+            <input type="tel" id="register-tel" name="tel" class="form-input" placeholder="+33 6 12 34 56 78">
           </div>
 
           <div class="form-group">
             <label for="register-password" class="form-label">Mot de passe</label>
-            <input 
-              type="password" 
-              id="register-password" 
-              name="password" 
-              class="form-input" 
-              placeholder="••••••••"
-              required
-            >
+            <input type="password" id="register-password" name="password" class="form-input" placeholder="••••••••"
+              required>
           </div>
 
           <div class="form-group">
             <label for="register-school" class="form-label">École</label>
-            <input 
-              type="text" 
-              id="register-school" 
-              name="school" 
-              class="form-input" 
-              placeholder="Nom de votre école"
-            >
+            <input type="text" id="register-school" name="school" class="form-input" placeholder="Nom de votre école">
           </div>
 
           <div class="form-group">
@@ -162,67 +147,38 @@
 
           <div class="form-group">
             <label for="register-domain" class="form-label">Domaine d'études</label>
-            <input 
-              type="text" 
-              id="register-domain" 
-              name="domain" 
-              class="form-input" 
-              placeholder="Ex: Informatique, Marketing..."
-            >
+            <input type="text" id="register-domain" name="domain" class="form-input"
+              placeholder="Ex: Informatique, Marketing...">
           </div>
           <button type="submit" class="btn-primary btn-full">
             Créer mon compte
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
+              <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
           </button>
         </form>
         <form id="registerENForm" class="auth-form" method="POST" action="/register2">
           <div class="form-group">
             <label for="register-firstname" class="form-label">Nom de l’entreprise</label>
-            <input 
-              type="text" 
-              id="register-entreprisename" 
-              name="firstname" 
-              class="form-input" 
-              placeholder="TalentHub"
-              required
-            >
+            <input type="text" id="register-entreprisename" name="firstname" class="form-input" placeholder="TalentHub"
+              required>
           </div>
 
           <div class="form-group">
             <label for="register-email" class="form-label">Email</label>
-            <input 
-              type="email" 
-              id="register-email" 
-              name="email" 
-              class="form-input" 
-              placeholder="votre@email.com"
-              required
-            >
+            <input type="email" id="register-email" name="email" class="form-input" placeholder="votre@email.com"
+              required>
           </div>
 
           <div class="form-group">
             <label for="register-tel" class="form-label">Téléphone</label>
-            <input 
-              type="tel" 
-              id="register-tel" 
-              name="tel" 
-              class="form-input" 
-              placeholder="+33 6 12 34 56 78"
-            >
+            <input type="tel" id="register-tel" name="tel" class="form-input" placeholder="+33 6 12 34 56 78">
           </div>
 
           <div class="form-group">
             <label for="register-password" class="form-label">Mot de passe</label>
-            <input 
-              type="password" 
-              id="register-password" 
-              name="password" 
-              class="form-input" 
-              placeholder="••••••••"
-              required
-            >
+            <input type="password" id="register-password" name="password" class="form-input" placeholder="••••••••"
+              required>
           </div>
 
           <div class="form-group">
@@ -240,18 +196,13 @@
 
           <div class="form-group">
             <label for="register-domain" class="form-label">Domaine de travail</label>
-            <input 
-              type="text" 
-              id="register-domain" 
-              name="domain" 
-              class="form-input" 
-              placeholder="Ex: Informatique, Marketing..."
-            >
+            <input type="text" id="register-domain" name="domain" class="form-input"
+              placeholder="Ex: Informatique, Marketing...">
           </div>
           <button type="submit" class="btn-primary btn-full">
             Créer mon compte
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
+              <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
           </button>
         </form>
@@ -262,4 +213,5 @@
   <script src="assets/js/navbar.js"></script>
   <script src="assets/js/auth.js"></script>
 </body>
+
 </html>

@@ -13,6 +13,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 // Adapte le chemin si tes dossiers sont ailleurs (ex: './app/controllers/...')
 require_once ROOT_PATH . 'app/config/db.php';
 require_once ROOT_PATH . 'app/controllers/UserController.php';
+require_once ROOT_PATH . 'app/controllers/CompanyController.php';
 
 // 3. Récupération de l'action demandée via l'URL (ex: api.php?action=register)
 $action = isset($_GET['action']) ? $_GET['action'] : '';
@@ -23,14 +24,24 @@ $data = json_decode($json, true); // true pour avoir un tableau associatif
 
 // 5. Instanciation du contrôleur
 $controller = new UserController();
+$controllerEN = new CompanyController();
 
 // 6. Router (Switch)
-switch($action) {
-    
+switch ($action) {
+
     case 'register':
         // Le contrôleur attend un tableau de données
-        if($data) {
+        if ($data) {
             echo $controller->register($data);
+        } else {
+            echo json_encode(["message" => "No data provided."]);
+        }
+        break;
+
+    case 'registerEN':
+        // Le contrôleur attend un tableau de données
+        if ($data) {
+            echo $controllerEN->register($data);
         } else {
             echo json_encode(["message" => "No data provided."]);
         }
@@ -38,8 +49,20 @@ switch($action) {
 
     case 'login':
         // Le contrôleur attend email et password séparés
-        if(isset($data['email']) && isset($data['password'])) {
+        if (isset($data['email']) && isset($data['password'])) {
             $result = $controller->login($data['email'], $data['password']);
+            // login renvoie un tableau, on doit le convertir en JSON pour l'echo
+            echo json_encode($result);
+        } else {
+            http_response_code(400);
+            echo json_encode(["message" => "Email and password required."]);
+        }
+        break;
+
+    case 'loginEN':
+        // Le contrôleur attend email et password séparés
+        if (isset($data['email']) && isset($data['password'])) {
+            $result = $controllerEN->login($data['email'], $data['password']);
             // login renvoie un tableau, on doit le convertir en JSON pour l'echo
             echo json_encode($result);
         } else {
@@ -51,7 +74,7 @@ switch($action) {
     case 'profile':
         // Pour lire un profil (GET api.php?action=profile&id=1)
         $id = isset($_GET['id']) ? $_GET['id'] : null;
-        if($id) {
+        if ($id) {
             echo $controller->getUserProfile($id);
         } else {
             echo json_encode(["message" => "No ID provided."]);
