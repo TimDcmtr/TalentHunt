@@ -306,7 +306,7 @@
               }
             });
           </script>
-          
+
 
           <section id="recherche-travail" class="config-section glass-card">
             <div class="section-header">
@@ -362,13 +362,13 @@
   <script src="/assets/js/config.js"></script>
 
   <script>
-    // Petit script spécifique pour changer l'URL de l'API pour les étudiants
-    // On surcharge le comportement par défaut si nécessaire, ou on adapte le fetch
     document.addEventListener('DOMContentLoaded', () => {
       const forms = document.querySelectorAll('.config-form');
       forms.forEach(form => {
-        // On ajoute un attribut data-action pour que le script JS générique sache où taper
-        form.setAttribute('data-api-action', 'update_student');
+        // CORRECTION : On ne touche pas si une action est déjà définie (comme upload_cv)
+        if (!form.hasAttribute('data-api-action')) {
+          form.setAttribute('data-api-action', 'update_student');
+        }
       });
     });
   </script>
