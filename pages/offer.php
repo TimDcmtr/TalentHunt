@@ -42,6 +42,8 @@
                         <span><?php echo $offre['title']; ?></span>
                     </nav>
 
+                    <?= $offre ?>
+
                     <!-- Header -->
                     <div class="offre-header glass-card">
                         <!-- <div class="company-logo-large"><?php strtoupper(substr($this->$offer['company'], 0, 1)); ?></div> -->
