@@ -21,8 +21,13 @@
     'search' => $_GET['search'] ?? ''
   ];
   $jobController = new JobOfferController();
-  $jobs = json_decode($jobController->findAllJobOffers($filters), true);
-  $totalJobs = is_array($jobs) ? count($jobs) : 0;
+  $allJobs = json_decode($jobController->findAllJobOffers($filters), true);
+  $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+  $limit = 9;
+  $totalJobs = is_array($allJobs) ? count($allJobs) : 0;
+  $totalPages = ceil($totalJobs / $limit);
+  $offset = ($page - 1) * $limit;
+  $jobs = array_slice($allJobs, $offset, $limit);
   ?>
 
   <main class="main-content">
@@ -122,8 +127,7 @@
                 value="<?php echo htmlspecialchars($filters['search']); ?>"
               >
               <button type="submit" class="btn-primary">Rechercher</button>
-              
-              <!-- Garder les filtres actuels dans des champs cachés -->
+
               <?php 
               if (!empty($filters['type'])):
                 foreach ((array)$filters['type'] as $type): ?>
@@ -150,11 +154,6 @@
               <h2>Offres disponibles</h2>
               <span class="results-count"><?php echo $totalJobs; ?> résultats</span>
             </div>
-            <select class="sort-select">
-              <option value="recent">Plus récentes</option>
-              <option value="relevant">Plus pertinentes</option>
-              <option value="salary">Salaire</option>
-            </select>
           </div>
 
           <!-- Job Cards -->
@@ -234,23 +233,30 @@
           </div>
 
           <!-- Pagination -->
+          <?php if ($totalPages > 1): ?>
           <div class="pagination">
-            <button class="pagination-btn" disabled>
+            <a href="?<?php echo http_build_query(array_merge($_GET, ['page' => max(1, $page-1)])); ?>" 
+              class="pagination-btn" <?php echo $page <= 1 ? 'style="pointer-events:none;opacity:0.5"' : ''; ?>>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M15 18l-6-6 6-6"/>
               </svg>
-            </button>
-            <button class="pagination-btn active">1</button>
-            <button class="pagination-btn">2</button>
-            <button class="pagination-btn">3</button>
-            <span class="pagination-dots">...</span>
-            <button class="pagination-btn">10</button>
-            <button class="pagination-btn">
+            </a>
+
+            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+              <a href="?<?php echo http_build_query(array_merge($_GET, ['page' => $i])); ?>" 
+                class="pagination-btn <?php echo $i == $page ? 'active' : ''; ?>">
+                <?php echo $i; ?>
+              </a>
+            <?php endfor; ?>
+
+            <a href="?<?php echo http_build_query(array_merge($_GET, ['page' => min($totalPages, $page+1)])); ?>" 
+              class="pagination-btn" <?php echo $page >= $totalPages ? 'style="pointer-events:none;opacity:0.5"' : ''; ?>>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M9 18l6-6-6-6"/>
               </svg>
-            </button>
+            </a>
           </div>
+          <?php endif; ?>
         </div>
       </div>
     </div>
