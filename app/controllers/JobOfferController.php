@@ -145,7 +145,6 @@ class JobOfferController
      */
     public function findAllJobOffers()
     {
-        // Requête SQL pour récupérer toutes les offres
         $query = "SELECT jo.*, c.name as company_name, c.logo as company_logo 
                 FROM job_offers jo 
                 LEFT JOIN companies c ON jo.company_id = c.id 
@@ -158,7 +157,6 @@ class JobOfferController
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             
-            // Calcul du "Il y a X jours"
             $created = new DateTime($row['created_at']);
             $now = new DateTime();
             $interval = $now->diff($created);
@@ -169,7 +167,6 @@ class JobOfferController
                 'id' => $row['id'],
                 'title' => $row['title'],
                 
-                // Infos Entreprise
                 'company' => $row['company_name'] ?? 'Entreprise inconnue',
                 'company_logo' => $row['company_logo'] ?? '❓',
 
