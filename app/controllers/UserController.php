@@ -246,7 +246,7 @@ class UserController
         // Le token contient l'ID dans $payload['data']['id'] (voir fonction login)
         if (isset($payload['data']['id'])) {
             $userId = $payload['data']['id'];
-            $role = $payload['data']['role'] || 'student';
+            $role = $payload['data']['role'] ?? 'student';
 
             // On utilise la méthode existante du modèle qui nettoie déjà le mot de passe
             // et formate les données (JSON decode des compétences, etc.)
