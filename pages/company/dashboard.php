@@ -17,6 +17,7 @@
     <h1> Erreur de Connexion </h1>
   <?php else: ?>
     <?php
+      $id = $_GET['id'];
       $offersController = new JobOfferController();
       $offers = json_decode($offersController->findAllJobOffersCompany($id), true);
       $totalOffres = is_array($offers) ? count($offers) : 0;
