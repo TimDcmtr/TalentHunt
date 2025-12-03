@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // === LOGIN ENTREPRISE ===
   if (loginENForm) {
-    loginForm.addEventListener('submit', async function (e) {
+    loginENForm.addEventListener('submit', async function (e) {
       e.preventDefault();
       const btn = this.querySelector('button[type="submit"]');
       const originalBtnText = btn.innerHTML;
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
       setLoading(btn, true);
       
       const response = await sendAuthRequest('loginEN', { email, password });
-      const data = JSON.parse(response.data);
+      const data = response.data.ok ? response.data : JSON.parse(response.data);
 
       setLoading(btn, false, originalBtnText);
 
