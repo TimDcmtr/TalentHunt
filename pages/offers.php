@@ -17,7 +17,8 @@
   $filters = [
     'type' => $_GET['contract'] ?? [],
     'location' => $_GET['location'] ?? '',
-    'remote' => $_GET['remote'] ?? []
+    'remote' => $_GET['remote'] ?? [],
+    'search' => $_GET['search'] ?? ''
   ];
   $jobController = new JobOfferController();
   $jobs = json_decode($jobController->findAllJobOffers($filters), true);
@@ -108,18 +109,39 @@
         <div class="content-area">
           <!-- Search Bar -->
           <div class="search-section glass-card">
-            <div class="search-bar">
+            <form method="GET" action="" class="search-bar">
               <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                ircle cx="11" cy="11" r="8"/>
+                <circle cx="11" cy="11" r="8"/>
                 <path d="m21 21-4.35-4.35"/>
               </svg>
               <input 
                 type="text" 
+                name="search"
                 class="search-input" 
-                placeholder="Rechercher un poste, une entreprise..."
+                placeholder="Rechercher un poste ..."
+                value="<?php echo htmlspecialchars($filters['search']); ?>"
               >
-              <button class="btn-primary">Rechercher</button>
-            </div>
+              <button type="submit" class="btn-primary">Rechercher</button>
+              
+              <!-- Garder les filtres actuels dans des champs cachés -->
+              <?php 
+              if (!empty($filters['type'])):
+                foreach ((array)$filters['type'] as $type): ?>
+                  <input type="hidden" name="contract[]" value="<?php echo htmlspecialchars($type); ?>">
+                <?php endforeach;
+              endif;
+              
+              if (!empty($filters['location'])): ?>
+                <input type="hidden" name="location" value="<?php echo htmlspecialchars($filters['location']); ?>">
+              <?php endif;
+              
+              if (!empty($filters['remote'])):
+                foreach ((array)$filters['remote'] as $remote): ?>
+                  <input type="hidden" name="remote[]" value="<?php echo htmlspecialchars($remote); ?>">
+                <?php endforeach;
+              endif;
+              ?>
+            </form>
           </div>
 
           <!-- Results Header -->
@@ -163,7 +185,7 @@
                     <span class="job-detail">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                        ircle cx="12" cy="10" r="3"/>
+                        <circle cx="12" cy="10" r="3"/>
                       </svg>
                       <?php echo htmlspecialchars($job['location']); ?>
                     </span>

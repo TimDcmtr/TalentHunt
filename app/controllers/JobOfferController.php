@@ -152,6 +152,11 @@ class JobOfferController
         
         $params = [];
         
+        if (!empty($filters['search'])) {
+        $query .= " AND jo.title LIKE :search";
+        $params[':search'] = '%' . $filters['search'] . '%';
+        }
+        
         if (!empty($filters['type'])) {
             $types = is_array($filters['type']) ? $filters['type'] : [$filters['type']];
             $placeholders = [];
