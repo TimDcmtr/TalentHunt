@@ -1,6 +1,6 @@
 <?php
-require_once ROOT_PATH . 'app/controllers/CompanySession.php';
-require_once ROOT_PATH . 'app/controllers/UserSession.php';
+require_once ROOT_PATH . 'app/helpers/CompanySession.php';
+require_once ROOT_PATH . 'app/helpers/UserSession.php';
 ?>
 
 <nav class="navbar">
