@@ -18,7 +18,7 @@
   requireLogin(); // Protection de la page
 
   $applicationController = new ApplicationController();
-  $candidatures = json_decode($applicationController->getStudentApplications($currentUser));
+  $candidatures = json_decode($applicationController->getStudentApplications($currentUser['id']));
   
   // Simulation données
   $candidaturesTemp = [
