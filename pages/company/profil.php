@@ -210,7 +210,7 @@
               ];
               
               foreach ($offres as $offre): ?>
-                <a href="/offre?id=<?php echo $offre['id']; ?>" class="offre-preview-card">
+                <a href="/offer?id=<?php echo $offre['id']; ?>" class="offre-preview-card">
                   <h4><?php echo $offre['title']; ?></h4>
                   <div class="offre-preview-meta">
                     <span><?php echo $offre['type']; ?></span>
