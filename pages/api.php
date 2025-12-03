@@ -181,5 +181,51 @@ switch ($action) {
         // 3. Appel Controller avec les fichiers
         echo $userController->uploadCV($data, $_FILES);
         break;
+
+    case 'apply':
+        // 1. SÉCURITÉ : Récupération et vérification du Token
+        $headers = null;
+        if (function_exists('apache_request_headers')) {
+            $headers = apache_request_headers();
+        } else {
+            $headers = []; // Fallback si nécessaire
+            foreach ($_SERVER as $name => $value) {
+                if (substr($name, 0, 5) == 'HTTP_') {
+                    $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+                }
+            }
+        }
+
+        $authHeader = $headers['Authorization'] ?? '';
+        $jwt = str_replace("Bearer ", "", $authHeader);
+
+        require_once ROOT_PATH . 'app/controllers/UserController.php';
+        $userController = new UserController();
+        $user = $userController->getUserFromToken($jwt);
+
+        if (!$user) {
+            http_response_code(401);
+            echo json_encode(["message" => "Session expirée ou invalide. Veuillez vous reconnecter."]);
+            exit;
+        }
+
+        // 2. Récupération des données JSON envoyées par le JS
+        $json = file_get_contents("php://input");
+        $data = json_decode($json, true);
+
+        if (!$data) {
+            http_response_code(400);
+            echo json_encode(["message" => "Données invalides."]);
+            exit;
+        }
+
+        // 3. Injection sécurisée de l'ID utilisateur
+        $data['user_id'] = $user['id'];
+
+        // 4. Appel du Controller
+        require_once ROOT_PATH . 'app/controllers/ApplicationController.php';
+        $appController = new ApplicationController();
+        echo $appController->apply($data);
+        break;
 }
 ?>

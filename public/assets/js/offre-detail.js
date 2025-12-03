@@ -1,162 +1,195 @@
-// /public/assets/js/offre-detail.js
-
 document.addEventListener('DOMContentLoaded', function() {
-  const applyBtn = document.getElementById('applyBtn');
-  const modal = document.getElementById('applicationModal');
-  const closeModalBtns = document.querySelectorAll('.close-modal');
-  const applicationForm = document.querySelector('.application-form');
-
-  // Open application modal
-  if (applyBtn) {
-    applyBtn.addEventListener('click', function() {
-      modal.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-    });
-  }
-
-  // Close modal
-  closeModalBtns.forEach(btn => {
-    btn.addEventListener('click', function() {
-      modal.style.display = 'none';
-      document.body.style.overflow = '';
-    });
-  });
-
-  // Close modal on outside click
-  modal?.addEventListener('click', function(e) {
-    if (e.target === this) {
-      this.style.display = 'none';
-      document.body.style.overflow = '';
-    }
-  });
-
-  // Handle form submission
-  if (applicationForm) {
-    applicationForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const formData = new FormData(this);
-      const data = Object.fromEntries(formData);
-
-      console.log('Application submitted:', data);
-
-      // Show success message
-      showNotification('Candidature envoyée avec succès !', 'success');
-
-      // Close modal
-      modal.style.display = 'none';
-      document.body.style.overflow = '';
-
-      // Reset form
-      this.reset();
-
-      // TODO: Send to backend
-    });
-  }
-
-  // Save offer
-  const saveBtn = document.querySelector('.offre-sidebar .btn-secondary');
-  if (saveBtn) {
-    saveBtn.addEventListener('click', function() {
-      this.classList.toggle('saved');
-      
-      const svg = this.querySelector('svg');
-      if (this.classList.contains('saved')) {
-        svg.setAttribute('fill', 'currentColor');
-        this.innerHTML = `
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
-            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-          </svg>
-          Sauvegardé
-        `;
-        showNotification('Offre sauvegardée', 'success');
-      } else {
-        svg.setAttribute('fill', 'none');
-        this.innerHTML = `
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-          </svg>
-          Sauvegarder
-        `;
-        showNotification('Offre retirée des favoris', 'info');
-      }
-
-      // TODO: Save to backend
-    });
-  }
-
-  const applyCard = document.querySelector('.apply-card');
-  if (applyCard) {
-    const lastBtn = applyCard.querySelector('.btn-secondary');
-    lastBtn.insertAdjacentElement('afterend', shareBtn);
-  }
-
-  shareBtn.addEventListener('click', async function() {
-    const url = window.location.href;
-    const title = document.querySelector('.offre-header h1').textContent;
     
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: title,
-          url: url
-        });
-        showNotification('Offre partagée', 'success');
-      } catch (err) {
-        console.log('Share cancelled');
-      }
-    } else {
-      // Fallback: copy to clipboard
-      navigator.clipboard.writeText(url);
-      showNotification('Lien copié dans le presse-papier', 'success');
-    }
-  });
+    const applyBtn = document.getElementById('applyBtn');
+    
+    // --- FONCTION ONE-CLICK APPLY ---
+    if (applyBtn) {
+        applyBtn.addEventListener('click', async function() {
+            
+            // 1. Vérification Token (Connecté ?)
+            const token = getCookie('authToken');
+            if (!token) {
+                // Si pas connecté, on redirige ou on notifie
+                showNotification("Vous devez être connecté pour postuler.", "error");
+                setTimeout(() => window.location.href = '/login', 1500);
+                return;
+            }
 
-  // Track view (analytics)
-  trackOfferView();
+            // 2. Gestion UI (Chargement)
+            const originalText = this.innerHTML;
+            this.disabled = true;
+            this.innerHTML = '<span class="loader-small"></span> Envoi...'; // Tu peux mettre juste "Envoi..."
+
+            // 3. Récupération de l'ID de l'offre depuis l'attribut HTML
+            const offreId = this.getAttribute('data-offre-id');
+
+            // 4. Préparation des données (Minimaliste)
+            // Le backend ApplicationController attend 'offre_id' et 'user_id' (ajouté par l'API via le token)
+            // On peut envoyer un message vide ou null pour cover_letter
+            const payload = {
+                offre_id: offreId,
+                cover_letter: "Candidature rapide", 
+                availability: null
+            };
+
+            try {
+                // 5. Appel API
+                const response = await fetch('api?action=apply', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                let result;
+                try {
+                    result = await response.json();
+                } catch(e) {
+                    throw new Error("Erreur serveur (Réponse invalide)");
+                }
+
+                if (response.ok) {
+                    // SUCCÈS
+                    showNotification('🚀 Candidature envoyée avec succès !', 'success');
+                    
+                    // On change le bouton définitivement
+                    applyBtn.innerHTML = `
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        Candidature envoyée
+                    `;
+                    applyBtn.classList.add('btn-success'); // Tu peux styliser cette classe en vert
+                } else {
+                    // ERREUR (ex: Déjà postulé, Erreur 409)
+                    const msg = result.message || 'Erreur lors de la candidature.';
+                    showNotification(msg, 'info'); // 'info' car souvent c'est "Déjà postulé"
+                    
+                    // On remet le bouton normal
+                    applyBtn.disabled = false;
+                    applyBtn.innerHTML = originalText;
+                }
+
+            } catch (error) {
+                console.error(error);
+                showNotification('Erreur technique. Vérifiez votre connexion.', 'error');
+                applyBtn.disabled = false;
+                applyBtn.innerHTML = originalText;
+            }
+        });
+    }
+
+    // --- SAVE OFFER (Favoris) ---
+    const saveBtn = document.querySelector('.offre-sidebar .btn-secondary');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', function() {
+            this.classList.toggle('saved');
+            const svg = this.querySelector('svg');
+            
+            if (this.classList.contains('saved')) {
+                svg.setAttribute('fill', 'currentColor');
+                this.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    Sauvegardé
+                `;
+                showNotification('Offre ajoutée aux favoris', 'success');
+            } else {
+                svg.setAttribute('fill', 'none');
+                this.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    Sauvegarder
+                `;
+                showNotification('Offre retirée des favoris', 'info');
+            }
+            // TODO: Appel API pour sauvegarder
+        });
+    }
+
+    // --- ANALYTICS ---
+    trackOfferView();
 });
 
-function trackOfferView() {
-  const offreId = window.location.pathname.split('/').pop();
-  console.log('Tracking view for offer:', offreId);
-  // TODO: Send analytics event
+// --- UTILITAIRES ---
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
 }
 
+function trackOfferView() {
+    // Logique analytics simple
+    const offreId = window.location.search.split('id=')[1];
+    if(offreId) console.log('View tracked for offer:', offreId);
+}
+
+// Système de notification (Style Tailwind/Glassmorphism)
 function showNotification(message, type = 'info') {
-  const notification = document.createElement('div');
-  notification.style.cssText = `
-    position: fixed;
-    top: 100px;
-    right: 20px;
-    padding: 1rem 1.5rem;
-    background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
-    border: 1px solid var(--glass-border);
-    border-left: 4px solid ${type === 'success' ? '#10b981' : 'var(--primary)'};
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
-    color: var(--text-primary);
-    z-index: 99999;
-    animation: slideIn 0.3s ease-out;
-    max-width: 400px;
-  `;
-  
-  notification.innerHTML = `
-    <div style="display: flex; align-items: center; gap: 0.75rem;">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        ${type === 'success' 
-          ? '<polyline points="20 6 9 17 4 12"/>'
-          : '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>'
-        }
-      </svg>
-      <span>${message}</span>
-    </div>
-  `;
-  
-  document.body.appendChild(notification);
-  
-  setTimeout(() => {
-    notification.style.animation = 'fadeOut 0.3s ease-out';
-    setTimeout(() => notification.remove(), 300);
-  }, 3000);
+    // Supprime l'ancienne notif s'il y en a une pour éviter l'empilement
+    const existing = document.querySelector('.custom-notification');
+    if(existing) existing.remove();
+
+    const notification = document.createElement('div');
+    notification.className = 'custom-notification'; // Classe pour ciblage facile
+    
+    // Couleurs selon le type
+    let borderColor = 'var(--primary)';
+    let icon = '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>';
+    
+    if (type === 'success') {
+        borderColor = '#10b981'; // Vert
+        icon = '<polyline points="20 6 9 17 4 12"/>';
+    } else if (type === 'error') {
+        borderColor = '#ef4444'; // Rouge
+    }
+
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px; /* En haut à droite c'est plus standard */
+        padding: 1rem 1.5rem;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(0,0,0,0.1);
+        border-left: 4px solid ${borderColor};
+        border-radius: 8px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        color: #333;
+        z-index: 99999;
+        font-family: 'Inter', sans-serif;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transform: translateX(100%);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    `;
+    
+    notification.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${borderColor}" stroke-width="2">
+            ${icon}
+        </svg>
+        <span>${message}</span>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Animation d'entrée (petit délai pour laisser le DOM se mettre à jour)
+    requestAnimationFrame(() => {
+        notification.style.transform = 'translateX(0)';
+    });
+    
+    // Disparition automatique
+    setTimeout(() => {
+        notification.style.transform = 'translateX(120%)';
+        setTimeout(() => notification.remove(), 300);
+    }, 4000);
 }
