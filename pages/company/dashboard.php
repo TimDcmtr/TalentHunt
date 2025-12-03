@@ -170,7 +170,6 @@
                   <div class="app-avatar"><?php echo $app['candidate_avatar']; ?></div>
                   <div class="app-info">
                     <h4><?php echo $app['candidate_name']; ?></h4>
-                    <p><?php echo $app['candidate_bio']; ?></p>
                   </div>
                   <a href="/student/profil?id=<?php echo $app['candidate_id']; ?>" class="btn-secondary btn-sm">Voir le profil</a>
                 </div>

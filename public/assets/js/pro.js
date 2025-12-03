@@ -67,37 +67,10 @@ function setupOfferActions() {
     });
   });
 
-  // Delete offer (if needed)
-  const offerItems = document.querySelectorAll('.offer-item');
-  offerItems.forEach(item => {
-    // Add context menu for delete
-    item.addEventListener('contextmenu', function(e) {
-      e.preventDefault();
-      if (confirm('Voulez-vous supprimer cette offre ?')) {
-        const offerId = this.querySelector('a').getAttribute('href').split('/')[2];
-        console.log('Delete offer:', offerId);
-        // TODO: Delete offer
-        this.style.animation = 'fadeOut 0.3s ease-out';
-        setTimeout(() => this.remove(), 300);
-      }
-    });
-  });
 }
 
 // Setup application interactions
 function setupApplicationInteractions() {
-  const profileBtns = document.querySelectorAll('.application-item .btn-secondary');
-  
-  profileBtns.forEach(btn => {
-    btn.addEventListener('click', function(e) {
-      e.preventDefault();
-      const candidateName = this.getAttribute('href').split('/').pop();
-      console.log('View profile:', candidateName);
-      // TODO: Open profile modal or navigate
-      showCandidatePreview(candidateName);
-    });
-  });
-
   // Add quick actions to application items
   const applicationItems = document.querySelectorAll('.application-item');
   applicationItems.forEach(item => {
@@ -196,68 +169,6 @@ function animateMatchScores() {
   }, { threshold: 0.5 });
 
   matchCircles.forEach(circle => observer.observe(circle));
-}
-
-// Show candidate preview (modal)
-function showCandidatePreview(name) {
-  // TODO: Implement modal with candidate details
-  const modal = document.createElement('div');
-  modal.className = 'modal-overlay';
-  modal.style.cssText = `
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(8px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    animation: fadeIn 0.3s ease-out;
-  `;
-
-  modal.innerHTML = `
-    <div class="glass-card" style="max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto;">
-      <div style="padding: 2rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-          <h2>Profil de ${name}</h2>
-          <button class="btn-icon close-modal">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18"/>
-              <line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>
-          </button>
-        </div>
-        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
-          Détails du profil à venir...
-        </p>
-        <div style="display: flex; gap: 1rem;">
-          <button class="btn-primary">Contacter</button>
-          <button class="btn-secondary close-modal">Fermer</button>
-        </div>
-      </div>
-    </div>
-  `;
-
-  document.body.appendChild(modal);
-
-  // Close modal
-  modal.querySelectorAll('.close-modal').forEach(btn => {
-    btn.addEventListener('click', () => {
-      modal.style.animation = 'fadeOut 0.3s ease-out';
-      setTimeout(() => modal.remove(), 300);
-    });
-  });
-
-  // Close on outside click
-  modal.addEventListener('click', function(e) {
-    if (e.target === this) {
-      this.style.animation = 'fadeOut 0.3s ease-out';
-      setTimeout(() => this.remove(), 300);
-    }
-  });
 }
 
 // Notification system
