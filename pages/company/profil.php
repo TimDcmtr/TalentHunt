@@ -21,7 +21,7 @@
   <?php 
 
   $id = $_GET['id'];
-  $userController = new CompaniesController();
+  $CompaniesController = new CompaniesController();
   $CompanyDb = $userController->getCompanyProfile($id);
   $etudiant = json_decode($CompanyDb, true);
   
