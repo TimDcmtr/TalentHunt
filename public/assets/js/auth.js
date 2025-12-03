@@ -252,7 +252,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Envoi
       setLoading(btn, true);
-      const response = await sendAuthRequest('register', formData);
+      const response = await sendAuthRequest('registerEN', formData);
       setLoading(btn, false, originalBtnText);
 
       if (response.ok) {
