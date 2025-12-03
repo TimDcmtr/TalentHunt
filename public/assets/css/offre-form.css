@@ -342,6 +342,40 @@
   font-size: 0.85rem;
 }
 
+/* Dans assets/css/offre-form.css */
+
+.form-step {
+    display: none; /* Caché par défaut */
+}
+.form-step.active {
+    display: block; /* Visible si actif */
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.list-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.btn-remove {
+    background: none;
+    border: none;
+    color: #ef4444;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0 10px;
+}
+.btn-remove:hover {
+    background-color: #fee2e2;
+    border-radius: 4px;
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .form-layout {

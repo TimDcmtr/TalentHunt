@@ -227,5 +227,38 @@ switch ($action) {
         $appController = new ApplicationController();
         echo $appController->apply($data);
         break;
+
+    case 'create_offer':
+        // 1. Auth check (Entreprise uniquement)
+        $headers = getallheaders();
+        $authHeader = $headers['Authorization'] ?? '';
+        $jwt = str_replace("Bearer ", "", $authHeader);
+
+        require_once ROOT_PATH . 'app/controllers/CompanyController.php';
+        $companyCtrl = new CompanyController();
+        $company = $companyCtrl->getCompanyFromToken($jwt);
+
+        if (!$company) {
+            http_response_code(401);
+            echo json_encode(["message" => "Non autorisé."]);
+            exit;
+        }
+
+        // 2. Data
+        $data = json_decode(file_get_contents("php://input"), true);
+        if (!$data) {
+            http_response_code(400);
+            echo json_encode(["message" => "Données invalides."]);
+            exit;
+        }
+
+        // 3. Force Company ID
+        $data['company_id'] = $company['id'];
+
+        // 4. Controller
+        require_once ROOT_PATH . 'app/controllers/JobOfferController.php';
+        $offerCtrl = new JobOfferController();
+        echo $offerCtrl->createOffer($data);
+        break;
 }
 ?>
