@@ -49,11 +49,6 @@
             <input type="password" id="login-password" name="password" class="form-input" placeholder="••••••••"
               required>
           </div>
-
-          <div class="form-options">
-            <a href="/forgot-password" class="link">Mot de passe oublié ?</a>
-          </div>
-
           <button type="submit" class="btn-primary btn-full">
             Se connecter
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -74,11 +69,6 @@
             <input type="password" id="login-password" name="password" class="form-input" placeholder="••••••••"
               required>
           </div>
-
-          <div class="form-options">
-            <a href="/forgot-password" class="link">Mot de passe oublié ?</a>
-          </div>
-
           <button type="submit" class="btn-primary btn-full">
             Se connecter
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
