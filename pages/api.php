@@ -152,5 +152,29 @@ switch ($action) {
         http_response_code(404);
         echo json_encode(["message" => "Action not found. Check your URL parameters."]);
         break;
+
+    case 'upload_cv':
+        // 1. Auth check (Copier-coller habituel)
+        $headers = getallheaders();
+        $authHeader = $headers['Authorization'] ?? '';
+        $jwt = str_replace("Bearer ", "", $authHeader);
+
+        $userController = new UserController();
+        $loggedUser = $userController->getUserFromToken($jwt);
+
+        if (!$loggedUser) {
+            http_response_code(401);
+            echo json_encode(["message" => "Non autorisé."]);
+            exit;
+        }
+
+        // 2. Préparation des données
+        // Pour l'upload, on utilise $_POST et $_FILES standard
+        $data = $_POST;
+        $data['id'] = $loggedUser['id']; // Sécurité : on force l'ID
+
+        // 3. Appel Controller avec les fichiers
+        echo $userController->uploadCV($data, $_FILES);
+        break;
 }
 ?>
