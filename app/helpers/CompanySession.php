@@ -20,11 +20,6 @@ if (isset($_COOKIE['authToken'])) {
         // SUCCÈS : C'est bien une entreprise connectée
         $currentCompany = $companyFromToken['id'];
         $isCompanyAuthenticated = true;
-    } else {
-        // ÉCHEC : Token invalide, expiré, ou c'est un token "Student" qui essaie d'accéder à une page Entreprise
-        // On ne supprime le cookie que si on est sûr que c'est invalide. 
-        // Dans le doute, pour une sécu simple, on nettoie.
-        setcookie('authToken', '', time() - 3600, "/"); 
     }
 }
 

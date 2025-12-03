@@ -16,14 +16,10 @@ if (isset($_COOKIE['authToken'])) {
     // 3. On vérifie le token via la méthode qu'on a créée précédemment
     $userFromToken = $controller->getUserFromToken($_COOKIE['authToken']);
 
-    if ($userFromToken) {
+    if ($userFromToken['role'] == 'student') {
         // SUCCÈS : Le token est valide
         $currentUser = $userFromToken;
         $isAuthenticated = true;
-    } else {
-        // ÉCHEC : Le token est invalide ou expiré (ex: bidouillé)
-        // On supprime le cookie pour nettoyer le navigateur du client
-        setcookie('authToken', '', time() - 3600, "/"); 
     }
 }
 
