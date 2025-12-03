@@ -44,7 +44,7 @@
 
                     <!-- Header -->
                     <div class="offre-header glass-card">
-                        <!-- <div class="company-logo-large"><?php strtoupper(substr($offer['company'], 0, 1)); ?></div> -->
+                        <div class="company-logo-large"><?php strtoupper(substr($offer['company'], 0, 1)); ?></div>
                         <div class="offre-header-content">
                             <h1><?php echo $offre['title']; ?></h1>
                             <div class="company-info">
