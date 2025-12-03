@@ -234,7 +234,7 @@ switch ($action) {
         $authHeader = $headers['Authorization'] ?? '';
         $jwt = str_replace("Bearer ", "", $authHeader);
 
-        require_once ROOT_PATH . 'app/controllers/CompanyController.php';
+        require_once ROOT_PATH . 'app/controllers/CompaniesController.php';
         $companyCtrl = new CompanyController();
         $company = $companyCtrl->getCompanyFromToken($jwt);
 
