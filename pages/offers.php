@@ -177,18 +177,13 @@
                         </svg>
                       </div>
                     </div>
-                    <button class="btn-bookmark">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-                      </svg>
-                    </button>
                   </div>
 
                   <div class="job-details">
                     <span class="job-detail">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                        ircle cx="12" cy="10" r="3"/>
+                        <circle cx="12" cy="10" r="3"/>
                       </svg>
                       <?php echo htmlspecialchars($job['location']); ?>
                     </span>
