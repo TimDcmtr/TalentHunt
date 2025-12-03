@@ -13,7 +13,7 @@
 <body>
   <?php require_once ROOT_PATH . 'app/helpers/Navbar.php';
   require_once ROOT_PATH . 'app/helpers/CompanySession.php';
-  require_once ROOT_PATH . 'app/helpers/CompaniesController.php'
+  require_once ROOT_PATH . 'app/controllers/CompaniesController.php'
   ?>
   <?php
     $id = $currentCompany;
