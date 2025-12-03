@@ -168,6 +168,11 @@ switch ($action) {
             exit;
         }
 
+        // DEBUG TEMPORAIRE
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($_POST) && empty($_FILES) && $_SERVER['CONTENT_LENGTH'] > 0) {
+            die(json_encode(["message" => "ERREUR CRITIQUE : Le fichier dépasse post_max_size dans php.ini"]));
+        }
+
         // 2. Préparation des données
         // Pour l'upload, on utilise $_POST et $_FILES standard
         $data = $_POST;
