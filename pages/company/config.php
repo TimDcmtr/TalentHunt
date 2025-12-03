@@ -100,12 +100,12 @@
                   <select id="company_size" name="size_range" class="form-input" required>
                     <option value="">Sélectionnez</option>
                     <?php 
-                      $sizes = ["1-10 employés", "11-50 employés", "50-200 employés", "201-500 employés", "500+ employés"];
+                      $sizes = ["1-10", "11-50", "50-200", "201-500", "500+"];
                       $currentSize = $company['size_range'] ?? '';
                       foreach($sizes as $size): 
                     ?>
                         <option value="<?= $size ?>" <?= ($currentSize == $size) ? 'selected' : '' ?>>
-                            <?= $size ?>
+                            <?= $size ?> employés
                         </option>
                     <?php endforeach; ?>
                   </select>
