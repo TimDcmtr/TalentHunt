@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
       };
     } catch (error) {
       console.error('Erreur réseau:', error);
-      return { ok: false, data: { message: "Une erreur technique est survenue." } };
+      return '{ ok: false, data: { message: "Une erreur technique est survenue." } }';
     }
   }
 
