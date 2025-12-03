@@ -148,6 +148,7 @@
                 <?php endforeach;
               endif;
               ?>
+              <input type="hidden" name="page" value="1">
             </form>
           </div>
 
