@@ -23,7 +23,8 @@ if (isset($_COOKIE['authToken'])) {
     } else {
         // ÉCHEC : Le token est invalide ou expiré (ex: bidouillé)
         // On supprime le cookie pour nettoyer le navigateur du client
-        setcookie('authToken', '', time() - 3600, "/"); 
+
+        setcookie('authToken', 'expired'); 
     }
 }
 
