@@ -23,7 +23,7 @@
   $id = $_GET['id'];
   $CompaniesController = new CompanyController();
   $CompanyDb = $CompaniesController->getCompanyProfile($id);
-  $etudiant = json_decode($CompanyDb, true);
+  $entreprise = json_decode($CompanyDb, true);
   
   $specialites_list = [
     'web' => 'Web Development',
