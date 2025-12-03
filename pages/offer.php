@@ -15,49 +15,19 @@
 
 <body>
 
-    <?php require_once ROOT_PATH . 'app/helpers/Navbar.php'; ?>
-    <?php
+    <?php require_once ROOT_PATH . 'app/helpers/Navbar.php';
+      require_once ROOT_PATH . 'app/controllers/JobOfferController.php';
+    ?>
+    <?php if (!isset($_GET['id'])): ?>
+        <h1> Erreur de Connexion </h1>
+    <?php else: ?>
 
-    // Simulation données - À remplacer par requête DB
-    $offre = [
-        'id' => 1,
-        'title' => 'Développeur Full Stack PARIS > LYON',
-        'company' => 'TechCorp',
-        'company_logo' => '🚀',
-        'location' => 'Paris, France',
-        'type' => 'Stage',
-        'remote' => 'Hybride',
-        'salary' => '1200-1500€',
-        'duration' => '6 mois',
-        'start_date' => '01/03/2025',
-        'posted' => 'Il y a 2 jours',
-        'views' => 256,
-        'applications' => 34,
-        'tags' => ['React', 'Node.js', 'MongoDB', 'TypeScript', 'Docker'],
-        'description' => 'Nous recherchons un développeur Full Stack passionné pour rejoindre notre équipe dynamique. Vous participerez au développement de solutions web innovantes et travaillerez sur des projets variés.',
-        'missions' => [
-            'Développer et maintenir des applications web avec React et Node.js',
-            'Participer à la conception d\'architectures techniques',
-            'Collaborer avec l\'équipe produit et design',
-            'Écrire du code propre et maintenable',
-            'Participer aux code reviews'
-        ],
-        'requirements' => [
-            'Formation Bac+3/5 en informatique',
-            'Maîtrise de JavaScript/TypeScript',
-            'Expérience avec React et Node.js',
-            'Connaissance des bases de données (SQL/NoSQL)',
-            'Bon niveau d\'anglais technique'
-        ],
-        'benefits' => [
-            'Télétravail flexible (2j/semaine)',
-            'Équipement fourni (MacBook Pro)',
-            'Tickets restaurant',
-            'Mutuelle premium',
-            'Formation continue',
-            'Événements d\'équipe réguliers'
-        ]
-    ];
+    <?php 
+
+    $id = $_GET['id'];
+    $OffreController = new getJobDetails();
+    $offreDb = $OffreController->getJobDetails($id);
+    $offre = json_decode($offreDb, true);
     ?>
 
     <main class="main-content">
@@ -74,7 +44,7 @@
 
                     <!-- Header -->
                     <div class="offre-header glass-card">
-                        <div class="company-logo-large"><?php echo $offre['company_logo']; ?></div>
+                        <div class="company-logo-large"><?php strtoupper(substr($this->company, 0, 1)); ?></div>
                         <div class="offre-header-content">
                             <h1><?php echo $offre['title']; ?></h1>
                             <div class="company-info">
@@ -231,7 +201,7 @@
                     <div class="company-card glass-card">
                         <h4>À propos de l'entreprise</h4>
                         <div class="company-header-small">
-                            <div class="company-logo-small"><?php echo $offre['company_logo']; ?></div>
+                            <div class="company-logo-small"><?php strtoupper(substr($this->company, 0, 1)); ?></div>
                             <div>
                                 <h5><?php echo $offre['company']; ?></h5>
                                 <p>Tech • 50-200 employés</p>
@@ -299,7 +269,7 @@
         </div>
     </div>
 
-    <?php require_once ROOT_PATH . 'app/helpers/Navbar.php'; ?>
+    <?php endif; ?>
     <?php require_once ROOT_PATH . 'app/helpers/Footer.php'; ?>
 
     <script src="assets/js/navbar.js"></script>
