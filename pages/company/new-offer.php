@@ -10,86 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-  <?php 
-  require_once ROOT_PATH . 'app/helpers/Navbar.php'; 
-  require_once ROOT_PATH . 'app/controllers/JobOfferController.php';
-  require_once ROOT_PATH . 'app/helpers/CompanySession.php';
-  
-  // Vérifier que l'entreprise est connectée
-  requireCompanyLogin();
-  
-  // Traitement du formulaire
-  if (isset($_POST['submit_offer'])) {
-      
-      // Vérifier que company_id existe
-      if (!isset($currentCompany) || empty($currentCompany)) {
-          echo "<script>alert('❌ Erreur: Aucune entreprise connectée');</script>";
-      } else {
-          // Préparer le salaire (format: "min-max")
-          $salary = '';
-          if (!empty($_POST['salary_min']) && !empty($_POST['salary_max'])) {
-              $salary = trim($_POST['salary_min']) . '-' . trim($_POST['salary_max']);
-          } elseif (!empty($_POST['salary_min'])) {
-              $salary = trim($_POST['salary_min']);
-          }
-          
-          // Préparer les tags (nettoyer les espaces et supprimer les vides)
-          $tags = [];
-          if (!empty($_POST['tags'])) {
-              $tagsArray = explode(',', $_POST['tags']);
-              foreach ($tagsArray as $tag) {
-                  $cleanTag = trim($tag);
-                  if (!empty($cleanTag)) {
-                      $tags[] = $cleanTag;
-                  }
-              }
-          }
-          
-          // Filtrer les tableaux pour supprimer les éléments vides
-          $missions = isset($_POST['missions']) ? array_filter(array_map('trim', $_POST['missions'])) : [];
-          $requirements = isset($_POST['requirements']) ? array_filter(array_map('trim', $_POST['requirements'])) : [];
-          $benefits = isset($_POST['benefits']) ? array_filter(array_map('trim', $_POST['benefits'])) : [];
-          
-          // Convertir la date du format HTML (YYYY-MM-DD) au format attendu (d/m/Y)
-          $startDate = '';
-          if (!empty($_POST['start_date'])) {
-              $dateObj = DateTime::createFromFormat('Y-m-d', $_POST['start_date']);
-              $startDate = $dateObj ? $dateObj->format('d/m/Y') : '';
-          }
-          
-          // Préparer toutes les données
-          $data = [
-              'company_id' => $currentCompany,
-              'title' => trim($_POST['title']),
-              'location' => trim($_POST['location']),
-              'type' => $_POST['contract_type'],
-              'remote' => $_POST['remote'],
-              'salary' => $salary,
-              'duration' => trim($_POST['duration'] ?? ''),
-              'start_date' => $startDate,
-              'description' => trim($_POST['description']),
-              'tags' => array_values($tags),
-              'missions' => array_values($missions),
-              'requirements' => array_values($requirements),
-              'benefits' => array_values($benefits)
-          ];
-          
-          // Créer l'offre dans la base de données
-          $jobController = new JobOfferController();
-          $result = json_decode($jobController->createOffer($data), true);
-          
-          if (isset($result['id'])) {
-              // Redirection vers la page de l'offre créée
-              $offerId = $result['id'];
-              header("Location: /offer?id=" . $offerId);
-              exit;
-          } else {
-              $errorMsg = isset($result['message']) ? htmlspecialchars($result['message']) : 'Erreur inconnue';
-              echo "<script>alert('❌ Erreur: " . $errorMsg . "');</script>";
-          }
-      }
-  }
-  ?>
+  <?php require_once ROOT_PATH . 'app/helpers/Navbar.php'; ?>
 
   <main class="main-content">
     <div class="container">
@@ -148,8 +69,7 @@
             <p>Créez une offre attractive pour trouver les meilleurs talents</p>
           </div>
 
-          <!-- ⭐ CHANGEMENT D'ID pour éviter l'interception du JS -->
-          <form id="offreFormReal" method="POST" action="">
+          <form id="offreForm" method="POST" action="/offre/create">
             <!-- Step 1: Informations générales -->
             <section class="form-step active" data-step="1">
               <div class="step-card glass-card">
@@ -172,10 +92,10 @@
                     <label for="contract_type" class="form-label">Type de contrat *</label>
                     <select id="contract_type" name="contract_type" class="form-input" required>
                       <option value="">Sélectionnez</option>
-                      <option value="Stage">Stage</option>
-                      <option value="Alternance">Alternance</option>
-                      <option value="CDD">CDD</option>
-                      <option value="CDI">CDI</option>
+                      <option value="stage">Stage</option>
+                      <option value="alternance">Alternance</option>
+                      <option value="cdd">CDD</option>
+                      <option value="cdi">CDI</option>
                     </select>
                   </div>
 
@@ -208,26 +128,25 @@
                     <label for="remote" class="form-label">Télétravail *</label>
                     <select id="remote" name="remote" class="form-input" required>
                       <option value="">Sélectionnez</option>
-                      <option value="Sur site">Sur site</option>
-                      <option value="Hybride">Hybride</option>
-                      <option value="100% remote">100% remote</option>
+                      <option value="onsite">Sur site</option>
+                      <option value="hybrid">Hybride</option>
+                      <option value="remote">100% remote</option>
                     </select>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="start_date" class="form-label">Date de début souhaitée *</label>
+                  <label for="start_date" class="form-label">Date de début souhaitée</label>
                   <input 
                     type="date" 
                     id="start_date" 
                     name="start_date" 
                     class="form-input"
-                    required
                   >
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label">Domaine(s)</label>
+                  <label class="form-label">Domaine(s) *</label>
                   <div class="checkbox-grid">
                     <label class="checkbox-card">
                       <input type="checkbox" name="domains[]" value="dev">
@@ -284,6 +203,7 @@
                         name="missions[]" 
                         class="form-input" 
                         placeholder="Mission 1"
+                        required
                       >
                       <button type="button" class="btn-remove" style="display: none;">×</button>
                     </div>
@@ -306,6 +226,7 @@
                         name="requirements[]" 
                         class="form-input" 
                         placeholder="Compétence 1"
+                        required
                       >
                       <button type="button" class="btn-remove" style="display: none;">×</button>
                     </div>
@@ -340,7 +261,7 @@
 
                 <div class="form-row">
                   <div class="form-group">
-                    <label for="salary_min" class="form-label">Salaire minimum (€/mois) *</label>
+                    <label for="salary_min" class="form-label">Salaire minimum (€/mois)</label>
                     <input 
                       type="number" 
                       id="salary_min" 
@@ -348,12 +269,11 @@
                       class="form-input" 
                       placeholder="1200"
                       min="0"
-                      required
                     >
                   </div>
 
                   <div class="form-group">
-                    <label for="salary_max" class="form-label">Salaire maximum (€/mois) *</label>
+                    <label for="salary_max" class="form-label">Salaire maximum (€/mois)</label>
                     <input 
                       type="number" 
                       id="salary_max" 
@@ -361,7 +281,6 @@
                       class="form-input" 
                       placeholder="1500"
                       min="0"
-                      required
                     >
                   </div>
                 </div>
@@ -422,6 +341,7 @@
                     <span id="preview-salary-range">Rémunération</span>
                   </div>
                 </div>
+
               </div>
             </section>
 
@@ -441,7 +361,7 @@
                 </svg>
               </button>
 
-              <button type="submit" name="submit_offer" class="btn-primary" id="submitBtn" style="display: none;">
+              <button type="submit" class="btn-primary" id="submitBtn" style="display: none;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <polyline points="20 6 9 17 4 12"/>
                 </svg>
@@ -455,18 +375,6 @@
   </main>
 
   <?php require_once ROOT_PATH . 'app/helpers/Footer.php'; ?>
-  
-  <!-- ⭐ ASTUCE : Ajouter un script pour forcer la soumission -->
-  <script>
-    // Intercepter le clic sur le bouton submit
-    document.getElementById('submitBtn')?.addEventListener('click', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      
-      // Soumettre directement le formulaire sans passer par le JS
-      document.getElementById('offreFormReal').submit();
-    });
-  </script>
   
   <script src="assets/js/navbar.js"></script>
   <script src="assets/js/offre-form.js"></script>
