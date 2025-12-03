@@ -1,6 +1,6 @@
 <?php
 // On s'assure que ROOT_PATH est défini (à inclure dans tes pages)
-require_once ROOT_PATH . 'app/controllers/CompanyController.php';
+require_once ROOT_PATH . 'app/controllers/CompaniesController.php';
 
 // Variables globales accessibles dans tes pages "Entreprise"
 $currentCompany = null;
