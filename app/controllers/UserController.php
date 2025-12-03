@@ -349,5 +349,74 @@ class UserController
             return json_encode(["message" => "Erreur serveur : " . $e->getMessage()]);
         }
     }
+
+    public function uploadCV($data, $files)
+    {
+        if (!isset($data['id']) || !isset($files['cv_file'])) {
+            http_response_code(400);
+            return json_encode(["message" => "Fichier ou ID manquant."]);
+        }
+
+        $userId = $data['id'];
+        $file = $files['cv_file'];
+
+        // 1. Vérifications d'usage
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            http_response_code(400);
+            return json_encode(["message" => "Erreur lors du transfert du fichier."]);
+        }
+
+        // Vérification taille (Ex: max 5MB)
+        if ($file['size'] > 5 * 1024 * 1024) {
+            http_response_code(400);
+            return json_encode(["message" => "Le fichier est trop volumineux (Max 5MB)."]);
+        }
+
+        // Vérification extension
+        $allowed = ['pdf', 'doc', 'docx'];
+        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        if (!in_array($ext, $allowed)) {
+            http_response_code(400);
+            return json_encode(["message" => "Format non accepté (PDF, DOC, DOCX uniquement)."]);
+        }
+
+        // 2. Préparation du stockage
+        // Création du nom unique : cv_IDUSER_TIMESTAMP.ext
+        $filename = "cv_" . $userId . "_" . time() . "." . $ext;
+        
+        // Chemin absolu vers le dossier uploads (Assure-toi que ce dossier existe !)
+        $targetDir = ROOT_PATH . 'public/uploads/cv/';
+        if (!is_dir($targetDir)) {
+            mkdir($targetDir, 0777, true);
+        }
+        
+        $targetFile = $targetDir . $filename;
+
+        // 3. Déplacement du fichier
+        if (move_uploaded_file($file['tmp_name'], $targetFile)) {
+            
+            // 4. Mise à jour en BDD
+            $this->user->id = $userId;
+            $this->user->cv_filename = $filename;
+
+            if ($this->user->updateCV()) {
+                http_response_code(200);
+                return json_encode([
+                    "message" => "CV téléchargé avec succès.",
+                    "filename" => $filename,
+                    "url" => "/uploads/cv/" . $filename // Pour l'affichage direct
+                ]);
+            } else {
+                // Si erreur BDD, on supprime le fichier pour ne pas polluer
+                unlink($targetFile);
+                http_response_code(503);
+                return json_encode(["message" => "Erreur lors de la sauvegarde en base."]);
+            }
+
+        } else {
+            http_response_code(500);
+            return json_encode(["message" => "Erreur lors de l'enregistrement du fichier sur le serveur."]);
+        }
+    }
 }
 ?>

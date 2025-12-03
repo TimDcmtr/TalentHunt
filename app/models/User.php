@@ -248,5 +248,20 @@ class User
 
         return $stmt->execute();
     }
+
+    // --- UPDATE : CV FILENAME ---
+    public function updateCV()
+    {
+        // On met à jour uniquement le nom du fichier
+        $query = "UPDATE " . $this->table_name . " SET cv_filename = :cv_filename WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+
+        $this->cv_filename = htmlspecialchars(strip_tags($this->cv_filename));
+
+        $stmt->bindParam(':cv_filename', $this->cv_filename);
+        $stmt->bindParam(':id', $this->id);
+
+        return $stmt->execute();
+    }
 }
 ?>
