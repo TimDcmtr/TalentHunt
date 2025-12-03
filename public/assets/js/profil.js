@@ -189,16 +189,9 @@ function setupCVDownload() {
   
   if (downloadBtn) {
     downloadBtn.addEventListener('click', function(e) {
-      e.preventDefault();
       
-      const filename = document.querySelector('.cv-info h4')?.textContent || 'CV.pdf';
-      console.log('Downloading CV:', filename);
-      
-      showNotification('Téléchargement du CV...', 'info');
-      
-      // TODO: Implement actual download
-      // This would typically fetch the file from the backend
-      // window.location.href = this.getAttribute('href');
+      showNotification('Affichage du cv...', 'info');
+
     });
   }
 }
