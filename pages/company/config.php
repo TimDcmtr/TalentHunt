@@ -93,7 +93,7 @@
                 <div class="form-group">
                   <label for="company_size" class="form-label">Taille de l'entreprise *</label>
                   <select id="company_size" name="company_size" class="form-input" required>
-                    <?php if ($company['size_range']): ?>
+                    <?php if (!isset($company['size_range'])): ?>
                       <option value="" selected>Sélectionnez</option>
                     <?php else: ?>
                       <option value="<?= $company['size_range'] ?>" selected><?= $company['size_range'] ?> employés</option>
