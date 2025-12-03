@@ -1,9 +1,7 @@
 // /public/assets/js/entreprise-config.js
 
 document.addEventListener('DOMContentLoaded', function() {
-  // Logo upload
-  setupLogoUpload();
-  
+
   // Character counter
   setupCharCounter();
   
@@ -13,42 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // Media upload
   setupMediaUpload();
 });
-
-function setupLogoUpload() {
-  const logoInput = document.getElementById('logo-file');
-  const currentLogo = document.querySelector('.current-logo');
-
-  if (logoInput && currentLogo) {
-    logoInput.addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      // Validate
-      if (!file.type.startsWith('image/')) {
-        alert('Veuillez sélectionner une image');
-        return;
-      }
-
-      if (file.size > 2 * 1024 * 1024) {
-        alert('La taille du fichier ne doit pas dépasser 2MB');
-        return;
-      }
-
-      // Preview
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        currentLogo.style.backgroundImage = `url(${event.target.result})`;
-        currentLogo.style.backgroundSize = 'cover';
-        currentLogo.style.backgroundPosition = 'center';
-        currentLogo.textContent = '';
-      };
-      reader.readAsDataURL(file);
-
-      console.log('Logo updated:', file.name);
-      // TODO: Upload to backend
-    });
-  }
-}
 
 function setupCharCounter() {
   const shortDesc = document.getElementById('short_description');
@@ -169,13 +131,6 @@ function setupMediaUpload() {
 // Form submission handlers
 document.querySelectorAll('.config-form').forEach(form => {
   form.addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const formData = new FormData(this);
-    const data = Object.fromEntries(formData);
-
-    console.log('Form submitted:', data);
-
     // Show success notification
     showNotification('Modifications enregistrées avec succès', 'success');
 
