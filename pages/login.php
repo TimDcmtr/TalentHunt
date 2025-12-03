@@ -51,10 +51,6 @@
           </div>
 
           <div class="form-options">
-            <label class="checkbox-label">
-              <input type="checkbox" name="remember">
-              <span>Se souvenir de moi</span>
-            </label>
             <a href="/forgot-password" class="link">Mot de passe oublié ?</a>
           </div>
 
@@ -80,10 +76,6 @@
           </div>
 
           <div class="form-options">
-            <label class="checkbox-label">
-              <input type="checkbox" name="remember">
-              <span>Se souvenir de moi</span>
-            </label>
             <a href="/forgot-password" class="link">Mot de passe oublié ?</a>
           </div>
 
