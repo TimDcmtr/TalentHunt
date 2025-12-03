@@ -29,44 +29,54 @@ class ApplicationController
      */
     public function apply($data)
     {
-        // $data attend : user_id, job_offer_id
+        // 1. Validation : On vérifie que 'offre_id' (envoyé par le JS) est bien là
         if (!isset($data['user_id']) || !isset($data['offre_id'])) {
             http_response_code(400);
             return json_encode([
                 "message" => "Données manquantes.",
-                "debug_received" => $data, // On affiche ce qu'on a reçu
-                "has_user_id" => isset($data['user_id']),
-                "has_offre_id" => isset($data['offre_id'])
+                "debug" => $data // Pour voir ce qui manque si besoin
             ]);
         }
 
-        // 1. Vérifier doublon
-        if ($this->application->checkExists($data['user_id'], $data['job_offer_id'])) {
+        // 2. Vérifier doublon (On utilise bien $data['offre_id'])
+        if ($this->application->checkExists($data['user_id'], $data['offre_id'])) {
             http_response_code(409); // Conflict
             return json_encode(["message" => "Vous avez déjà postulé à cette offre."]);
         }
 
-        // 2. Récupérer l'ID de l'entreprise via l'offre (nécessaire pour la table application)
-        if (!$this->jobModel->getOfferById($data['job_offer_id'])) {
+        // 3. Récupérer l'offre (On utilise bien $data['offre_id'])
+        if (!$this->jobModel->getOfferById($data['offre_id'])) {
             http_response_code(404);
             return json_encode(["message" => "Offre introuvable."]);
         }
+
         $companyId = $this->jobModel->company_id;
 
-        // 3. Création
+        // 4. Préparation du Modèle Application
+        // Ici on mappe la donnée reçue ('offre_id') vers la propriété du modèle ('job_offer_id')
         $this->application->user_id = $data['user_id'];
-        $this->application->job_offer_id = $data['job_offer_id'];
+        $this->application->job_offer_id = $data['offre_id']; // <-- C'est ici que la conversion se fait
         $this->application->company_id = $companyId;
 
+        // Gestion du message
+        $message = $data['cover_letter'] ?? 'Candidature simplifiée (One-Click)';
+        if (!empty($data['availability'])) {
+            $message .= " | Dispo: " . $data['availability'];
+        }
+        $this->application->message = $message;
+
+        // 5. Enregistrement en BDD
         if ($this->application->create()) {
             http_response_code(201);
-            return json_encode(["message" => "Candidature envoyée avec succès."]);
+            return json_encode([
+                "message" => "Candidature envoyée avec succès.",
+                "status" => "success"
+            ]);
         }
 
         http_response_code(503);
-        return json_encode(["message" => "Erreur lors de l'envoi."]);
+        return json_encode(["message" => "Erreur serveur lors de l'enregistrement."]);
     }
-
     /**
      * A. Pour l'ÉTUDIANT : Voir mes candidatures
      * Retourne : Offre, Entreprise, Logo, Statut...
