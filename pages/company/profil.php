@@ -12,7 +12,13 @@
 <body>
     <?php require_once ROOT_PATH . 'app/helpers/Navbar.php'; ?>
 
+  <?php if (!isset($_GET['id'])): ?>
+    <h1> Erreur de Connexion </h1>
+  <?php else: ?>
+
   <?php 
+
+
   // Simulation données - À remplacer par requête DB
   $entreprise = [
     'id' => 1,
