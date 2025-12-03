@@ -42,8 +42,6 @@
                         <span><?php echo $offre['title']; ?></span>
                     </nav>
 
-                    <?= $offre ?>
-
                     <!-- Header -->
                     <div class="offre-header glass-card">
                         <!-- <div class="company-logo-large"><?php strtoupper(substr($this->$offer['company'], 0, 1)); ?></div> -->
@@ -203,7 +201,7 @@
                     <div class="company-card glass-card">
                         <h4>À propos de l'entreprise</h4>
                         <div class="company-header-small">
-                            <div class="company-logo-small"><?php strtoupper(substr($this->company, 0, 1)); ?></div>
+                            <div class="company-logo-small"><?php strtoupper(substr($this->$offre['company'], 0, 1)); ?></div>
                             <div>
                                 <h5><?php echo $offre['company']; ?></h5>
                                 <p>Tech • 50-200 employés</p>
