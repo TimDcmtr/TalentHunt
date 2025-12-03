@@ -264,6 +264,7 @@ class UserController
                     "school" => $this->user->school,
                     "location" => $this->user->location,
                     "field_of_study" => $this->user->field_of_study,
+                    "cv_filename" => $this->user->cv_filename,
                     "bio" => $this->user->bio,
                     "role" => $role, // Simplification
                     // ... Ajoute les autres champs dont tu as besoin
