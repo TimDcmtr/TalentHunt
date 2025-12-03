@@ -25,7 +25,7 @@
     <?php 
 
     $id = $_GET['id'];
-    $OffreController = new getJobDetails();
+    $OffreController = new JobOfferController();
     $offreDb = $OffreController->getJobDetails($id);
     $offre = json_decode($offreDb, true);
     ?>
