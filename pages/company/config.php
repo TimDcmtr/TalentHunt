@@ -85,7 +85,7 @@
               <p>Les informations de base visibles par les étudiants</p>
             </div>
 
-            <form class="config-form" method="POST" action="/api/updateCompany">
+            <form class="config-form" method="POST" action="/api?action=updateCompany">
               <input type="hidden" name="id" value="<?= $company['id'] ?>">
               <input type="hidden" name="section" value="infos">
 

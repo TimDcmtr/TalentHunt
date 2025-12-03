@@ -131,6 +131,13 @@ function setupMediaUpload() {
 // Form submission handlers
 document.querySelectorAll('.config-form').forEach(form => {
   form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+
+    console.log('Form submitted:', data);
+
     // Show success notification
     showNotification('Modifications enregistrées avec succès', 'success');
 

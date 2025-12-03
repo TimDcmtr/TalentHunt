@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // Show success message
       showNotification('Modifications enregistrées avec succès!', 'success');
       
-      // TODO: Send to backend
+      form.submit();
     });
   });
 
