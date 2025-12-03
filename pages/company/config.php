@@ -120,7 +120,7 @@
 
               <div class="form-group">
                 <label for="website" class="form-label">Site web</label>
-                <input type="url" id="website" name="website" class="form-input" placeholder="https://dev.lemecha.fr" <?= $company['website'] ?? '' ?>>
+                <input type="url" id="website" name="website" class="form-input" placeholder="https://dev.lemecha.fr" value=<?= $company['website'] ?? '' ?>>
               </div>
 
               <div class="form-actions">
