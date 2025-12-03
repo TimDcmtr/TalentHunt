@@ -20,7 +20,7 @@
 }
 
 .auth-container {
-  position: relative;
+  display: flex;
   z-index: 1;
   max-width: 500px;
 }
