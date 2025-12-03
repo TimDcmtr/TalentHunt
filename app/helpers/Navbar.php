@@ -1,4 +1,7 @@
-<!-- /app/helpers/Navbar.php -->
+<?php
+require_once ROOT_PATH . 'app/controllers/CompanySession.php';
+require_once ROOT_PATH . 'app/controllers/UserSession.php';
+?>
 
 <nav class="navbar">
   <div class="container navbar-container">
@@ -19,11 +22,14 @@
     </div>
 
     <div class="navbar-menu" id="navbarMenu">
-      <a href="/offers" class="nav-link">Offres</a>
-      <a href="/student/feed" class="nav-link">Feed</a>
-      <a href="/student/config" class="nav-link">Profil</a>
-      <a href="/company/dashboard" class="nav-link">Dashboard</a>
-      <a href="/company/config" class="nav-link">Profil</a>
+      <? if ($isAuthenticated): ?>
+        <a href="/offers" class="nav-link">Offres</a>
+        <a href="/student/feed" class="nav-link">Feed</a>
+        <a href="/student/config" class="nav-link">Profil</a>
+      <? elseif ($isCompanyAuthenticated): ?>
+        <a href="/company/dashboard" class="nav-link">Dashboard</a>
+        <a href="/company/config" class="nav-link">Profil</a>
+      <? endif; ?>
     </div>
 
     <div class="navbar-actions">
@@ -74,7 +80,7 @@
 
 
 
-      
+
     </div>
 
     <button class="mobile-menu-toggle" id="mobileMenuToggle">
