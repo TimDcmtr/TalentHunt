@@ -34,61 +34,51 @@ class JobOffer
     }
 
     // --- CREATE ---
-public function createOffer($data)
+    public function create()
     {
-        // Validation minimale
-        if (!isset($data['company_id']) || !isset($data['title'])) {
-            http_response_code(400);
-            return json_encode(["message" => "Titre manquant."]);
+        $query = "INSERT INTO " . $this->table_name . " 
+                  SET 
+                    company_id = :company_id,
+                    title = :title,
+                    location = :location,
+                    type = :type,
+                    remote = :remote,
+                    salary = :salary,
+                    duration = :duration,
+                    start_date = :start_date,
+                    description = :description,
+                    tags = :tags,
+                    missions = :missions,
+                    requirements = :requirements,
+                    benefits = :benefits,
+                    created_at = NOW(),
+                    views = 0,
+                    applications_count = 0";
+
+        $stmt = $this->conn->prepare($query);
+
+        // Sanitize & Bind (Version simplifiée)
+        $stmt->bindParam(":company_id", $this->company_id);
+        $stmt->bindParam(":title", $this->title);
+        $stmt->bindParam(":location", $this->location);
+        $stmt->bindParam(":type", $this->type);
+        $stmt->bindParam(":remote", $this->remote);
+        $stmt->bindParam(":salary", $this->salary);
+        $stmt->bindParam(":duration", $this->duration);
+        $stmt->bindParam(":start_date", $this->start_date);
+        $stmt->bindParam(":description", $this->description);
+
+        // JSON Encoding pour les tableaux
+        $stmt->bindParam(":tags", json_encode($this->tags));
+        $stmt->bindParam(":missions", json_encode($this->missions));
+        $stmt->bindParam(":requirements", json_encode($this->requirements));
+        $stmt->bindParam(":benefits", json_encode($this->benefits));
+
+        if ($stmt->execute()) {
+            $this->id = $this->conn->lastInsertId();
+            return true;
         }
-
-        $this->job->company_id = $data['company_id'];
-        $this->job->title = $data['title'];
-        $this->job->location = $data['location'] ?? 'Non spécifié';
-        $this->job->type = $data['contract_type'] ?? 'CDI'; // Mapping name HTML
-        $this->job->remote = $data['remote'] ?? 'Sur site';
-        $this->job->duration = $data['duration'] ?? null;
-        
-        // Gestion Salaire (Min - Max)
-        $min = $data['salary_min'] ?? '';
-        $max = $data['salary_max'] ?? '';
-        if($min && $max) $this->job->salary = "$min - $max €";
-        elseif($min) $this->job->salary = "À partir de $min €";
-        else $this->job->salary = "Non communiqué";
-
-        // Date de début
-        if (!empty($data['start_date'])) {
-            $this->job->start_date = $data['start_date']; // Format YYYY-MM-DD direct du input date
-        } else {
-            $this->job->start_date = date('Y-m-d', strtotime('+1 month')); // Par défaut +1 mois
-        }
-
-        $this->job->description = $data['description'] ?? '';
-        
-        // Gestion des tags (Input texte séparé par virgules -> Array)
-        if (isset($data['tags']) && is_string($data['tags'])) {
-            // "React, Node" -> ["React", "Node"]
-            $this->job->tags = array_map('trim', explode(',', $data['tags']));
-        } else {
-            $this->job->tags = [];
-        }
-
-        // Tableaux dynamiques (Missions, Requirements, Benefits)
-        // Le JS enverra des tableaux JSON directement
-        $this->job->missions = $data['missions'] ?? [];
-        $this->job->requirements = $data['requirements'] ?? [];
-        $this->job->benefits = $data['benefits'] ?? [];
-
-        if ($this->job->create()) {
-            http_response_code(201);
-            return json_encode([
-                "message" => "Offre publiée avec succès !", 
-                "id" => $this->job->id
-            ]);
-        }
-        
-        http_response_code(503);
-        return json_encode(["message" => "Erreur lors de la publication."]);
+        return false;
     }
 
     // --- READ ONE ---
