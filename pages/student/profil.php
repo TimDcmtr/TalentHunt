@@ -25,7 +25,8 @@
   <?php
   $id = $_GET['id'];
   $userController = new UserController();
-  $etudiant = $userController->getUserProfile($id);
+  $userDb = $userController->getUserProfile($id);
+  $etudiant = json_decode($userDb, true);
 
 
   $categories_list = [
