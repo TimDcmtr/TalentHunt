@@ -36,7 +36,7 @@
         <div class="dashboard-header">
           <div class="header-content">
             <h1>Espace Entreprise</h1>
-            <p class="header-subtitle">Gérez vos offres et trouvez les meilleurs talents</p>
+            <p class="header-subtitle">Gérez vos offres et trouvez les meilleurs talents : <?= $id ?></p>
           </div>
           <a href="/company/new-offer" class="btn-primary">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
