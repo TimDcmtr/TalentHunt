@@ -38,13 +38,13 @@ class CompanyController
 
         // Champs optionnels ou mappés
         // HTML: name="siege" -> DB: headquarters
-        $this->company->headquarters = $data['siege'] ?? null;
+        $this->company->headquarters = $data['region'] ?? null;
         
         // HTML: name="site_web" -> DB: website
         $this->company->website = $data['site_web'] ?? null;
         
         // HTML: name="secteur" -> DB: sector
-        $this->company->sector = $data['secteur'] ?? null;
+        $this->company->sector = $data['domain'] ?? null;
         
         // HTML: name="tel" -> DB: phone
         $this->company->phone = $data['tel'] ?? null;
