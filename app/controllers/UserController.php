@@ -68,6 +68,8 @@ class UserController
                 return json_encode(["message" => "Impossible de créer le compte. L'email existe peut-être déjà."]);
             }
         } catch (Exception $e) {
+            error_log("Erreur Register Company : " . $e->getMessage());
+
             http_response_code(500);
             return json_encode(["message" => "Erreur serveur : " . $e->getMessage()]);
         }
