@@ -81,6 +81,46 @@ switch ($action) {
         }
         break;
 
+    case 'updateCompany':
+        // 1. Sécurité : Vérifier le token
+        $headers = getallheaders(); // Ou ta fonction fallback
+        $authHeader = $headers['Authorization'] ?? '';
+        $jwt = str_replace("Bearer ", "", $authHeader);
+
+        $companyController = new CompanyController();
+        $loggedCompany = $companyController->getCompanyFromToken($jwt);
+
+        if (!$loggedCompany) {
+            http_response_code(401);
+            echo json_encode(["message" => "Non autorisé."]);
+            exit;
+        }
+
+        // 2. Récupérer les données POST
+        // Note: Si tu envoies un FormData classique (pas JSON), utilise $_POST
+        // Si tu envoies du JSON via fetch, utilise php://input
+
+        // Option A: Si tu utilises le JS 'sendAuthRequest' (JSON)
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        // Option B: Si tu utilises des formulaires classiques sans JS
+        // $data = $_POST;
+
+        if (!$data) {
+            // Fallback mixte
+            $data = $_POST;
+            // Si c'est du JSON, on merge les tableaux pour récupérer values[] et specialties[]
+            if (empty($data))
+                $data = json_decode(file_get_contents("php://input"), true);
+        }
+
+        // 3. Sécurité : On force l'ID à être celui du token
+        // On ignore l'ID envoyé dans le formulaire pour empêcher de modifier une autre entreprise
+        $data['id'] = $loggedCompany['id'];
+
+        echo $companyController->updateCompanyProfile($data);
+        break;
+
     default:
         http_response_code(404);
         echo json_encode(["message" => "Action not found. Check your URL parameters."]);

@@ -150,5 +150,106 @@ class Company
         }
         return false;
     }
+
+    // --- UPDATE : INFORMATIONS GÉNÉRALES ---
+    public function updateInfos()
+    {
+        $query = "UPDATE " . $this->table_name . " 
+                  SET name = :name, 
+                      size_range = :size_range, 
+                      founded_year = :founded_year, 
+                      headquarters = :headquarters, 
+                      website = :website 
+                  WHERE id = :id";
+
+        $stmt = $this->conn->prepare($query);
+
+        // Nettoyage
+        $this->name = htmlspecialchars(strip_tags($this->name));
+        $this->headquarters = htmlspecialchars(strip_tags($this->headquarters));
+        $this->website = htmlspecialchars(strip_tags($this->website));
+
+        // Bind
+        $stmt->bindParam(':name', $this->name);
+        $stmt->bindParam(':size_range', $this->size_range);
+        $stmt->bindParam(':founded_year', $this->founded_year);
+        $stmt->bindParam(':headquarters', $this->headquarters);
+        $stmt->bindParam(':website', $this->website);
+        $stmt->bindParam(':id', $this->id);
+
+        return $stmt->execute();
+    }
+
+    // --- UPDATE : DESCRIPTION & VALEURS ---
+    public function updateDescription()
+    {
+        $query = "UPDATE " . $this->table_name . " 
+                  SET short_description = :short_description, 
+                      description = :description, 
+                      core_values = :core_values 
+                  WHERE id = :id";
+
+        $stmt = $this->conn->prepare($query);
+
+        $this->short_description = htmlspecialchars(strip_tags($this->short_description));
+        // On autorise un peu de HTML dans la description longue (nl2br) ou on nettoie tout :
+        $this->description = htmlspecialchars(strip_tags($this->description));
+
+        // Pour les tableaux JSON
+        $json_values = json_encode($this->core_values);
+
+        $stmt->bindParam(':short_description', $this->short_description);
+        $stmt->bindParam(':description', $this->description);
+        $stmt->bindParam(':core_values', $json_values);
+        $stmt->bindParam(':id', $this->id);
+
+        return $stmt->execute();
+    }
+
+    // --- UPDATE : SECTEUR & SPÉCIALITÉS ---
+    public function updateSector()
+    {
+        $query = "UPDATE " . $this->table_name . " 
+                  SET sector = :sector, 
+                      specialties = :specialties 
+                  WHERE id = :id";
+
+        $stmt = $this->conn->prepare($query);
+
+        $this->sector = htmlspecialchars(strip_tags($this->sector));
+        $json_specialties = json_encode($this->specialties);
+
+        $stmt->bindParam(':sector', $this->sector);
+        $stmt->bindParam(':specialties', $json_specialties);
+        $stmt->bindParam(':id', $this->id);
+
+        return $stmt->execute();
+    }
+
+    // --- UPDATE : CONTACT ---
+    public function updateContact()
+    {
+        $query = "UPDATE " . $this->table_name . " 
+                  SET email = :email, 
+                      phone = :phone, 
+                      linkedin = :linkedin, 
+                      twitter = :twitter 
+                  WHERE id = :id";
+
+        $stmt = $this->conn->prepare($query);
+
+        $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->phone = htmlspecialchars(strip_tags($this->phone));
+        $this->linkedin = htmlspecialchars(strip_tags($this->linkedin));
+        $this->twitter = htmlspecialchars(strip_tags($this->twitter));
+
+        $stmt->bindParam(':email', $this->email);
+        $stmt->bindParam(':phone', $this->phone);
+        $stmt->bindParam(':linkedin', $this->linkedin);
+        $stmt->bindParam(':twitter', $this->twitter);
+        $stmt->bindParam(':id', $this->id);
+
+        return $stmt->execute();
+    }
 }
 ?>

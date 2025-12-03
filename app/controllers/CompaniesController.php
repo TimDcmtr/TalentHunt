@@ -39,13 +39,13 @@ class CompanyController
         // Champs optionnels ou mappés
         // HTML: name="siege" -> DB: headquarters
         $this->company->headquarters = $data['region'] ?? null;
-        
+
         // HTML: name="site_web" -> DB: website
         $this->company->website = $data['site_web'] ?? '(Aucun site)';
-        
+
         // HTML: name="secteur" -> DB: sector
         $this->company->sector = $data['domain'] ?? null;
-        
+
         // HTML: name="tel" -> DB: phone
         $this->company->phone = $data['tel'] ?? null;
 
@@ -67,17 +67,18 @@ class CompanyController
     /**
      * Login Entreprise
      */
-    public function login($email, $password) {
-        if(empty($email) || empty($password)) {
+    public function login($email, $password)
+    {
+        if (empty($email) || empty($password)) {
             http_response_code(400);
             return json_encode(["message" => "Email et mot de passe requis."]);
         }
 
         $this->company->email = $email;
 
-        if($this->company->findByEmail()) {
-            if(password_verify($password, $this->company->password)) {
-                
+        if ($this->company->findByEmail()) {
+            if (password_verify($password, $this->company->password)) {
+
                 // Payload JWT spécifique Entreprise
                 $payload = [
                     'iss' => "TalentHub",
@@ -123,7 +124,7 @@ class CompanyController
                 "id" => $this->company->id,
                 "name" => $this->company->name,
                 "logo" => $this->company->logo,
-                
+
                 // Infos Business
                 "headquarters" => $this->company->headquarters,
                 "website" => $this->company->website,
@@ -162,7 +163,8 @@ class CompanyController
     // MÉTHODES PRIVÉES JWT (Identiques à User)
     // ==========================================
 
-    private function generateJWT($payload) {
+    private function generateJWT($payload)
+    {
         $header = json_encode(['typ' => 'JWT', 'alg' => 'HS256']);
         $base64UrlHeader = $this->base64UrlEncode($header);
         $base64UrlPayload = $this->base64UrlEncode(json_encode($payload));
@@ -171,11 +173,13 @@ class CompanyController
         return $base64UrlHeader . "." . $base64UrlPayload . "." . $base64UrlSignature;
     }
 
-    private function base64UrlEncode($data) {
+    private function base64UrlEncode($data)
+    {
         return str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($data));
     }
 
-    private function base64UrlDecode($data) {
+    private function base64UrlDecode($data)
+    {
         $remainder = strlen($data) % 4;
         if ($remainder) {
             $padlen = 4 - $remainder;
@@ -185,19 +189,23 @@ class CompanyController
     }
 
     // Récupérer l'entreprise via le Token (pour l'authentification auto)
-    public function getCompanyFromToken($jwt) {
+    public function getCompanyFromToken($jwt)
+    {
         $tokenParts = explode('.', $jwt);
-        if (count($tokenParts) !== 3) return false;
+        if (count($tokenParts) !== 3)
+            return false;
 
         list($header64, $payload64, $signature64) = $tokenParts;
 
         $validSignature = hash_hmac('sha256', $header64 . "." . $payload64, $this->secret_key, true);
         $validSignature64 = $this->base64UrlEncode($validSignature);
 
-        if (!hash_equals($validSignature64, $signature64)) return false;
+        if (!hash_equals($validSignature64, $signature64))
+            return false;
 
         $payload = json_decode($this->base64UrlDecode($payload64), true);
-        if ($payload === null || (isset($payload['exp']) && $payload['exp'] < time())) return false;
+        if ($payload === null || (isset($payload['exp']) && $payload['exp'] < time()))
+            return false;
 
         // Vérification que c'est bien une entreprise
         if (isset($payload['data']['id']) && isset($payload['data']['role']) && $payload['data']['role'] === 'company') {
@@ -213,6 +221,78 @@ class CompanyController
             }
         }
         return false;
+    }
+
+    public function updateCompanyProfile($data)
+    {
+        // 1. Sécurité : On s'assure que l'ID est fourni (idéalement via le token, pas le POST)
+        if (!isset($data['id']) || !isset($data['section'])) {
+            http_response_code(400);
+            return json_encode(["message" => "Données manquantes (ID ou Section)."]);
+        }
+
+        $this->company->id = $data['id'];
+
+        try {
+            $success = false;
+
+            // 2. Aiguillage selon la section du formulaire
+            switch ($data['section']) {
+
+                case 'infos':
+                    $this->company->name = $data['name'];
+                    $this->company->size_range = $data['size_range'];
+                    $this->company->founded_year = $data['founded_year'];
+                    $this->company->headquarters = $data['headquarters'];
+                    $this->company->website = $data['website'];
+
+                    $success = $this->company->updateInfos();
+                    break;
+
+                case 'description':
+                    $this->company->short_description = $data['short_description'];
+                    $this->company->description = $data['description'];
+                    // Les valeurs arrivent sous forme de tableau (ex: name="values[]")
+                    $this->company->core_values = $data['values'] ?? [];
+
+                    $success = $this->company->updateDescription();
+                    break;
+
+                case 'sector':
+                    $this->company->sector = $data['sector'];
+                    // Les spécialités arrivent sous forme de tableau (checkboxes)
+                    $this->company->specialties = $data['specialties'] ?? [];
+
+                    $success = $this->company->updateSector();
+                    break;
+
+                case 'contact':
+                    $this->company->email = $data['email'];
+                    $this->company->phone = $data['phone'];
+                    $this->company->linkedin = $data['linkedin'];
+                    $this->company->twitter = $data['twitter'];
+
+                    $success = $this->company->updateContact();
+                    break;
+
+                default:
+                    http_response_code(400);
+                    return json_encode(["message" => "Section inconnue."]);
+            }
+
+            // 3. Réponse
+            if ($success) {
+                http_response_code(200);
+                return json_encode(["message" => "Mise à jour réussie.", "section" => $data['section']]);
+            } else {
+                http_response_code(503);
+                return json_encode(["message" => "Erreur lors de la mise à jour."]);
+            }
+
+        } catch (Exception $e) {
+            http_response_code(500);
+            return json_encode(["message" => "Erreur serveur : " . $e->getMessage()]);
+        }
     }
 }
 ?>

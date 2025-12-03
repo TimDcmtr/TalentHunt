@@ -85,8 +85,9 @@
               <p>Les informations de base visibles par les étudiants</p>
             </div>
 
-            <form class="config-form" method="POST" action="/entreprise/update_infos">
+            <form class="config-form" method="POST" action="/api/updateCompany">
               <input type="hidden" name="id" value="<?= $company['id'] ?>">
+              <input type="hidden" name="section" value="infos">
 
               <div class="form-group">
                 <label for="company_name" class="form-label">Nom de l'entreprise *</label>
@@ -142,8 +143,9 @@
               <p>Présentez votre entreprise aux futurs candidats</p>
             </div>
 
-            <form class="config-form" method="POST" action="/entreprise/update_desc">
+            <form class="config-form" method="POST" action="/api/updateCompany">
               <input type="hidden" name="id" value="<?= $company['id'] ?>">
+              <input type="hidden" name="section" value="description">
 
               <div class="form-group">
                 <label for="short_description" class="form-label">Description courte (visible en aperçu)</label>
@@ -201,8 +203,9 @@
               <p>Aidez les étudiants à vous trouver</p>
             </div>
 
-            <form class="config-form" method="POST" action="/entreprise/update_sector">
+            <form class="config-form" method="POST" action="/api/updateCompany">
               <input type="hidden" name="id" value="<?= $company['id'] ?>">
+              <input type="hidden" name="section" value="sector">
 
               <div class="form-group">
                 <label for="industry" class="form-label">Secteur principal *</label>
@@ -262,8 +265,9 @@
               <p>Comment les candidats peuvent vous joindre</p>
             </div>
 
-            <form class="config-form" method="POST" action="/entreprise/update_contact">
+            <form class="config-form" method="POST" action="/api/updateCompany">
               <input type="hidden" name="id" value="<?= $company['id'] ?>">
+              <input type="hidden" name="section" value="contact">
 
               <div class="form-group">
                 <label for="contact_email" class="form-label">Email de contact *</label>
