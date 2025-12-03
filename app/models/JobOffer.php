@@ -166,5 +166,24 @@ class JobOffer
             $string = array_slice($string, 0, 1);
         return $string ? 'Il y a ' . implode(', ', $string) : 'À l\'instant';
     }
+    
+    // --- DANS JobOffer.php ---
+
+    /**
+     * Récupère toutes les offres d'une entreprise spécifique
+     */
+    public function getAllByCompany($company_id)
+    {
+        $query = "SELECT * FROM " . $this->table_name . " 
+                  WHERE company_id = :company_id 
+                  ORDER BY created_at DESC";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':company_id', $company_id);
+        $stmt->execute();
+
+        return $stmt; // On retourne l'objet PDOStatement pour boucler dessus dans le controller
+    }
+
 }
 ?>
