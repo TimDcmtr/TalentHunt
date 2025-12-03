@@ -108,7 +108,7 @@
                 <div class="form-group">
                   <label for="founded_year" class="form-label">Année de création</label>
                   <input type="number" id="founded_year" name="founded_year" class="form-input" placeholder="2020"
-                    min="1800" max="2025" value="<?= $company['founded_year'] || '' ?>">
+                    min="1800" max="2025" value="<?= $company['founded_year'] ?? '' ?>">
                 </div>
               </div>
 
@@ -120,7 +120,7 @@
 
               <div class="form-group">
                 <label for="website" class="form-label">Site web</label>
-                <input type="url" id="website" name="website" class="form-input" placeholder="https://dev.lemecha.fr" <?= $company['website'] || '' ?>>
+                <input type="url" id="website" name="website" class="form-input" placeholder="https://dev.lemecha.fr" <?= $company['website'] ?? '' ?>>
               </div>
 
               <div class="form-actions">
