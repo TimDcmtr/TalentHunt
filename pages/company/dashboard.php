@@ -12,15 +12,22 @@
 <body>
   <?php require_once ROOT_PATH . 'app/helpers/Navbar.php'; 
   require_once ROOT_PATH . 'app/controllers/JobOfferController.php';
+  require_once ROOT_PATH . 'app/controllers/ApplicationController.php';
+  require_once ROOT_PATH . 'app/helpers/CompanySession.php';
   ?>
-  <?php if (!isset($_GET['id'])): ?>
-    <h1> Erreur de Connexion </h1>
-  <?php else: ?>
+
     <?php
-      $id = $_GET['id'];
+      $id = $currentCompany;
+
       $offersController = new JobOfferController();
       $offers = json_decode($offersController->findAllJobOffersCompany($id), true);
       $totalOffres = is_array($offers) ? count($offers) : 0;
+
+      $applicationController = new ApplicationController();
+      $applications = json_decode($applicationController->getCompanyApplications($id), true);
+      $totalApplications = is_array($applications) ? count($applications) : 0;
+
+      requireCompanyLogin();
     ?>
 
     <main class="main-content">
@@ -67,7 +74,7 @@
             </div>
             <div class="stat-info">
               <p class="stat-label">Candidatures reçues</p>
-              <p class="stat-value">247</p>
+              <p class="stat-value"><?php echo $totalApplications; ?></p>
             </div>
           </div>
         </div>
@@ -173,7 +180,6 @@
         </div>
       </div>
     </main>
-  <?php endif; ?>
   <?php require_once ROOT_PATH . 'app/helpers/Footer.php'; ?>
   
   <script src="assets/js/navbar.js"></script>
