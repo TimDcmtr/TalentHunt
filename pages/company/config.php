@@ -114,7 +114,7 @@
 
               <div class="form-group">
                 <label for="headquarters" class="form-label">Siège social *</label>
-                <input type="text" id="headquarters" name="headquarters" class="form-input" placeholder="Paris, France" value="<?= $company['sector'] || '' ?>"
+                <input type="text" id="headquarters" name="headquarters" class="form-input" placeholder="Paris, France" value="<?= $company['headquarters'] || '' ?>"
                   required>
               </div>
 
