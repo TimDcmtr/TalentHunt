@@ -34,7 +34,7 @@
         <aside class="config-sidebar glass-card">
           <div class="profile-preview">
             <div class="avatar-large company-avatar"><?php echo strtoupper(substr($company['name'], 0, 2)); ?></div>
-            <h3>TechCorp</h3>
+            <h3><?= $company['name'] ?></h3>
           </div>
 
           <nav class="config-nav">
@@ -77,6 +77,8 @@
             <div class="section-header">
               <h2>Informations de l'entreprise</h2>
               <p>Les informations de base visibles par les étudiants</p>
+
+              <p><?= $company ?></p>
             </div>
 
             <form class="config-form" method="POST" action="/entreprise/update">
