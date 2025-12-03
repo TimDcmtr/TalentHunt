@@ -42,7 +42,8 @@
     'stage' => 'Stage',
     'alternance' => 'Alternance',
     'cdd' => 'CDD',
-    'cdi' => 'CDI'
+    'cdi' => 'CDI',
+    'idk' => 'Non spécifié'
   ];
 
   $modes_travail = [
@@ -176,7 +177,7 @@
                 <h4>Type de contrat</h4>
                 <div class="recherche-value">
                   <div class="type-badge type-<?php echo $etudiant['search_type']; ?>">
-                    <?php echo $types_contrat[$etudiant['search_type']] || ''; ?>
+                    <?php echo $types_contrat[$etudiant['search_type'] || 'idk']; ?>
                   </div>
                 </div>
               </div>
