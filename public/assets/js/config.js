@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // 2. Détection du type de contenu (Fichier ou JSON)
             const isMultipart = this.enctype === 'multipart/form-data';
-            const apiAction = this.getAttribute('data-api-action') || 'update_company'; // Fallback
+            const apiAction = this.getAttribute('data-api-action') || 'updateCompany'; // Fallback
 
             let bodyPayload;
             let headers = {
