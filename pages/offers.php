@@ -26,7 +26,7 @@
   $jobController = new JobOfferController();
   $allJobs = json_decode($jobController->findAllJobOffers($filters), true);
   $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-  $limit = 2;
+  $limit = 4;
   $totalJobs = is_array($allJobs) ? count($allJobs) : 0;
   $totalPages = ceil($totalJobs / $limit);
   $offset = ($page - 1) * $limit;
