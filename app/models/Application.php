@@ -69,7 +69,8 @@ class Application
     }
 
     // --- VÉRIFIER SI DÉJÀ POSTULÉ ---
-    public function checkExists($user_id, $job_offer_id) {
+    public function checkExists($user_id, $job_offer_id)
+    {
         $query = "SELECT id FROM " . $this->table_name . " 
                   WHERE user_id = :user_id AND job_offer_id = :job_offer_id";
         $stmt = $this->conn->prepare($query);
@@ -77,6 +78,19 @@ class Application
         $stmt->bindParam(":job_offer_id", $job_offer_id);
         $stmt->execute();
         return $stmt->rowCount() > 0;
+    }
+
+    public function getAllByOffer($job_offer_id)
+    {
+        $query = "SELECT * FROM " . $this->table_name . " 
+              WHERE job_offer_id = :job_offer_id";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":job_offer_id", $job_offer_id);
+        $stmt->execute();
+
+        // On retourne le tableau complet directement (fetchAll)
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 ?>

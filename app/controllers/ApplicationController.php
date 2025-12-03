@@ -72,7 +72,7 @@ class ApplicationController
         $apps_arr = [];
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            
+
             // 1. Récupérer infos Entreprise (Nom, Logo) via l'ID stocké
             $companyName = "Unknown";
             $companyLogo = "";
@@ -90,7 +90,7 @@ class ApplicationController
             // 3. Formatage Date & Status
             $dateCandidature = date("d/m/Y", strtotime($row['created_at']));
             $dateReponse = $row['updated_at'] ? date("d/m/Y", strtotime($row['updated_at'])) : null;
-            
+
             // Mapping statut -> Label lisible
             $statusLabels = [
                 'pending' => 'En attente',
@@ -175,6 +175,12 @@ class ApplicationController
 
         http_response_code(200);
         return json_encode($apps_arr);
+    }
+
+    public function getOfferApplications($offerId)
+    {
+        // Retourne un tableau d'applications
+        return $this->application->getAllByOffer($offerId);
     }
 }
 ?>

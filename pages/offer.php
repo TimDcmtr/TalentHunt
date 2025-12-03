@@ -17,6 +17,7 @@
 
     <?php require_once ROOT_PATH . 'app/helpers/Navbar.php';
       require_once ROOT_PATH . 'app/controllers/JobOfferController.php';
+      require_once ROOT_PATH . 'app/controllers/ApplicationController.php';
     ?>
     <?php if (!isset($_GET['id'])): ?>
         <h1> Erreur de Connexion </h1>
@@ -28,6 +29,9 @@
     $OffreController->incrementViewsForOffer($id);
     $offreDb = $OffreController->getJobDetails($id);
     $offre = json_decode($offreDb, true);
+    
+    $applicationController = new ApplicationController();
+    $candidates = $applicationController->getOfferApplications($id);
     ?>
 
     <main class="main-content">
@@ -182,7 +186,7 @@
                                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                                     <circle cx="9" cy="7" r="4" />
                                 </svg>
-                                <span><?php echo $offre['applications']; ?> candidatures</span>
+                                <span><?php echo count($candidates); ?> candidatures</span>
                             </div>
                         </div>
 
