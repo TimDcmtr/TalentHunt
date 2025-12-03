@@ -239,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function () {
       try {
         // --- D. Appel API ---
         // Note : J'utilise 'update_company' pour correspondre au switch case du PHP précédent
-        const response = await fetch('api?action=update_company', {
+        const response = await fetch('api?action=updateCompany', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
