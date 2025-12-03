@@ -18,7 +18,7 @@ if (isset($_COOKIE['authToken'])) {
 
     if ($companyFromToken) {
         // SUCCÈS : C'est bien une entreprise connectée
-        $currentCompany = $companyFromToken;
+        $currentCompany = $companyFromToken['id'];
         $isCompanyAuthenticated = true;
     } else {
         // ÉCHEC : Token invalide, expiré, ou c'est un token "Student" qui essaie d'accéder à une page Entreprise
