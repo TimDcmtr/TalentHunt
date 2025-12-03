@@ -11,7 +11,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-  <?php require_once ROOT_PATH . 'app/helpers/Navbar.php'; ?>
+  <?php require_once ROOT_PATH . 'app/helpers/Navbar.php';
+  require_once ROOT_PATH . 'app/helpers/CompanySession.php';
+  require_once ROOT_PATH . 'app/helpers/CompaniesController.php'
+  ?>
+  <?php
+    $id = $currentCompany;
+    $companyController = new CompanyController();
+    $company = json_decode($companyController->getCompanyProfile($id), true);
+    requireCompanyLogin();
+  ?>
 
   <main class="main-content">
     <div class="container">
@@ -19,7 +28,7 @@
         <!-- Sidebar Navigation -->
         <aside class="config-sidebar glass-card">
           <div class="profile-preview">
-            <div class="avatar-large company-avatar">🚀</div>
+            <div class="avatar-large company-avatar"><?php echo strtoupper(substr($company['name'], 0, 2)); ?></div>
             <h3>TechCorp</h3>
           </div>
 
@@ -66,21 +75,6 @@
             </div>
 
             <form class="config-form" method="POST" action="/entreprise/update">
-              <div class="logo-upload-section">
-                <div class="current-logo">🚀</div>
-                <div>
-                  <label for="logo-file" class="btn-secondary">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                      <polyline points="17 8 12 3 7 8"/>
-                      <line x1="12" y1="3" x2="12" y2="15"/>
-                    </svg>
-                    Changer le logo
-                  </label>
-                  <input type="file" id="logo-file" accept="image/*" hidden>
-                  <p class="upload-hint">Format: PNG, JPG • Max: 2MB</p>
-                </div>
-              </div>
 
               <div class="form-group">
                 <label for="company_name" class="form-label">Nom de l'entreprise *</label>
