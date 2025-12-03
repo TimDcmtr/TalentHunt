@@ -23,9 +23,9 @@
     <?php else: ?>
 
     <?php 
-
-    $id = $_GET['id'];
+    $id = (int)$_GET['id'];
     $OffreController = new JobOfferController();
+    $OffreController->incrementViewsForOffer($id);
     $offreDb = $OffreController->getJobDetails($id);
     $offre = json_decode($offreDb, true);
     ?>

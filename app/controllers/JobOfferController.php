@@ -151,7 +151,7 @@ class JobOfferController
                   WHERE 1=1";
         
         $params = [];
-        
+
         if (!empty($filters['search'])) {
         $query .= " AND jo.title LIKE :search";
         $params[':search'] = '%' . $filters['search'] . '%';
@@ -229,6 +229,13 @@ class JobOfferController
 
         http_response_code(200);
         return json_encode($offers_arr);
+    }
+    /**
+     * Incrémenter les vues d'une offre
+     */
+    public function incrementViewsForOffer($id)
+    {
+        return $this->job->incrementViews($id);
     }
 
     /**

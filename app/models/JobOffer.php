@@ -166,8 +166,18 @@ class JobOffer
             $string = array_slice($string, 0, 1);
         return $string ? 'Il y a ' . implode(', ', $string) : 'À l\'instant';
     }
-    
-    // --- DANS JobOffer.php ---
+    /**
+     * Incrémenter le nombre de vues
+     */
+    public function incrementViews($id)
+    {
+        $query = "UPDATE job_offers SET views = views + 1 WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        
+        return $stmt->execute();
+    }
+
 
     /**
      * Récupère toutes les offres d'une entreprise spécifique
