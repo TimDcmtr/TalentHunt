@@ -246,6 +246,7 @@ class UserController
         // Le token contient l'ID dans $payload['data']['id'] (voir fonction login)
         if (isset($payload['data']['id'])) {
             $userId = $payload['data']['id'];
+            $role = $payload['data']['role'] || 'student';
 
             // On utilise la méthode existante du modèle qui nettoie déjà le mot de passe
             // et formate les données (JSON decode des compétences, etc.)
@@ -260,7 +261,7 @@ class UserController
                     "location" => $this->user->location,
                     "field_of_study" => $this->user->field_of_study,
                     "bio" => $this->user->bio,
-                    "role" => isset($this->user->search_type) ? 'student' : 'company', // Simplification
+                    "role" => $role, // Simplification
                     // ... Ajoute les autres champs dont tu as besoin
                     "avatar_initials" => $this->user->avatar_initials
                 ];
