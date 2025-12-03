@@ -77,8 +77,6 @@
             <div class="section-header">
               <h2>Informations de l'entreprise</h2>
               <p>Les informations de base visibles par les étudiants</p>
-
-              <p><?= $company['name'] ?> | <?= $company['size_range'] ?> | <?= $company['founded_year'] ?> | <?= $company['headquarters'] ?></p>
             </div>
 
             <form class="config-form" method="POST" action="/entreprise/update">
@@ -116,7 +114,7 @@
 
               <div class="form-group">
                 <label for="headquarters" class="form-label">Siège social *</label>
-                <input type="text" id="headquarters" name="headquarters" class="form-input" placeholder="Paris, France" value="<?= $company['headquarters'] || '' ?>"
+                <input type="text" id="headquarters" name="headquarters" class="form-input" placeholder="Paris, France" value="<?= $company['headquarters'] ?>"
                   required>
               </div>
 
