@@ -186,7 +186,7 @@
                 </div>
               </div>
 
-              <?php if ($cand['status'] !== 'en_attente'): ?>
+              <?php if ($cand['status'] !== 'pending'): ?>
                 <div class="timeline-item completed">
                   <div class="timeline-dot"></div>
                   <div class="timeline-content">
