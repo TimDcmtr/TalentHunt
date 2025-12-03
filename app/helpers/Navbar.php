@@ -22,14 +22,14 @@ require_once ROOT_PATH . 'app/helpers/UserSession.php';
     </div>
 
     <div class="navbar-menu" id="navbarMenu">
-      <? if ($isAuthenticated): ?>
+      <?php if ($isAuthenticated): ?>
         <a href="/offers" class="nav-link">Offres</a>
         <a href="/student/feed" class="nav-link">Feed</a>
         <a href="/student/config" class="nav-link">Profil</a>
-      <? elseif ($isCompanyAuthenticated): ?>
+      <?php elseif ($isCompanyAuthenticated): ?>
         <a href="/company/dashboard" class="nav-link">Dashboard</a>
         <a href="/company/config" class="nav-link">Profil</a>
-      <? endif; ?>
+      <?php endif; ?>
     </div>
 
     <div class="navbar-actions">
