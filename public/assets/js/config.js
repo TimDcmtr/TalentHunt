@@ -236,10 +236,10 @@ document.addEventListener('DOMContentLoaded', function () {
       btn.disabled = true;
       btn.innerHTML = 'Enregistrement...';
 
+      const apiAction = this.getAttribute('data-api-action') || 'updateCompany';
+
       try {
-        // --- D. Appel API ---
-        // Note : J'utilise 'update_company' pour correspondre au switch case du PHP précédent
-        const response = await fetch('api?action=updateCompany', {
+        const response = await fetch(`api?action=${apiAction}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

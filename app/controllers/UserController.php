@@ -128,9 +128,10 @@ class UserController
 
     }
 
-    public function login($email, $password) {
+    public function login($email, $password)
+    {
         // 1. Validation basique
-        if(empty($email) || empty($password)) {
+        if (empty($email) || empty($password)) {
             http_response_code(400);
             return json_encode(["message" => "Email et mot de passe requis."]);
         }
@@ -138,11 +139,11 @@ class UserController
         $this->user->email = $email;
 
         // 2. Vérification existence utilisateur
-        if($this->user->findByEmail()) {
-            
+        if ($this->user->findByEmail()) {
+
             // 3. Vérification du hash du mot de passe
-            if(password_verify($password, $this->user->password)) {
-                
+            if (password_verify($password, $this->user->password)) {
+
                 // 4. Génération du Token (JWT)
                 // Payload : les infos qu'on veut stocker dans le jeton
                 $payload = [
@@ -186,7 +187,8 @@ class UserController
     /**
      * Génère un JSON Web Token signé
      */
-    private function generateJWT($payload) {
+    private function generateJWT($payload)
+    {
         // 1. Header
         $header = json_encode(['typ' => 'JWT', 'alg' => 'HS256']);
 
@@ -205,14 +207,16 @@ class UserController
     /**
      * Encodage Base64 adapté aux URLs (Standard JWT)
      */
-    private function base64UrlEncode($data) {
+    private function base64UrlEncode($data)
+    {
         return str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($data));
     }
 
-    public function getUserFromToken($jwt) {
+    public function getUserFromToken($jwt)
+    {
         // 1. Découpage du Token (Header . Payload . Signature)
         $tokenParts = explode('.', $jwt);
-        
+
         if (count($tokenParts) !== 3) {
             return false; // Format invalide
         }
@@ -274,13 +278,76 @@ class UserController
     /**
      * Décodage Base64Url (Inverse de base64UrlEncode)
      */
-    private function base64UrlDecode($data) {
+    private function base64UrlDecode($data)
+    {
         $remainder = strlen($data) % 4;
         if ($remainder) {
             $padlen = 4 - $remainder;
             $data .= str_repeat('=', $padlen);
         }
         return base64_decode(str_replace(['-', '_'], ['+', '/'], $data));
+    }
+
+    public function updateUserProfile($data)
+    {
+        if (!isset($data['id']) || !isset($data['section'])) {
+            http_response_code(400);
+            return json_encode(["message" => "Données manquantes."]);
+        }
+
+        $this->user->id = $data['id'];
+        $success = false;
+
+        try {
+            switch ($data['section']) {
+                case 'infos':
+                    $this->user->firstname = $data['firstname'];
+                    $this->user->lastname = $data['lastname'];
+                    $this->user->email = $data['email'];
+                    $this->user->phone = $data['phone'];
+                    $this->user->school = $data['school'];
+                    $this->user->location = $data['region']; // Mapping region -> location
+                    $this->user->field_of_study = $data['domain']; // Mapping domain -> field_of_study
+                    $this->user->bio = $data['bio'];
+
+                    $success = $this->user->updateInfos();
+                    break;
+
+                case 'categories':
+                    // Checkboxes -> Array
+                    $this->user->categories = $data['category'] ?? [];
+                    $success = $this->user->updateCategories();
+                    break;
+
+                case 'search_type':
+                    $this->user->search_type = $data['search_type'];
+                    $success = $this->user->updateSearchType();
+                    break;
+
+                case 'preferences':
+                    // Checkboxes -> Array
+                    $this->user->work_mode = $data['remote'] ?? [];
+                    $this->user->min_salary = (int) ($data['salary_min'] ?? 0);
+                    $success = $this->user->updatePreferences();
+                    break;
+
+                default:
+                    http_response_code(400);
+                    return json_encode(["message" => "Section inconnue."]);
+            }
+
+            if ($success) {
+                http_response_code(200);
+                return json_encode(["message" => "Mise à jour réussie.", "section" => $data['section']]);
+            } else {
+                http_response_code(503);
+                return json_encode(["message" => "Erreur lors de la mise à jour."]);
+            }
+
+        } catch (Exception $e) {
+            http_response_code(500);
+            return json_encode(["message" => "Erreur serveur : " . $e->getMessage()]);
+        }
     }
 }
 ?>

@@ -81,6 +81,33 @@ switch ($action) {
         }
         break;
 
+    case 'update_student':
+        // 1. Auth check
+        $headers = getallheaders();
+        $authHeader = $headers['Authorization'] ?? '';
+        $jwt = str_replace("Bearer ", "", $authHeader);
+
+        $userController = new UserController();
+        // getUserFromToken doit retourner l'utilisateur si token valide
+        $loggedUser = $userController->getUserFromToken($jwt);
+
+        if (!$loggedUser) {
+            http_response_code(401);
+            echo json_encode(["message" => "Non autorisé."]);
+            exit;
+        }
+
+        // 2. Data
+        $data = json_decode(file_get_contents("php://input"), true);
+        if (!$data)
+            $data = $_POST;
+
+        // 3. Force ID
+        $data['id'] = $loggedUser['id'];
+
+        echo $userController->updateUserProfile($data);
+        break;
+
     case 'updateCompany':
         // 1. Sécurité : Vérifier le token
         $headers = getallheaders(); // Ou ta fonction fallback

@@ -163,5 +163,90 @@ class User
         }
         return false;
     }
+
+    // --- UPDATE : INFORMATIONS PERSONNELLES ---
+    public function updateInfos()
+    {
+        $query = "UPDATE " . $this->table_name . " 
+                  SET firstname = :firstname, 
+                      lastname = :lastname, 
+                      email = :email, 
+                      phone = :phone, 
+                      school = :school, 
+                      location = :location, 
+                      field_of_study = :field_of_study,
+                      bio = :bio
+                  WHERE id = :id";
+
+        $stmt = $this->conn->prepare($query);
+
+        // Nettoyage
+        $this->firstname = htmlspecialchars(strip_tags($this->firstname));
+        $this->lastname = htmlspecialchars(strip_tags($this->lastname));
+        $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->phone = htmlspecialchars(strip_tags($this->phone));
+        $this->school = htmlspecialchars(strip_tags($this->school));
+        $this->location = htmlspecialchars(strip_tags($this->location));
+        $this->field_of_study = htmlspecialchars(strip_tags($this->field_of_study));
+        $this->bio = htmlspecialchars(strip_tags($this->bio));
+
+        $stmt->bindParam(':firstname', $this->firstname);
+        $stmt->bindParam(':lastname', $this->lastname);
+        $stmt->bindParam(':email', $this->email);
+        $stmt->bindParam(':phone', $this->phone);
+        $stmt->bindParam(':school', $this->school);
+        $stmt->bindParam(':location', $this->location);
+        $stmt->bindParam(':field_of_study', $this->field_of_study);
+        $stmt->bindParam(':bio', $this->bio);
+        $stmt->bindParam(':id', $this->id);
+
+        return $stmt->execute();
+    }
+
+    // --- UPDATE : CATÉGORIES (JSON) ---
+    public function updateCategories()
+    {
+        $query = "UPDATE " . $this->table_name . " SET categories = :categories WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+
+        $json_cats = json_encode($this->categories); // Array -> JSON
+
+        $stmt->bindParam(':categories', $json_cats);
+        $stmt->bindParam(':id', $this->id);
+
+        return $stmt->execute();
+    }
+
+    // --- UPDATE : TYPE DE RECHERCHE ---
+    public function updateSearchType()
+    {
+        $query = "UPDATE " . $this->table_name . " SET search_type = :search_type WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+
+        $this->search_type = htmlspecialchars(strip_tags($this->search_type));
+
+        $stmt->bindParam(':search_type', $this->search_type);
+        $stmt->bindParam(':id', $this->id);
+
+        return $stmt->execute();
+    }
+
+    // --- UPDATE : PRÉFÉRENCES (JSON + Int) ---
+    public function updatePreferences()
+    {
+        $query = "UPDATE " . $this->table_name . " 
+                  SET work_mode = :work_mode, 
+                      min_salary = :min_salary 
+                  WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+
+        $json_mode = json_encode($this->work_mode);
+
+        $stmt->bindParam(':work_mode', $json_mode);
+        $stmt->bindParam(':min_salary', $this->min_salary);
+        $stmt->bindParam(':id', $this->id);
+
+        return $stmt->execute();
+    }
 }
 ?>
