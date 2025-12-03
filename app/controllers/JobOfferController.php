@@ -122,8 +122,8 @@ class JobOfferController
                 'duration' => $row['duration'],
                 'start_date' => date("d/m/Y", strtotime($row['start_date'])),
                 'posted' => $posted_ago,
-                'views' => (int) $row['views'],
-                'applications' => (int) $row['applications_count'],
+                'views' => (int) ($row['views'] ?? 0),
+                'applications' => (int) ($row['applications_count'] ?? 0),
                 
                 // Décodage JSON pour la liste (si besoin d'afficher les tags dans la liste)
                 'tags' => json_decode($row['tags'] ?? '[]', true),
@@ -143,14 +143,50 @@ class JobOfferController
     /**
      * Récupérer TOUTES les offres (toutes entreprises)
      */
-    public function findAllJobOffers()
+    public function findAllJobOffers($filters = [])
     {
         $query = "SELECT jo.*, c.name as company_name, c.logo as company_logo 
-                FROM job_offers jo 
-                LEFT JOIN companies c ON jo.company_id = c.id 
-                ORDER BY jo.created_at DESC";
+                  FROM job_offers jo 
+                  LEFT JOIN companies c ON jo.company_id = c.id 
+                  WHERE 1=1";
+        
+        $params = [];
+        
+        if (!empty($filters['type'])) {
+            $types = is_array($filters['type']) ? $filters['type'] : [$filters['type']];
+            $placeholders = [];
+            foreach ($types as $i => $type) {
+                $key = ":type$i";
+                $placeholders[] = $key;
+                $params[$key] = $type;
+            }
+            $query .= " AND jo.type IN (" . implode(',', $placeholders) . ")";
+        }
+        
+        if (!empty($filters['location'])) {
+            $query .= " AND jo.location LIKE :location";
+            $params[':location'] = '%' . $filters['location'] . '%';
+        }
+        
+        if (!empty($filters['remote'])) {
+            $remotes = is_array($filters['remote']) ? $filters['remote'] : [$filters['remote']];
+            $placeholders = [];
+            foreach ($remotes as $i => $remote) {
+                $key = ":remote$i";
+                $placeholders[] = $key;
+                $params[$key] = $remote;
+            }
+            $query .= " AND jo.remote IN (" . implode(',', $placeholders) . ")";
+        }
+        
+        $query .= " ORDER BY jo.created_at DESC";
         
         $stmt = $this->db->prepare($query);
+        
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+        
         $stmt->execute();
         
         $offers_arr = [];
@@ -177,8 +213,8 @@ class JobOfferController
                 'duration' => $row['duration'],
                 'start_date' => date("d/m/Y", strtotime($row['start_date'])),
                 'posted' => $posted_ago,
-                'views' => (int) $row['views'],
-                'applications' => (int) $row['applications_count'],
+                'views' => (int) ($row['views'] ?? 0),
+                'applications' => (int) ($row['applications_count'] ?? 0),
                 
                 'tags' => json_decode($row['tags'] ?? '[]', true),
             ];
