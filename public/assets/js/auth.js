@@ -13,11 +13,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Activate clicked tab
       this.classList.add('active');
-      
+
       // Target form ID logic
       // Note: Assure-toi que les IDs dans ton HTML sont bien: loginForm, registerForm, registerENForm
       const targetForm = document.getElementById(targetTab + 'Form');
-      if(targetForm) targetForm.classList.add('active');
+      if (targetForm) targetForm.classList.add('active');
     });
   });
 
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
   async function sendAuthRequest(action, data) {
     try {
       const response = await fetch(`api?action=${action}`, {
-        method: 'POST', 
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
@@ -34,12 +34,12 @@ document.addEventListener('DOMContentLoaded', function () {
       });
 
       // On tente de lire le JSON même si le statut est une erreur (400, 404, etc.)
-      const result = await response.json(); 
-      
-      return { 
-        ok: response.ok, 
+      const result = await response.json();
+
+      return {
+        ok: response.ok,
         status: response.status,
-        data: result 
+        data: result
       };
     } catch (error) {
       console.error('Erreur réseau:', error);
@@ -73,22 +73,47 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Envoi Backend
       setLoading(btn, true);
-      
+
       const response = await sendAuthRequest('login', { email, password });
       const data = response.data.ok ? response.data : JSON.parse(response.data);
 
       setLoading(btn, false, originalBtnText);
 
       if (await response.ok && await data.status === true) {
-        document.cookie= `authToken=${data.token}`;
-        window.location.href = '/offers'; // Ou index.php selon ta structure
+
+        const isSecure = location.protocol === 'https:';
+        const domain = ".lemecha.fr";
+
+        let cookieString = `authToken=${encodeURIComponent(data.token)}`;
+        cookieString += `; path=/`;
+        cookieString += `; domain=${domain}`;
+        cookieString += `; max-age=86400`;
+
+        if (isSecure) {
+          // Configuration optimale pour HTTPS
+          cookieString += `; SameSite=None; Secure`;
+        } else {
+          // Configuration de repli pour HTTP
+          cookieString += `; SameSite=Lax`;
+        }
+
+        document.cookie = cookieString;
+
+        // Vérification immédiate
+        if (document.cookie.indexOf('authToken') === -1) {
+          alert("ERREUR CRITIQUE : Le cookie refuse de s'écrire. Contactez l'administrateur.");
+        } else {
+          // Redirection seulement si le cookie est bien là
+          window.location.href = "/offers";
+        }
+
       } else {
         showError(this.querySelector('input[name="password"]'), data.message || 'Identifiants incorrects');
       }
     });
   }
 
-    // === LOGIN ENTREPRISE ===
+  // === LOGIN ENTREPRISE ===
   if (loginENForm) {
     loginENForm.addEventListener('submit', async function (e) {
       e.preventDefault();
@@ -107,15 +132,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Envoi Backend
       setLoading(btn, true);
-      
+
       const response = await sendAuthRequest('loginEN', { email, password });
       const data = response.data.ok ? response.data : JSON.parse(response.data);
 
       setLoading(btn, false, originalBtnText);
 
       if (await response.ok && await data.status === true) {
-        document.cookie= `authToken=${data.token}; path=/; SameSite=Lax`;
-        window.location.href = '/company/dashboard';
+
+        const isSecure = location.protocol === 'https:';
+        const domain = ".lemecha.fr";
+
+        let cookieString = `authToken=${encodeURIComponent(data.token)}`;
+        cookieString += `; path=/`;
+        cookieString += `; domain=${domain}`;
+        cookieString += `; max-age=86400`;
+
+        if (isSecure) {
+          // Configuration optimale pour HTTPS
+          cookieString += `; SameSite=None; Secure`;
+        } else {
+          // Configuration de repli pour HTTP
+          cookieString += `; SameSite=Lax`;
+        }
+
+        document.cookie = cookieString;
+
+        // Vérification immédiate
+        if (document.cookie.indexOf('authToken') === -1) {
+          alert("ERREUR CRITIQUE : Le cookie refuse de s'écrire. Contactez l'administrateur.");
+        } else {
+          // Redirection seulement si le cookie est bien là
+          window.location.href = "/company/dashboard";
+        }
+
       } else {
         showError(this.querySelector('input[name="password"]'), data.message || 'Identifiants incorrects');
       }
@@ -235,7 +285,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Affiche l'erreur sous l'input
   function showError(inputElement, message) {
-    if(!inputElement) return;
+    if (!inputElement) return;
 
     inputElement.style.borderColor = 'var(--accent, #ff4d4f)';
 
@@ -267,7 +317,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const passwordInputs = document.querySelectorAll('input[type="password"]');
   passwordInputs.forEach(input => {
     // Création du wrapper si pas déjà présent (pour éviter duplication si script rechargé)
-    if(input.parentNode.style.position === 'relative') return;
+    if (input.parentNode.style.position === 'relative') return;
 
     const wrapper = document.createElement('div');
     wrapper.style.position = 'relative';
