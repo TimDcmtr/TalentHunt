@@ -203,6 +203,12 @@
               $offersController = new JobOfferController();
               $offres = json_decode($offersController->findAllJobOffersCompany($id), true);
 
+              $tempoffers = [
+                ['id' => 1, 'title' => 'Développeur Full Stack', 'type' => 'Stage', 'location' => 'Paris'],
+                ['id' => 2, 'title' => 'Designer UI/UX', 'type' => 'Alternance', 'location' => 'Paris'],
+                ['id' => 3, 'title' => 'Data Analyst', 'type' => 'CDI', 'location' => 'Remote']
+              ];
+              
               foreach ($offres as $offre): ?>
                 <a href="/offer?id=<?php echo $offre['id']; ?>" class="offre-preview-card">
                   <h4><?php echo $offre['title']; ?></h4>
