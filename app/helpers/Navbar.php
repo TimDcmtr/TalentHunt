@@ -29,12 +29,11 @@ require_once ROOT_PATH . 'app/helpers/UserSession.php';
       <?php elseif ($isCompanyAuthenticated): ?>
         <a href="/company/dashboard" class="nav-link">Dashboard</a>
         <a href="/company/config" class="nav-link">Profil</a>
+      <?php else: ?>
+        <div class="navbar-actions">
+          <a href="/login" class="btn-secondary nav-btn">Connexion</a>
       <?php endif; ?>
     </div>
-
-    <div class="navbar-actions">
-      <a href="/login" class="btn-secondary nav-btn">Connexion</a>
-
 
 
 
