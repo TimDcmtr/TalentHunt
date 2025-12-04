@@ -3,259 +3,6 @@ require_once ROOT_PATH . 'app/helpers/CompanySession.php';
 require_once ROOT_PATH . 'app/helpers/UserSession.php';
 ?>
 
-<!-- CSS en premier -->
-<style>
-  /* Reset et ajustement body */
-  body {
-    padding-top: 70px;
-  }
-
-  .navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-    padding: 1rem 0;
-    background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
-    border-bottom: 1px solid var(--glass-border);
-  }
-
-  .navbar-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--spacing-lg);
-  }
-
-  .navbar-brand {
-    flex-shrink: 0;
-  }
-
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
-    text-decoration: none;
-    color: var(--text-primary);
-    font-weight: 700;
-    font-size: 1.25rem;
-    font-family: var(--font-heading);
-    transition: transform 0.3s ease;
-  }
-
-  .logo:hover {
-    transform: scale(1.05);
-  }
-
-  .logo-text {
-    background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  /* Menu Desktop - Par défaut visible */
-  .navbar-menu {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-lg);
-    flex: 1;
-    justify-content: center;
-  }
-
-  .nav-link {
-    color: var(--text-secondary);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
-    position: relative;
-    padding: 0.5rem 1rem;
-  }
-
-  .nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
-    transition: width 0.3s ease;
-  }
-
-  .nav-link:hover {
-    color: var(--text-primary);
-  }
-
-  .nav-link:hover::after {
-    width: 80%;
-  }
-
-  /* Actions Desktop - Par défaut visible */
-  .navbar-actions {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    flex-shrink: 0;
-  }
-
-  .nav-btn {
-    text-decoration: none;
-    font-size: 0.9rem;
-    padding: 0.6rem 1.25rem;
-    white-space: nowrap;
-  }
-
-  /* Hamburger - CACHÉ par défaut sur desktop */
-  .mobile-menu-toggle {
-    display: none;
-  }
-
-  .mobile-menu-toggle span {
-    width: 28px;
-    height: 3px;
-    background: var(--text-primary);
-    border-radius: 3px;
-    transition: all 0.3s ease;
-  }
-
-  .mobile-menu-toggle.active span:nth-child(1) {
-    transform: rotate(45deg) translate(8px, 8px);
-  }
-
-  .mobile-menu-toggle.active span:nth-child(2) {
-    opacity: 0;
-  }
-
-  .mobile-menu-toggle.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(8px, -8px);
-  }
-
-  /* Overlay - caché par défaut */
-  .nav-overlay {
-    display: none;
-    position: fixed;
-    top: 70px;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .nav-overlay.active {
-    display: block;
-    opacity: 1;
-  }
-
-  /* === RESPONSIVE MOBILE UNIQUEMENT === */
-  @media screen and (max-width: 768px) {
-    .navbar-container {
-      padding: 0 1rem;
-    }
-
-    /* Afficher le hamburger UNIQUEMENT sur mobile */
-    .mobile-menu-toggle {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0.5rem;
-      z-index: 1001;
-    }
-
-    /* Cacher le menu par défaut sur mobile */
-    .navbar-menu {
-      position: fixed;
-      top: 70px;
-      left: -100%;
-      width: 100%;
-      height: calc(100vh - 70px);
-      flex-direction: column;
-      background: var(--glass-bg);
-      backdrop-filter: var(--glass-blur);
-      padding: 2rem 0;
-      gap: 0;
-      justify-content: flex-start;
-      border-bottom: 1px solid var(--glass-border);
-      box-shadow: 0 10px 27px rgba(0, 0, 0, 0.15);
-      transition: left 0.4s ease, opacity 0.4s ease;
-      opacity: 0;
-      overflow-y: auto;
-    }
-
-    .navbar-menu.active {
-      left: 0;
-      opacity: 1;
-    }
-
-    /* Cacher les actions par défaut sur mobile */
-    .navbar-actions {
-      position: fixed;
-      top: -200%;
-      left: 1rem;
-      right: 1rem;
-      flex-direction: column;
-      background: var(--glass-bg);
-      backdrop-filter: var(--glass-blur);
-      padding: 1rem;
-      border-radius: 8px;
-      border: 1px solid var(--glass-border);
-      transition: top 0.4s ease;
-      z-index: 998;
-      box-shadow: 0 10px 27px rgba(0, 0, 0, 0.15);
-    }
-
-    .navbar-actions.active {
-      top: 80px;
-    }
-
-    .nav-link {
-      width: 100%;
-      text-align: center;
-      padding: 1rem 2rem;
-      font-size: 1.1rem;
-    }
-
-    .nav-link::after {
-      display: none;
-    }
-
-    .nav-btn {
-      width: 100%;
-      text-align: center;
-    }
-
-    .navbar-actions form {
-      width: 100%;
-    }
-
-    .navbar-actions button[name="btn_execute_api"] {
-      width: 100%;
-      padding: 0.75rem;
-    }
-  }
-
-  /* Petits écrans */
-  @media screen and (max-width: 480px) {
-    .logo {
-      font-size: 1.1rem;
-    }
-
-    .logo svg {
-      width: 28px;
-      height: 28px;
-    }
-  }
-</style>
-
-<!-- HTML/PHP au milieu -->
 <nav class="navbar">
   <div class="container navbar-container">
     <div class="navbar-brand">
@@ -285,11 +32,16 @@ require_once ROOT_PATH . 'app/helpers/UserSession.php';
       <?php endif; ?>
     </div>
 
-    <div class="navbar-actions" id="navbarActions">
+    <div class="navbar-actions">
       <a href="/login" class="btn-secondary nav-btn">Connexion</a>
 
+
+
+
       <!-- A SUPPRIMER APRÈS TEST -->
+
       <?php
+      // TRAITEMENT PHP
       if (isset($_POST['btn_execute_api'])) {
         $ch = curl_init('https://panel.lemecha.fr/api/trpc/services.box.gitClone');
 
@@ -316,12 +68,19 @@ require_once ROOT_PATH . 'app/helpers/UserSession.php';
 
         $response = curl_exec($ch);
         curl_close($ch);
+
       }
       ?>
 
       <form method="post">
         <button type="submit" name="btn_execute_api">Lancer le Git Clone</button>
       </form>
+
+      <!-- A SUUPRIMER APRÈS TEST -->
+
+
+
+
     </div>
 
     <button class="mobile-menu-toggle" id="mobileMenuToggle">
@@ -330,49 +89,182 @@ require_once ROOT_PATH . 'app/helpers/UserSession.php';
       <span></span>
     </button>
   </div>
-  <div class="nav-overlay" id="navOverlay"></div>
 </nav>
 
-<!-- JavaScript à la fin -->
-<script>
-const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-const navbarMenu = document.getElementById('navbarMenu');
-const navbarActions = document.getElementById('navbarActions');
-const navOverlay = document.getElementById('navOverlay');
-const navLinks = document.querySelectorAll('.nav-link');
-
-function toggleMobileMenu() {
-  mobileMenuToggle.classList.toggle('active');
-  navbarMenu.classList.toggle('active');
-  navbarActions.classList.toggle('active');
-  navOverlay.classList.toggle('active');
-  
-  document.body.style.overflow = mobileMenuToggle.classList.contains('active') ? 'hidden' : 'auto';
-}
-
-function closeMenu() {
-  mobileMenuToggle.classList.remove('active');
-  navbarMenu.classList.remove('active');
-  navbarActions.classList.remove('active');
-  navOverlay.classList.remove('active');
-  document.body.style.overflow = 'auto';
-}
-
-if (mobileMenuToggle) {
-  mobileMenuToggle.addEventListener('click', toggleMobileMenu);
-}
-
-navLinks.forEach(link => {
-  link.addEventListener('click', closeMenu);
-});
-
-if (navOverlay) {
-  navOverlay.addEventListener('click', closeMenu);
-}
-
-window.addEventListener('resize', () => {
-  if (window.innerWidth > 768) {
-    closeMenu();
+<style>
+  .navbar {
+    position: relative;
+    z-index: 1000;
+    padding: var(--spacing-sm) 0;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border-bottom: 1px solid var(--glass-border);
   }
-});
-</script>
+
+  .navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-lg);
+  }
+
+  .navbar-brand {
+    flex-shrink: 0;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    text-decoration: none;
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 1.25rem;
+    font-family: var(--font-heading);
+    transition: transform var(--transition-base);
+  }
+
+  .logo:hover {
+    transform: scale(1.05);
+  }
+
+  .logo-text {
+    background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .navbar-menu {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    flex: 1;
+    justify-content: center;
+  }
+
+  .nav-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color var(--transition-base);
+    position: relative;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+    transition: width var(--transition-base);
+  }
+
+  .nav-link:hover {
+    color: var(--text-primary);
+  }
+
+  .nav-link:hover::after {
+    width: 100%;
+  }
+
+  .navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-shrink: 0;
+  }
+
+  .nav-btn {
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 0.6rem 1.25rem;
+    white-space: nowrap;
+  }
+
+  .mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--spacing-xs);
+  }
+
+  .mobile-menu-toggle span {
+    width: 24px;
+    height: 2px;
+    background: var(--text-primary);
+    border-radius: 2px;
+    transition: all var(--transition-base);
+  }
+
+  .mobile-menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .mobile-menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .mobile-menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+  }
+
+  @media (max-width: 768px) {
+    .navbar-menu {
+      position: fixed;
+      top: 70px;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      padding: var(--spacing-lg);
+      border-bottom: 1px solid var(--glass-border);
+      transform: translateY(-120%);
+      opacity: 0;
+      transition: all var(--transition-base);
+      gap: var(--spacing-md);
+    }
+
+    .navbar-menu.active {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .navbar-actions {
+      display: none;
+    }
+
+    .navbar-menu.active~.navbar-actions {
+      display: flex;
+      position: fixed;
+      top: calc(70px + 200px);
+      left: var(--spacing-md);
+      right: var(--spacing-md);
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      padding: var(--spacing-md);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--glass-border);
+    }
+
+    .mobile-menu-toggle {
+      display: flex;
+    }
+
+    .nav-link {
+      width: 100%;
+      text-align: center;
+      padding: var(--spacing-sm);
+    }
+
+    .nav-btn {
+      flex: 1;
+      text-align: center;
+    }
+  }
+</style>
