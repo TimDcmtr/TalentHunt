@@ -198,5 +198,21 @@ class ApplicationController
         // Retourne un tableau d'applications
         return $this->application->getAllByOffer($offerId);
     }
+
+    public function withdraw($data)
+    {
+        if (!isset($data['application_id']) || !isset($data['user_id'])) {
+            http_response_code(400);
+            return json_encode(["message" => "Données manquantes."]);
+        }
+
+        if ($this->application->delete($data['application_id'], $data['user_id'])) {
+            http_response_code(200);
+            return json_encode(["message" => "Candidature retirée avec succès."]);
+        } else {
+            http_response_code(403); // Forbidden ou Not Found
+            return json_encode(["message" => "Impossible de retirer cette candidature (introuvable ou non autorisé)."]);
+        }
+    }
 }
 ?>

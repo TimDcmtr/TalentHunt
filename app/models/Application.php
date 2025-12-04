@@ -92,5 +92,27 @@ class Application
         // On retourne le tableau complet directement (fetchAll)
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function delete($application_id, $user_id)
+    {
+        // On vérifie d'abord que la candidature appartient bien à l'utilisateur
+        // pour éviter qu'un utilisateur supprime la candidature d'un autre
+        $checkQuery = "SELECT id FROM " . $this->table_name . " WHERE id = :id AND user_id = :user_id";
+        $checkStmt = $this->conn->prepare($checkQuery);
+        $checkStmt->bindParam(':id', $application_id);
+        $checkStmt->bindParam(':user_id', $user_id);
+        $checkStmt->execute();
+
+        if ($checkStmt->rowCount() === 0) {
+            return false; // Pas trouvé ou pas autorisé
+        }
+
+        // Suppression réelle
+        $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $application_id);
+
+        return $stmt->execute();
+    }
 }
 ?>

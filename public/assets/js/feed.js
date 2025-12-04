@@ -1,212 +1,248 @@
 // /public/assets/js/feed.js
 
 document.addEventListener('DOMContentLoaded', function() {
-  // Filter functionality
-  setupFilters();
-  
-  // Delete candidature
-  setupDeleteButtons();
-  
-  // Check empty state
-  checkEmptyState();
+    // Filter functionality
+    setupFilters();
+    
+    // Delete candidature (API Connected)
+    setupDeleteButtons();
+    
+    // Check empty state
+    checkEmptyState();
+
+    // Sort functionality setup
+    const sortSelect = document.querySelector('.sort-select-small');
+    if (sortSelect) {
+        sortSelect.addEventListener('change', function() {
+            sortCandidatures(this.value);
+        });
+    }
 });
 
+// --- FILTERS & SORT ---
+
 function setupFilters() {
-  const filterTabs = document.querySelectorAll('.filter-tab');
-  const candidatureCards = document.querySelectorAll('.candidature-card');
-  const emptyState = document.querySelector('.empty-state');
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    const candidatureCards = document.querySelectorAll('.candidature-card');
+    const emptyState = document.querySelector('.empty-state');
 
-  filterTabs.forEach(tab => {
-    tab.addEventListener('click', function() {
-      // Remove active from all tabs
-      filterTabs.forEach(t => t.classList.remove('active'));
-      
-      // Add active to clicked tab
-      this.classList.add('active');
-      
-      const filter = this.getAttribute('data-filter');
-      let visibleCount = 0;
+    filterTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Remove active from all tabs
+            filterTabs.forEach(t => t.classList.remove('active'));
+            
+            // Add active to clicked tab
+            this.classList.add('active');
+            
+            const filter = this.getAttribute('data-filter');
+            let visibleCount = 0;
 
-      // Filter candidatures
-      candidatureCards.forEach(card => {
-        if (filter === 'all' || card.getAttribute('data-status') === filter) {
-          card.style.display = 'block';
-          visibleCount++;
-        } else {
-          card.style.display = 'none';
-        }
-      });
+            // Filter candidatures
+            candidatureCards.forEach(card => {
+                const status = card.getAttribute('data-status');
+                let isVisible = false;
 
-      // Show/hide empty state
-      if (visibleCount === 0) {
-        if (emptyState) emptyState.style.display = 'block';
-      } else {
-        if (emptyState) emptyState.style.display = 'none';
-      }
+                if (filter === 'all') {
+                    isVisible = true;
+                } else if (filter === 'pending') {
+                    isVisible = ['pending', 'vue', 'entretien'].includes(status);
+                } else if (filter === 'accepted') {
+                    isVisible = ['accepted', 'accepte'].includes(status);
+                } else if (filter === 'refused') {
+                    isVisible = ['rejected', 'refuse'].includes(status);
+                }
+
+                if (isVisible) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Update tab count if needed (Optional UX improvement)
+            // this.textContent = `${this.textContent.split('(')[0]} (${visibleCount})`;
+
+            checkEmptyState();
+        });
     });
-  });
-
-  // Sort functionality
-  const sortSelect = document.querySelector('.sort-select-small');
-  if (sortSelect) {
-    sortSelect.addEventListener('change', function() {
-      const sortBy = this.value;
-      sortCandidatures(sortBy);
-    });
-  }
 }
 
 function sortCandidatures(sortBy) {
-  const container = document.querySelector('.candidatures-list');
-  const cards = Array.from(container.querySelectorAll('.candidature-card'));
+    const container = document.querySelector('.candidatures-list');
+    if(!container) return;
+    
+    const cards = Array.from(container.querySelectorAll('.candidature-card'));
 
-  cards.sort((a, b) => {
-    if (sortBy === 'recent') {
-      // Sort by date (most recent first)
-      const dateA = a.querySelector('.timeline-date')?.textContent || '';
-      const dateB = b.querySelector('.timeline-date')?.textContent || '';
-      return dateB.localeCompare(dateA);
-    } else if (sortBy === 'old') {
-      // Sort by date (oldest first)
-      const dateA = a.querySelector('.timeline-date')?.textContent || '';
-      const dateB = b.querySelector('.timeline-date')?.textContent || '';
-      return dateA.localeCompare(dateB);
-    } else if (sortBy === 'company') {
-      // Sort alphabetically by company
-      const companyA = a.querySelector('.candidature-info p').textContent;
-      const companyB = b.querySelector('.candidature-info p').textContent;
-      return companyA.localeCompare(companyB);
-    }
-    return 0;
-  });
+    cards.sort((a, b) => {
+        if (sortBy === 'recent') {
+            const dateA = new Date(getDateFromCard(a));
+            const dateB = new Date(getDateFromCard(b));
+            return dateB - dateA;
+        } else if (sortBy === 'old') {
+            const dateA = new Date(getDateFromCard(a));
+            const dateB = new Date(getDateFromCard(b));
+            return dateA - dateB;
+        }
+        return 0;
+    });
 
-  // Re-append sorted cards
-  cards.forEach(card => container.appendChild(card));
+    // Re-append sorted cards
+    cards.forEach(card => container.appendChild(card));
 }
+
+// Helper pour extraire la date proprement (format DD/MM/YYYY)
+function getDateFromCard(card) {
+    const dateStr = card.querySelector('.timeline-date')?.textContent || '';
+    // Conversion "15/11/2024" -> "2024-11-15" pour le tri JS
+    const parts = dateStr.split('/');
+    if(parts.length === 3) return `${parts[2]}-${parts[1]}-${parts[0]}`;
+    return new Date(); // Fallback
+}
+
+// --- DELETE FUNCTIONALITY (API) ---
 
 function setupDeleteButtons() {
-  const deleteBtns = document.querySelectorAll('.btn-delete');
-  
-  deleteBtns.forEach(btn => {
-    btn.addEventListener('click', function() {
-      const candidatureId = this.getAttribute('data-id');
-      const card = this.closest('.candidature-card');
-      const offreName = card.querySelector('.candidature-info h3').textContent;
+    const deleteBtns = document.querySelectorAll('.btn-delete');
+    
+    deleteBtns.forEach(btn => {
+        btn.addEventListener('click', async function() {
+            const candidatureId = this.getAttribute('data-id');
+            const card = this.closest('.candidature-card');
+            const offreName = card.querySelector('.candidature-info h3').textContent;
 
-      if (confirm(`Êtes-vous sûr de vouloir retirer votre candidature pour "${offreName}" ?`)) {
-        // Animate removal
-        card.style.animation = 'fadeOut 0.3s ease-out';
-        
-        setTimeout(() => {
-          card.remove();
-          checkEmptyState();
-          showNotification('Candidature retirée', 'info');
-          
-          // TODO: Send delete request to backend
-          console.log('Delete candidature:', candidatureId);
-        }, 300);
-      }
+            // 1. Confirmation
+            if (!confirm(`Êtes-vous sûr de vouloir retirer votre candidature pour "${offreName}" ? Cette action est irréversible.`)) {
+                return;
+            }
+
+            // 2. Token Check
+            const token = getCookie('authToken');
+            if (!token) {
+                showNotification("Session expirée. Veuillez vous reconnecter.", "error");
+                setTimeout(() => window.location.href = '/login', 1500);
+                return;
+            }
+
+            // 3. UI Loading state
+            const originalHTML = this.innerHTML;
+            this.disabled = true;
+            this.innerHTML = '...';
+
+            try {
+                // 4. API Call
+                const response = await fetch('api?action=withdraw_application', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ application_id: candidatureId })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // 5. Success Animation & Removal
+                    card.style.transition = 'all 0.3s ease';
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateX(20px)';
+                    
+                    setTimeout(() => {
+                        card.remove();
+                        checkEmptyState();
+                        showNotification('Candidature retirée avec succès', 'success');
+                        // Update stats counters if they exist in DOM (Optional)
+                        updateStatsCounters(); 
+                    }, 300);
+                } else {
+                    showNotification(result.message || 'Erreur lors du retrait', 'error');
+                    this.disabled = false;
+                    this.innerHTML = originalHTML;
+                }
+
+            } catch (error) {
+                console.error(error);
+                showNotification('Erreur réseau. Vérifiez votre connexion.', 'error');
+                this.disabled = false;
+                this.innerHTML = originalHTML;
+            }
+        });
     });
-  });
 }
+
+function updateStatsCounters() {
+    // Simple logic to decrease total counter visually
+    const totalEl = document.querySelector('.stat-value-small'); // Cibler le premier compteur (Total)
+    if(totalEl) {
+        let current = parseInt(totalEl.textContent);
+        if(!isNaN(current) && current > 0) totalEl.textContent = current - 1;
+    }
+}
+
+// --- UTILS ---
 
 function checkEmptyState() {
-  const candidatureCards = document.querySelectorAll('.candidature-card:not([style*="display: none"])');
-  const emptyState = document.querySelector('.empty-state');
-  
-  if (candidatureCards.length === 0) {
-    if (emptyState) emptyState.style.display = 'block';
-  } else {
-    if (emptyState) emptyState.style.display = 'none';
-  }
+    const candidatureCards = document.querySelectorAll('.candidature-card');
+    const visibleCards = Array.from(candidatureCards).filter(c => c.style.display !== 'none');
+    const emptyState = document.querySelector('.empty-state');
+    
+    if(!emptyState) return;
+
+    if (visibleCards.length === 0) {
+        emptyState.style.display = 'flex'; // Flex pour centrer si ton CSS le prévoit
+    } else {
+        emptyState.style.display = 'none';
+    }
 }
 
-// Add to calendar functionality
-document.querySelectorAll('.candidature-actions button').forEach(btn => {
-  if (btn.textContent.includes('calendrier')) {
-    btn.addEventListener('click', function() {
-      const card = this.closest('.candidature-card');
-      const offreName = card.querySelector('.candidature-info h3').textContent;
-      const company = card.querySelector('.candidature-info p').textContent;
-      
-      // Extract date from message if available
-      const message = card.querySelector('.candidature-message p')?.textContent || '';
-      
-      // Create calendar event
-      addToCalendar(offreName, company, message);
-    });
-  }
-});
-
-function addToCalendar(title, company, details) {
-  // For demonstration - would integrate with Google Calendar API or similar
-  const event = {
-    title: `Entretien - ${title}`,
-    description: `Entretien chez ${company}\n\n${details}`,
-    location: company
-  };
-  
-  console.log('Adding to calendar:', event);
-  showNotification('Événement ajouté au calendrier', 'success');
-  
-  // TODO: Integrate with actual calendar API
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
 }
-
-// Download contract functionality
-document.querySelectorAll('.candidature-actions button').forEach(btn => {
-  if (btn.textContent.includes('contrat')) {
-    btn.addEventListener('click', function() {
-      const card = this.closest('.candidature-card');
-      const offreName = card.querySelector('.candidature-info h3').textContent;
-      
-      console.log('Downloading contract for:', offreName);
-      showNotification('Téléchargement du contrat...', 'info');
-      
-      // TODO: Implement actual download
-      // This would typically fetch the contract from the backend
-    });
-  }
-});
 
 function showNotification(message, type = 'info') {
-  const notification = document.createElement('div');
-  notification.style.cssText = `
-    position: fixed;
-    top: 100px;
-    right: 20px;
-    padding: 1rem 1.5rem;
-    background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
-    border: 1px solid var(--glass-border);
-    border-left: 4px solid ${
-      type === 'success' ? '#10b981' : 
-      type === 'info' ? 'var(--primary)' : 
-      '#ef4444'
-    };
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
-    color: var(--text-primary);
-    z-index: 99999;
-    animation: slideIn 0.3s ease-out;
-    max-width: 400px;
-  `;
-  
-  notification.innerHTML = `
-    <div style="display: flex; align-items: center; gap: 0.75rem;">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        ${type === 'success' 
-          ? '<polyline points="20 6 9 17 4 12"/>'
-          : '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>'
-        }
-      </svg>
-      <span>${message}</span>
-    </div>
-  `;
-  
-  document.body.appendChild(notification);
-  
-  setTimeout(() => {
-    notification.style.animation = 'fadeOut 0.3s ease-out';
-    setTimeout(() => notification.remove(), 300);
-  }, 3000);
+    // Remove existing
+    const existing = document.querySelector('.custom-notification');
+    if(existing) existing.remove();
+
+    const notification = document.createElement('div');
+    notification.className = 'custom-notification';
+    
+    let color = 'var(--primary)';
+    if(type === 'success') color = '#10b981';
+    if(type === 'error') color = '#ef4444';
+
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 1rem 1.5rem;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(0,0,0,0.1);
+        border-left: 4px solid ${color};
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        color: #333;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: slideIn 0.3s ease-out;
+    `;
+    
+    notification.innerHTML = `
+        <span>${message}</span>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
 }

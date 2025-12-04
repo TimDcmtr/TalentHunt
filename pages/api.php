@@ -260,5 +260,32 @@ switch ($action) {
         $offerCtrl = new JobOfferController();
         echo $offerCtrl->createOffer($data);
         break;
+
+    case 'withdraw_application':
+        // 1. Auth Check (Étudiant)
+        $headers = getallheaders(); // Ou fallback
+        $authHeader = $headers['Authorization'] ?? '';
+        $jwt = str_replace("Bearer ", "", $authHeader);
+
+        $userController = new UserController();
+        $user = $userController->getUserFromToken($jwt); // Doit être require_once avant
+
+        if (!$user) {
+            http_response_code(401);
+            echo json_encode(["message" => "Non autorisé."]);
+            exit;
+        }
+
+        // 2. Data
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        // 3. Sécurité : On force l'ID utilisateur du token
+        $data['user_id'] = $user['id'];
+
+        // 4. Controller
+        require_once ROOT_PATH . 'app/controllers/ApplicationController.php';
+        $appController = new ApplicationController();
+        echo $appController->withdraw($data);
+        break;
 }
 ?>
