@@ -260,5 +260,55 @@ switch ($action) {
         $offerCtrl = new JobOfferController();
         echo $offerCtrl->createOffer($data);
         break;
+
+
+    case 'delete_application':
+    // 1. SÉCURITÉ : Vérification du token (copier-coller de apply)
+    $headers = null;
+    if (function_exists('apache_request_headers')) {
+        $headers = apache_request_headers();
+    } else {
+        $headers = [];
+        foreach ($_SERVER as $name => $value) {
+            if (substr($name, 0, 5) == 'HTTP_') {
+                $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+            }
+        }
+    }
+
+    $authHeader = $headers['Authorization'] ?? '';
+    $jwt = str_replace("Bearer ", "", $authHeader);
+
+    require_once ROOT_PATH . 'app/controllers/UserController.php';
+    $userController = new UserController();
+    $user = $userController->getUserFromToken($jwt);
+
+    if (!$user) {
+        http_response_code(401);
+        echo json_encode(["message" => "Session expirée ou invalide. Veuillez vous reconnecter."]);
+        exit;
+    }
+
+    // 2. Récupération de l'ID candidature (JSON ou GET)
+    $json = file_get_contents("php://input");
+    $data = json_decode($json, true);
+    if (!$data) {
+        $data = $_GET;
+    }
+
+    if (!isset($data['application_id'])) {
+        http_response_code(400);
+        echo json_encode(["message" => "ID de candidature manquant."]);
+        exit;
+    }
+
+    $applicationId = (int)$data['application_id'];
+
+    // 3. Appel du controller Application
+    require_once ROOT_PATH . 'app/controllers/ApplicationController.php';
+    $appController = new ApplicationController();
+    echo $appController->delete($applicationId, $user['id']);
+
+    break;
 }
 ?>

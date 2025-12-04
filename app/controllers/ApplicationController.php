@@ -198,5 +198,38 @@ class ApplicationController
         // Retourne un tableau d'applications
         return $this->application->getAllByOffer($offerId);
     }
+    public function delete($applicationId, $userId) {
+    if (!$applicationId || !$userId) {
+        http_response_code(400);
+        return json_encode(["message" => "Données manquantes."]);
+    }
+
+    // Récupérer la candidature
+    $stmt = $this->application->getById($applicationId);
+    $application = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$application) {
+        http_response_code(404);
+        return json_encode(["message" => "Candidature introuvable."]);
+    }
+
+    // Vérifier que la candidature appartient bien à l'utilisateur connecté
+    if ((int)$application['user_id'] !== (int)$userId) {
+        http_response_code(403);
+        return json_encode(["message" => "Non autorisé à supprimer cette candidature."]);
+    }
+
+    // Supprimer
+    if ($this->application->delete($applicationId)) {
+        http_response_code(200);
+        return json_encode([
+            "message" => "Candidature supprimée avec succès.",
+            "status"  => "success"
+        ]);
+    }
+
+    http_response_code(503);
+    return json_encode(["message" => "Erreur serveur lors de la suppression."]);
+}
 }
 ?>

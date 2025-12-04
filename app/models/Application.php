@@ -92,5 +92,20 @@ class Application
         // On retourne le tableau complet directement (fetchAll)
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
+    public function getById($id) {
+    $query = "SELECT * FROM " . $this->table_name . " WHERE id = :id LIMIT 1";
+    $stmt  = $this->conn->prepare($query);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt;
+    }
+
+    public function delete($id) {
+        $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
+        $stmt  = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
 }
 ?>

@@ -85,30 +85,53 @@ function sortCandidatures(sortBy) {
 }
 
 function setupDeleteButtons() {
-  const deleteBtns = document.querySelectorAll('.btn-delete');
-  
-  deleteBtns.forEach(btn => {
-    btn.addEventListener('click', function() {
-      const candidatureId = this.getAttribute('data-id');
-      const card = this.closest('.candidature-card');
-      const offreName = card.querySelector('.candidature-info h3').textContent;
+    const deleteBtns = document.querySelectorAll('.btn-delete');
 
-      if (confirm(`Êtes-vous sûr de vouloir retirer votre candidature pour "${offreName}" ?`)) {
-        // Animate removal
-        card.style.animation = 'fadeOut 0.3s ease-out';
-        
-        setTimeout(() => {
-          card.remove();
-          checkEmptyState();
-          showNotification('Candidature retirée', 'info');
-          
-          // TODO: Send delete request to backend
-          console.log('Delete candidature:', candidatureId);
-        }, 300);
-      }
+    deleteBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const candidatureId = this.getAttribute('data-id');
+            const card = this.closest('.candidature-card');
+            const offreName = card.querySelector('.candidature-info h3').textContent;
+
+            if (confirm(`Êtes-vous sûr de vouloir retirer votre candidature pour "${offreName}" ?`)) {
+                btn.disabled = true;
+                const oldText = btn.textContent;
+                btn.textContent = 'Suppression...';
+
+                fetch('/api.php?action=delete_application', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('jwt') // même token que pour apply
+                    },
+                    body: JSON.stringify({ application_id: candidatureId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        card.style.animation = 'fadeOut 0.3s ease-out';
+                        setTimeout(() => {
+                            card.remove();
+                            checkEmptyState();
+                            showNotification('Candidature supprimée avec succès', 'success');
+                        }, 300);
+                    } else {
+                        showNotification(data.message || 'Erreur lors de la suppression', 'error');
+                        btn.disabled = false;
+                        btn.textContent = oldText;
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur suppression candidature:', error);
+                    showNotification('Erreur de connexion au serveur', 'error');
+                    btn.disabled = false;
+                    btn.textContent = oldText;
+                });
+            }
+        });
     });
-  });
 }
+
 
 function checkEmptyState() {
   const candidatureCards = document.querySelectorAll('.candidature-card:not([style*="display: none"])');

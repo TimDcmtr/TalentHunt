@@ -24,65 +24,6 @@
   $applicationController = new ApplicationController();
   $candidatures = json_decode($applicationController->getStudentApplications($currentUser['id']), true);
 
-  // Simulation données
-  $candidaturesTemp = [
-    [
-      'id' => 1,
-      'offre' => 'Développeur Full Stack',
-      'company' => 'TechCorp',
-      'logo' => '🚀',
-      'status' => 'en_attente',
-      'status_label' => 'En attente',
-      'date_candidature' => '15/11/2024',
-      'date_reponse' => null,
-      'message' => null
-    ],
-    [
-      'id' => 2,
-      'offre' => 'Designer UI/UX',
-      'company' => 'DesignLab',
-      'logo' => '🎨',
-      'status' => 'entretien',
-      'status_label' => 'Entretien planifié',
-      'date_candidature' => '12/11/2024',
-      'date_reponse' => '18/11/2024',
-      'message' => 'Nous souhaitons vous rencontrer ! Entretien prévu le 25/11 à 14h.'
-    ],
-    [
-      'id' => 3,
-      'offre' => 'Data Analyst',
-      'company' => 'DataPro',
-      'logo' => '📊',
-      'status' => 'accepte',
-      'status_label' => 'Accepté',
-      'date_candidature' => '08/11/2024',
-      'date_reponse' => '14/11/2024',
-      'message' => 'Félicitations ! Nous sommes ravis de vous accueillir. Contrat à signer.'
-    ],
-    [
-      'id' => 4,
-      'offre' => 'Marketing Digital',
-      'company' => 'MarketGenius',
-      'logo' => '📱',
-      'status' => 'refuse',
-      'status_label' => 'Refusé',
-      'date_candidature' => '05/11/2024',
-      'date_reponse' => '10/11/2024',
-      'message' => 'Nous avons retenu d\'autres candidats. Bon courage pour la suite.'
-    ],
-    [
-      'id' => 5,
-      'offre' => 'Développeur Mobile',
-      'company' => 'AppTech',
-      'logo' => '📱',
-      'status' => 'vue',
-      'status_label' => 'Vue par l\'entreprise',
-      'date_candidature' => '18/11/2024',
-      'date_reponse' => null,
-      'message' => null
-    ]
-  ];
-
   $stats = [
     'total' => count($candidatures),
     'en_attente' => count(array_filter($candidatures, fn($c) => $c['status'] === 'pending')),
