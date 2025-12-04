@@ -49,6 +49,7 @@ class JobOfferController
 
                 // --- Infos injectées depuis le CompanyModel ---
                 'company' => $companyData['name'],
+                'company_id' => $this->job->company_id,
                 'company_logo' => $companyData['logo'],
                 // ---------------------------------------------
 
