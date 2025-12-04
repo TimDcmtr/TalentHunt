@@ -260,12 +260,5 @@ switch ($action) {
         $offerCtrl = new JobOfferController();
         echo $offerCtrl->createOffer($data);
         break;
-    case 'delete_application_simple':
-    $id = isset($_GET['id']) ? (int)$_GET['id'] : null;
-
-    require_once ROOT_PATH . 'app/controllers/ApplicationController.php';
-    $appController = new ApplicationController();
-    $appController->deleteSimple($id);
-    break;
 }
 ?>

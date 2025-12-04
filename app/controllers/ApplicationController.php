@@ -198,26 +198,5 @@ class ApplicationController
         // Retourne un tableau d'applications
         return $this->application->getAllByOffer($offerId);
     }
-    public function deleteSimple($applicationId) {
-    if (!$applicationId) {
-        http_response_code(400);
-        echo json_encode(["status" => "error", "message" => "ID manquant"]);
-        return;
-    }
-
-    // Suppression directe sans contrôle d'utilisateur (version simple)
-    $query = "DELETE FROM applications WHERE id = :id"; // remplace 'applications' par le vrai nom
-    $stmt  = $this->db->prepare($query);
-    $stmt->bindParam(':id', $applicationId, PDO::PARAM_INT);
-
-    if ($stmt->execute()) {
-        http_response_code(200);
-        echo json_encode(["status" => "success"]);
-    } else {
-        http_response_code(500);
-        echo json_encode(["status" => "error", "message" => "Erreur lors de la suppression"]);
-    }
-}
-
 }
 ?>
