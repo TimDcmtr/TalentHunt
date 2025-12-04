@@ -58,6 +58,7 @@ class JobOffer
         $stmt = $this->conn->prepare($query);
 
         // Sanitize & Bind (Version simplifiée)
+        // Note: Ici c'est OK car $this->titre est bien une variable/propriété
         $stmt->bindParam(":company_id", $this->company_id);
         $stmt->bindParam(":title", $this->title);
         $stmt->bindParam(":location", $this->location);
@@ -68,11 +69,18 @@ class JobOffer
         $stmt->bindParam(":start_date", $this->start_date);
         $stmt->bindParam(":description", $this->description);
 
-        // JSON Encoding pour les tableaux
-        $stmt->bindParam(":tags", json_encode($this->tags));
-        $stmt->bindParam(":missions", json_encode($this->missions));
-        $stmt->bindParam(":requirements", json_encode($this->requirements));
-        $stmt->bindParam(":benefits", json_encode($this->benefits));
+        // --- CORRECTION ICI ---
+        // On crée d'abord les variables contenant le JSON
+        $tagsJson = json_encode($this->tags);
+        $missionsJson = json_encode($this->missions);
+        $requirementsJson = json_encode($this->requirements);
+        $benefitsJson = json_encode($this->benefits);
+
+        // Puis on lie ces nouvelles variables
+        $stmt->bindParam(":tags", $tagsJson);
+        $stmt->bindParam(":missions", $missionsJson);
+        $stmt->bindParam(":requirements", $requirementsJson);
+        $stmt->bindParam(":benefits", $benefitsJson);
 
         if ($stmt->execute()) {
             $this->id = $this->conn->lastInsertId();
@@ -174,7 +182,7 @@ class JobOffer
         $query = "UPDATE job_offers SET views = views + 1 WHERE id = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        
+
         return $stmt->execute();
     }
 
