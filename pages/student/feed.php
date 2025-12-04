@@ -227,7 +227,7 @@
             <?php endif; ?>
 
             <div class="candidature-actions">
-              <a href="/offre/<?php echo $cand['id']; ?>" class="btn-secondary btn-sm">
+              <a href="/offer?id=<?php echo $cand['offer_id']; ?>" class="btn-secondary btn-sm">
                 Voir l'offre
               </a>
 

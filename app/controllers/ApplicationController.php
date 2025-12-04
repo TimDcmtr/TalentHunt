@@ -120,6 +120,7 @@ class ApplicationController
                 'id' => $row['id'],
                 'userId' => $row['user_id'],
                 'offre' => $jobTitle,
+                'offer_id' => $row['job_offer_id'],
                 'company' => $companyName,
                 'logo' => $companyLogo,
                 'status' => $row['status'],
