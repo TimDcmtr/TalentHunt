@@ -5,12 +5,17 @@ require_once ROOT_PATH . 'app/helpers/UserSession.php';
 
 <!-- CSS en premier -->
 <style>
+  /* Reset et ajustement body */
+  body {
+    padding-top: 70px;
+  }
+
   .navbar {
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 1000;
-    padding: var(--spacing-sm) 0;
+    padding: 1rem 0;
     background: var(--glass-bg);
     backdrop-filter: var(--glass-blur);
     border-bottom: 1px solid var(--glass-border);
@@ -36,7 +41,7 @@ require_once ROOT_PATH . 'app/helpers/UserSession.php';
     font-weight: 700;
     font-size: 1.25rem;
     font-family: var(--font-heading);
-    transition: transform var(--transition-base);
+    transition: transform 0.3s ease;
   }
 
   .logo:hover {
@@ -47,8 +52,10 @@ require_once ROOT_PATH . 'app/helpers/UserSession.php';
     background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
+  /* Menu Desktop - Par défaut visible */
   .navbar-menu {
     display: flex;
     align-items: center;
@@ -61,19 +68,21 @@ require_once ROOT_PATH . 'app/helpers/UserSession.php';
     color: var(--text-secondary);
     text-decoration: none;
     font-weight: 500;
-    transition: color var(--transition-base);
+    transition: color 0.3s ease;
     position: relative;
+    padding: 0.5rem 1rem;
   }
 
   .nav-link::after {
     content: '';
     position: absolute;
-    bottom: -4px;
-    left: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
     width: 0;
     height: 2px;
     background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
-    transition: width var(--transition-base);
+    transition: width 0.3s ease;
   }
 
   .nav-link:hover {
@@ -81,9 +90,10 @@ require_once ROOT_PATH . 'app/helpers/UserSession.php';
   }
 
   .nav-link:hover::after {
-    width: 100%;
+    width: 80%;
   }
 
+  /* Actions Desktop - Par défaut visible */
   .navbar-actions {
     display: flex;
     align-items: center;
@@ -98,15 +108,9 @@ require_once ROOT_PATH . 'app/helpers/UserSession.php';
     white-space: nowrap;
   }
 
+  /* Hamburger - CACHÉ par défaut sur desktop */
   .mobile-menu-toggle {
     display: none;
-    flex-direction: column;
-    gap: 5px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: var(--spacing-xs);
-    z-index: 1001;
   }
 
   .mobile-menu-toggle span {
@@ -129,11 +133,11 @@ require_once ROOT_PATH . 'app/helpers/UserSession.php';
     transform: rotate(-45deg) translate(8px, -8px);
   }
 
-  /* Overlay pour le menu mobile */
+  /* Overlay - caché par défaut */
   .nav-overlay {
     display: none;
     position: fixed;
-    top: 0;
+    top: 70px;
     left: 0;
     width: 100%;
     height: 100vh;
@@ -148,72 +152,84 @@ require_once ROOT_PATH . 'app/helpers/UserSession.php';
     opacity: 1;
   }
 
-  /* Ajustement pour le contenu principal */
-  body {
-    padding-top: 70px;
-  }
-
-  @media (max-width: 768px) {
+  /* === RESPONSIVE MOBILE UNIQUEMENT === */
+  @media screen and (max-width: 768px) {
     .navbar-container {
       padding: 0 1rem;
     }
 
+    /* Afficher le hamburger UNIQUEMENT sur mobile */
     .mobile-menu-toggle {
       display: flex;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      z-index: 1001;
     }
 
+    /* Cacher le menu par défaut sur mobile */
     .navbar-menu {
       position: fixed;
       top: 70px;
-      left: 0;
-      right: 0;
+      left: -100%;
+      width: 100%;
+      height: calc(100vh - 70px);
       flex-direction: column;
       background: var(--glass-bg);
       backdrop-filter: var(--glass-blur);
-      padding: var(--spacing-lg);
+      padding: 2rem 0;
+      gap: 0;
+      justify-content: flex-start;
       border-bottom: 1px solid var(--glass-border);
-      transform: translateY(-100%);
-      opacity: 0;
-      transition: all 0.4s ease;
-      gap: var(--spacing-md);
       box-shadow: 0 10px 27px rgba(0, 0, 0, 0.15);
+      transition: left 0.4s ease, opacity 0.4s ease;
+      opacity: 0;
+      overflow-y: auto;
     }
 
     .navbar-menu.active {
-      transform: translateY(0);
+      left: 0;
       opacity: 1;
     }
 
+    /* Cacher les actions par défaut sur mobile */
     .navbar-actions {
       position: fixed;
-      top: -100%;
-      left: var(--spacing-md);
-      right: var(--spacing-md);
+      top: -200%;
+      left: 1rem;
+      right: 1rem;
+      flex-direction: column;
       background: var(--glass-bg);
       backdrop-filter: var(--glass-blur);
-      padding: var(--spacing-md);
-      border-radius: var(--radius-md);
+      padding: 1rem;
+      border-radius: 8px;
       border: 1px solid var(--glass-border);
       transition: top 0.4s ease;
       z-index: 998;
-      flex-direction: column;
+      box-shadow: 0 10px 27px rgba(0, 0, 0, 0.15);
     }
 
     .navbar-actions.active {
-      top: calc(70px + 40px + var(--spacing-md) * 2);
+      top: 80px;
     }
 
     .nav-link {
       width: 100%;
       text-align: center;
-      padding: var(--spacing-sm);
+      padding: 1rem 2rem;
       font-size: 1.1rem;
     }
 
+    .nav-link::after {
+      display: none;
+    }
+
     .nav-btn {
-      flex: 1;
-      text-align: center;
       width: 100%;
+      text-align: center;
     }
 
     .navbar-actions form {
@@ -222,16 +238,19 @@ require_once ROOT_PATH . 'app/helpers/UserSession.php';
 
     .navbar-actions button[name="btn_execute_api"] {
       width: 100%;
+      padding: 0.75rem;
     }
   }
 
-  @media (max-width: 480px) {
+  /* Petits écrans */
+  @media screen and (max-width: 480px) {
     .logo {
       font-size: 1.1rem;
     }
 
-    .navbar {
-      padding: 0.75rem 0;
+    .logo svg {
+      width: 28px;
+      height: 28px;
     }
   }
 </style>
@@ -271,7 +290,6 @@ require_once ROOT_PATH . 'app/helpers/UserSession.php';
 
       <!-- A SUPPRIMER APRÈS TEST -->
       <?php
-      // TRAITEMENT PHP
       if (isset($_POST['btn_execute_api'])) {
         $ch = curl_init('https://panel.lemecha.fr/api/trpc/services.box.gitClone');
 
@@ -304,7 +322,6 @@ require_once ROOT_PATH . 'app/helpers/UserSession.php';
       <form method="post">
         <button type="submit" name="btn_execute_api">Lancer le Git Clone</button>
       </form>
-      <!-- A SUPPRIMER APRÈS TEST -->
     </div>
 
     <button class="mobile-menu-toggle" id="mobileMenuToggle">
@@ -318,29 +335,21 @@ require_once ROOT_PATH . 'app/helpers/UserSession.php';
 
 <!-- JavaScript à la fin -->
 <script>
-// Sélection des éléments
 const mobileMenuToggle = document.getElementById('mobileMenuToggle');
 const navbarMenu = document.getElementById('navbarMenu');
 const navbarActions = document.getElementById('navbarActions');
 const navOverlay = document.getElementById('navOverlay');
 const navLinks = document.querySelectorAll('.nav-link');
 
-// Fonction pour ouvrir/fermer le menu mobile
 function toggleMobileMenu() {
   mobileMenuToggle.classList.toggle('active');
   navbarMenu.classList.toggle('active');
   navbarActions.classList.toggle('active');
   navOverlay.classList.toggle('active');
   
-  // Empêche le scroll du body quand le menu est ouvert
-  if (mobileMenuToggle.classList.contains('active')) {
-    document.body.style.overflow = 'hidden';
-  } else {
-    document.body.style.overflow = 'auto';
-  }
+  document.body.style.overflow = mobileMenuToggle.classList.contains('active') ? 'hidden' : 'auto';
 }
 
-// Fonction pour fermer le menu
 function closeMenu() {
   mobileMenuToggle.classList.remove('active');
   navbarMenu.classList.remove('active');
@@ -349,31 +358,20 @@ function closeMenu() {
   document.body.style.overflow = 'auto';
 }
 
-// Event listener pour le bouton hamburger
 if (mobileMenuToggle) {
   mobileMenuToggle.addEventListener('click', toggleMobileMenu);
 }
 
-// Ferme le menu quand on clique sur un lien
 navLinks.forEach(link => {
   link.addEventListener('click', closeMenu);
 });
 
-// Ferme le menu si on clique sur l'overlay
 if (navOverlay) {
   navOverlay.addEventListener('click', closeMenu);
 }
 
-// Ferme le menu lors du redimensionnement de la fenêtre
 window.addEventListener('resize', () => {
   if (window.innerWidth > 768) {
-    closeMenu();
-  }
-});
-
-// Ferme le menu lors du scroll sur mobile
-window.addEventListener('scroll', () => {
-  if (mobileMenuToggle.classList.contains('active') && window.innerWidth <= 768) {
     closeMenu();
   }
 });
