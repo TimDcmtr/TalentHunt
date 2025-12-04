@@ -98,18 +98,6 @@
             <form class="config-form" method="POST">
               <input type="hidden" name="section" value="infos">
 
-              <div class="avatar-upload">
-                <div class="avatar-current">
-                  <span><?= strtoupper(substr($user['firstname'] ?? 'U', 0, 1) . substr($user['lastname'] ?? '', 0, 1)) ?></span>
-                </div>
-                <div class="avatar-actions">
-                  <label for="avatar-file" class="btn-secondary">
-                    Changer la photo
-                  </label>
-                  <input type="file" id="avatar-file" accept="image/*" hidden>
-                </div>
-              </div>
-
               <div class="form-row">
                 <div class="form-group">
                   <label for="firstname" class="form-label">Prénom *</label>

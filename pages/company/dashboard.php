@@ -29,6 +29,16 @@
       $candidates = $applicationController->getOfferApplications($id);
 
       requireCompanyLogin();
+      if (isset($_POST['delete_offer_id'])) {
+      $offerId = $_POST['delete_offer_id'];
+      
+      $offersController = new JobOfferController();
+      $offersController->deleteOffer($offerId);
+      
+      // Recharger la page pour voir les changements
+      header("Location: " . $_SERVER['PHP_SELF']);
+      exit;
+      }
     ?>
 
     <main class="main-content">
@@ -117,13 +127,23 @@
                     </div>
                   </div>
                   <div class="offer-actions">
-                    <a href="/offre/<?php echo $offer['id']; ?>/edit" class="btn-icon" title="Modifier">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                      </svg>
-                    </a>
-                    <a href="/offre/<?php echo $offer['id']; ?>/candidatures" class="btn-icon" title="Voir les candidatures">
+                    <form method="POST" action="" style="display: inline;">
+                      <input type="hidden" name="delete_offer_id" value="<?php echo $offer['id']; ?>">
+                      <button type="submit" 
+                              class="btn-icon" 
+                              title="Supprimer"
+                              onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette offre ?');">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M4 7l16 0"/>
+                          <path d="M10 11l0 6"/>
+                          <path d="M14 11l0 6"/>
+                          <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"/>
+                          <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"/>
+                        </svg>
+                      </button>
+                    </form>
+
+                    <a href="/offre?id=<?php echo $offer['id']; ?>" class="btn-icon" title="Voir l'offre">
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                         <circle cx="12" cy="12" r="3"/>

@@ -142,6 +142,15 @@ class JobOfferController
         http_response_code(200);
         return json_encode($offers_arr);
     }
+
+    /** Suprimer une offre */
+    public function deleteOffer($id) {
+    $query = "DELETE FROM job_offers WHERE id = :id";
+    $stmt = $this->db->prepare($query);
+    $stmt->bindParam(':id', $id);
+    return $stmt->execute();
+    }
+
     /**
      * Récupérer TOUTES les offres (toutes entreprises)
      */
