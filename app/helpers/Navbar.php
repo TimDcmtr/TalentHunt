@@ -1,27 +1,6 @@
 <?php
-ob_start(); // Démarre le buffer de sortie
-
 require_once ROOT_PATH . 'app/helpers/CompanySession.php';
 require_once ROOT_PATH . 'app/helpers/UserSession.php';
-
-// Traitement de la déconnexion
-if (isset($_POST['logout'])) {
-  // Ne pas rappeler session_start() - déjà fait dans les helpers
-  $_SESSION = array();
-  
-  // Supprimer le cookie de session
-  if (ini_get("session.use_cookies")) {
-    $params = session_get_cookie_params();
-    setcookie(session_name(), '', time() - 42000,
-        $params["path"], $params["domain"],
-        $params["secure"], $params["httponly"]
-    );
-  }
-  
-  session_destroy();
-  header("Location: /login");
-  exit();
-}
 ?>
 
 <nav class="navbar">
@@ -47,15 +26,11 @@ if (isset($_POST['logout'])) {
         <a href="/offers" class="nav-link">Offres</a>
         <a href="/student/feed" class="nav-link">Feed</a>
         <a href="/student/config" class="nav-link">Profil</a>
-        <form method="post" style="margin: 0;">
-          <button type="submit" name="logout" class="btn-secondary nav-btn">Déconnexion</button>
-        </form>
+        <a href="/logout" class="btn-secondary nav-btn">Déconnexion</a>
       <?php elseif ($isCompanyAuthenticated): ?>
         <a href="/company/dashboard" class="nav-link">Dashboard</a>
         <a href="/company/config" class="nav-link">Profil</a>
-        <form method="post" style="margin: 0;">
-          <button type="submit" name="logout" class="btn-secondary nav-btn">Déconnexion</button>
-        </form>
+        <a href="/logout" class="btn-secondary nav-btn">Déconnexion</a>
       <?php else: ?>
         <div class="navbar-actions">
           <a href="/login" class="btn-secondary nav-btn">Connexion</a>
@@ -101,7 +76,6 @@ if (isset($_POST['logout'])) {
     </button>
   </div>
 </nav>
-
 
 <style>
   .navbar {

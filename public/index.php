@@ -36,6 +36,11 @@ if ($script_dir === '/' || $script_dir === '\\') {
 if (empty($route) || $route === 'index.php') {
     $route = 'home';
 }
+// Route de déconnexion
+if ($uri === '/logout') {
+    require_once ROOT_PATH . 'app/controllers/logout.php';
+    exit();
+}
 
 // 3. Construction du chemin cible
 // Cela fonctionne pour "home", mais aussi "admin/dashboard" ou "user/compte/params"
