@@ -8,7 +8,7 @@ require_once ROOT_PATH . 'app/helpers/UserSession.php';
     <div class="navbar-brand">
       <a href="/" class="logo">
         <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-          ircle cx="16" cy="16" r="14" fill="url(#gradient1)" />
+          <circle cx="16" cy="16" r="14" fill="url(#gradient1)" />
           <path d="M16 8L12 14H16V20L20 14H16V8Z" fill="white" />
           <defs>
             <linearGradient id="gradient1" x1="0" y1="0" x2="32" y2="32">
@@ -23,51 +23,64 @@ require_once ROOT_PATH . 'app/helpers/UserSession.php';
 
     <div class="navbar-menu" id="navbarMenu">
       <?php if ($isAuthenticated): ?>
-        <a href="offers" class="nav-link">Offres</a>
-        <a href="student/feed" class="nav-link">Feed</a>
-        <a href="student/config" class="nav-link">Profil</a>
-        <a href="logout" class="btn-secondary nav-btn">Déconnexion</a>
+        <a href="/offers" class="nav-link">Offres</a>
+        <a href="/student/feed" class="nav-link">Feed</a>
+        <a href="/student/config" class="nav-link">Profil</a>
       <?php elseif ($isCompanyAuthenticated): ?>
-        <a href="company/dashboard" class="nav-link">Dashboard</a>
-        <a href="company/config" class="nav-link">Profil</a>
-        <a href="logout" class="btn-secondary nav-btn">Déconnexion</a>
+        <a href="/company/dashboard" class="nav-link">Dashboard</a>
+        <a href="/company/config" class="nav-link">Profil</a>
       <?php else: ?>
         <div class="navbar-actions">
-          <a href="login" class="btn-secondary nav-btn">Connexion</a>
-        </div>
+          <a href="/login" class="btn-secondary nav-btn">Connexion</a>
       <?php endif; ?>
     </div>
 
-    <!-- Test API - À supprimer après test -->
-    <?php
-    if (isset($_POST['btn_execute_api'])) {
-      $ch = curl_init('https://panel.lemecha.fr/api/trpc/services.box.gitClone');
-      $payload = json_encode([
-        "json" => [
-          "projectName" => "guardia",
-          "serviceName" => "talenthub",
-          "url" => "https://github.com/TimDcmtr/TalentHunt.git",
-          "branch" => "main",
-          "private" => false
-        ]
-      ]);
-      curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_POST => true,
-        CURLOPT_POSTFIELDS => $payload,
-        CURLOPT_HTTPHEADER => [
-          'accept: */*',
-          'Authorization: Bearer 7070098905ce48dd0d08f18428ec6055557e9593a0aed6b9f90dce88844b4ad7',
-          'Content-Type: application/json'
-        ]
-      ]);
-      $response = curl_exec($ch);
-      curl_close($ch);
-    }
-    ?>
-    <form method="post">
-      <button type="submit" name="btn_execute_api">Lancer le Git Clone</button>
-    </form>
+
+
+      <!-- A SUPPRIMER APRÈS TEST -->
+
+      <?php
+      // TRAITEMENT PHP
+      if (isset($_POST['btn_execute_api'])) {
+        $ch = curl_init('https://panel.lemecha.fr/api/trpc/services.box.gitClone');
+
+        $payload = json_encode([
+          "json" => [
+            "projectName" => "guardia",
+            "serviceName" => "talenthub",
+            "url" => "https://github.com/TimDcmtr/TalentHunt.git",
+            "branch" => "main",
+            "private" => false
+          ]
+        ]);
+
+        curl_setopt_array($ch, [
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_POST => true,
+          CURLOPT_POSTFIELDS => $payload,
+          CURLOPT_HTTPHEADER => [
+            'accept: */*',
+            'Authorization: Bearer 7070098905ce48dd0d08f18428ec6055557e9593a0aed6b9f90dce88844b4ad7',
+            'Content-Type: application/json'
+          ]
+        ]);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+      }
+      ?>
+
+      <form method="post">
+        <button type="submit" name="btn_execute_api">Lancer le Git Clone</button>
+      </form>
+
+      <!-- A SUUPRIMER APRÈS TEST -->
+
+
+
+
+    </div>
 
     <button class="mobile-menu-toggle" id="mobileMenuToggle">
       <span></span>
