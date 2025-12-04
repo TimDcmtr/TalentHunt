@@ -1,6 +1,14 @@
 <?php
 require_once ROOT_PATH . 'app/helpers/CompanySession.php';
 require_once ROOT_PATH . 'app/helpers/UserSession.php';
+
+if (isset($_POST['logout'])) {
+  session_start();
+  $_SESSION = array(); // Vide toutes les variables de session
+  session_destroy(); // Détruit la session
+  header("Location: /login");
+  exit();
+}
 ?>
 
 <nav class="navbar">
@@ -26,9 +34,11 @@ require_once ROOT_PATH . 'app/helpers/UserSession.php';
         <a href="/offers" class="nav-link">Offres</a>
         <a href="/student/feed" class="nav-link">Feed</a>
         <a href="/student/config" class="nav-link">Profil</a>
+        <a href="/logout" class="btn-secondary nav-btn">Déconnexion</a>
       <?php elseif ($isCompanyAuthenticated): ?>
         <a href="/company/dashboard" class="nav-link">Dashboard</a>
         <a href="/company/config" class="nav-link">Profil</a>
+        <a href="/logout" class="btn-secondary nav-btn">Déconnexion</a>
       <?php else: ?>
         <div class="navbar-actions">
           <a href="/login" class="btn-secondary nav-btn">Connexion</a>
