@@ -193,7 +193,7 @@
                         <p class="company-description">
                             TechCorp est une scale-up innovante spécialisée dans le développement de solutions web et mobile.
                         </p>
-                        <a href="/company/profil?id=<?php echo $offre['company']; ?>" class="link">
+                        <a href="/company/profil?id=<?php echo $offre['company_id']; ?>" class="link">
                             Voir le profil complet →
                         </a>
                     </div>
