@@ -33,7 +33,7 @@ if ($script_dir === '/' || $script_dir === '\\') {
 
 // Route de déconnexion (À PLACER AVANT LA GESTION DU CAS RACINE)
 if ($route === 'logout') {
-    require_once ROOT_PATH . 'app/pages/logout.php';
+    require_once ROOT_PATH . 'pages/logout.php';
     exit();
 }
 
