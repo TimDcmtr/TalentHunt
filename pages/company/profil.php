@@ -60,11 +60,6 @@
                   <span class="stat-number"><?php echo $nombreOffres; ?></span>
                   <span class="stat-label">Offres actives</span>
                 </div>
-                <div class="stat-divider-small"></div>
-                <div class="stat-item-small">
-                  <span class="stat-number"><?php echo $entreprise['employee_count']; ?></span>
-                  <span class="stat-label">Employés</span>
-                </div>
               </div>
 
               <div class="profil-actions">
