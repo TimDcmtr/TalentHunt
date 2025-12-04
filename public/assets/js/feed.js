@@ -98,12 +98,20 @@ function setupDeleteButtons() {
         card.style.animation = 'fadeOut 0.3s ease-out';
         
         setTimeout(() => {
+          // 1) comportement visuel comme avant
           card.remove();
           checkEmptyState();
           showNotification('Candidature retirée', 'info');
           
-          // TODO: Send delete request to backend
-          console.log('Delete candidature:', candidatureId);
+          // 2) appel au backend pour supprimer en base
+          fetch('/api.php?action=delete_application_simple&id=' + encodeURIComponent(candidatureId))
+            .then(response => response.json())
+            .then(data => {
+              console.log('Résultat suppression BDD:', data);
+            })
+            .catch(error => {
+              console.error('Erreur suppression BDD:', error);
+            });
         }, 300);
       }
     });
@@ -206,7 +214,21 @@ function showNotification(message, type = 'info') {
   document.body.appendChild(notification);
   
   setTimeout(() => {
-    notification.style.animation = 'fadeOut 0.3s ease-out';
-    setTimeout(() => notification.remove(), 300);
-  }, 3000);
+      card.remove();
+      checkEmptyState();
+      showNotification('Candidature retirée', 'info');
+
+      // Appel simple au backend pour supprimer en base
+      fetch('/delete_application.php?id=' + encodeURIComponent(candidatureId), {
+          method: 'GET' // ou 'POST' si tu préfères
+      })
+      .then(r => r.text())
+      .then(txt => {
+          console.log('Suppression BDD OK:', txt);
+      })
+      .catch(err => {
+          console.error('Erreur suppression BDD:', err);
+      });
+
+  }, 300);
 }
