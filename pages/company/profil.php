@@ -24,11 +24,15 @@
   <?php else: ?>
 
     <?php
-
     $id = $_GET['id'];
     $CompaniesController = new CompanyController();
     $CompanyDb = $CompaniesController->getCompanyProfile($id);
     $entreprise = json_decode($CompanyDb, true);
+
+    // Récupération des offres et comptage
+    $offersController = new JobOfferController();
+    $offres = json_decode($offersController->findAllJobOffersCompany($id), true);
+    $nombreOffres = count($offres); // Comptage du nombre d'offres
 
     $specialites_list = [
       'web' => 'Web Development',
@@ -53,7 +57,7 @@
 
               <div class="company-stats">
                 <div class="stat-item-small">
-                  <span class="stat-number"><?php echo $entreprise['active_offers']; ?></span>
+                  <span class="stat-number"><?php echo $nombreOffres; ?></span>
                   <span class="stat-label">Offres actives</span>
                 </div>
                 <div class="stat-divider-small"></div>
@@ -204,11 +208,7 @@
               </div>
 
               <div class="offres-preview">
-                <?php
-                $offersController = new JobOfferController();
-                $offres = json_decode($offersController->findAllJobOffersCompany($id), true);
-
-                foreach ($offres as $offre): ?>
+                <?php foreach ($offres as $offre): ?>
                   <a href="/offer?id=<?php echo $offre['id']; ?>" class="offre-preview-card">
                     <h4><?php echo $offre['title']; ?></h4>
                     <div class="offre-preview-meta">
