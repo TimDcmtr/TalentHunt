@@ -1,30 +1,19 @@
 <?php
-// Démarre la session (si elle n'est pas déjà démarrée)
+// Supprime le cookie authToken (CRITIQUE)
+setcookie('authToken', '', time() - 3600, '/');
+setcookie('authToken', '', time() - 3600, '/', '', false, true);
+
+// Supprime aussi toute session PHP par sécurité
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
-// Détruit toutes les variables de session
 $_SESSION = array();
 
-// Supprime le cookie de session
+// Supprime le cookie de session PHP
 if (isset($_COOKIE[session_name()])) {
-    $params = session_get_cookie_params();
-    setcookie(
-        session_name(),
-        '',
-        time() - 42000,
-        $params["path"],
-        $params["domain"],
-        $params["secure"],
-        $params["httponly"]
-    );
-    // Aussi avec le chemin racine au cas où
-    setcookie(session_name(), '', time() - 42000, '/');
+    setcookie(session_name(), '', time() - 3600, '/');
 }
 
-// Détruit la session
-session_unset();
 session_destroy();
 
 // Redirection
