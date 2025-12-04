@@ -38,7 +38,7 @@ if (empty($route) || $route === 'index.php') {
 }
 // Route de déconnexion
 if ($uri === '/logout') {
-    require_once ROOT_PATH . 'app/controllers/logout.php';
+    require_once ROOT_PATH . 'app/pages/logout.php';
     exit();
 }
 
