@@ -1,12 +1,24 @@
 <?php
+ob_start(); // Démarre le buffer de sortie
+
 require_once ROOT_PATH . 'app/helpers/CompanySession.php';
 require_once ROOT_PATH . 'app/helpers/UserSession.php';
 
 // Traitement de la déconnexion
 if (isset($_POST['logout'])) {
-  session_start();
-  $_SESSION = array(); // Vide toutes les variables de session
-  session_destroy(); // Détruit la session
+  // Ne pas rappeler session_start() - déjà fait dans les helpers
+  $_SESSION = array();
+  
+  // Supprimer le cookie de session
+  if (ini_get("session.use_cookies")) {
+    $params = session_get_cookie_params();
+    setcookie(session_name(), '', time() - 42000,
+        $params["path"], $params["domain"],
+        $params["secure"], $params["httponly"]
+    );
+  }
+  
+  session_destroy();
   header("Location: /login");
   exit();
 }
