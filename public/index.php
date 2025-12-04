@@ -1,6 +1,5 @@
 <?php
 
-
 define('ROOT_PATH', dirname(__DIR__) . '/');
 define('ASSETS_PATH', 'assets/');
 define('PAGES_PATH', ROOT_PATH . 'pages/');
@@ -32,14 +31,15 @@ if ($script_dir === '/' || $script_dir === '\\') {
     $route = trim(str_replace($script_dir, '', $request_uri), '/');
 }
 
+// Route de déconnexion (À PLACER AVANT LA GESTION DU CAS RACINE)
+if ($route === 'logout') {
+    require_once ROOT_PATH . 'app/pages/logout.php';
+    exit();
+}
+
 // Cas de la racine
 if (empty($route) || $route === 'index.php') {
     $route = 'home';
-}
-// Route de déconnexion
-if ($uri === '/logout') {
-    require_once ROOT_PATH . 'app/pages/logout.php';
-    exit();
 }
 
 // 3. Construction du chemin cible
@@ -79,7 +79,6 @@ if ($real_path && strpos($real_path, realpath(PAGES_PATH)) === 0) {
 // ===============================================
 // TEMPLATE PRINCIPAL
 // ===============================================
-
 
 // 1. On démarre l'enregistrement de la sortie
 ob_start();

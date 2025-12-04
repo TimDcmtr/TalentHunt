@@ -23,17 +23,17 @@ require_once ROOT_PATH . 'app/helpers/UserSession.php';
 
     <div class="navbar-menu" id="navbarMenu">
       <?php if ($isAuthenticated): ?>
-        <a href="/offers" class="nav-link">Offres</a>
-        <a href="/student/feed" class="nav-link">Feed</a>
-        <a href="/student/config" class="nav-link">Profil</a>
-        <a href="/logout" class="btn-secondary nav-btn">Déconnexion</a>
+        <a href="offers" class="nav-link">Offres</a>
+        <a href="student/feed" class="nav-link">Feed</a>
+        <a href="student/config" class="nav-link">Profil</a>
+        <a href="logout" class="btn-secondary nav-btn">Déconnexion</a>
       <?php elseif ($isCompanyAuthenticated): ?>
-        <a href="/company/dashboard" class="nav-link">Dashboard</a>
-        <a href="/company/config" class="nav-link">Profil</a>
-        <a href="/logout" class="btn-secondary nav-btn">Déconnexion</a>
+        <a href="company/dashboard" class="nav-link">Dashboard</a>
+        <a href="company/config" class="nav-link">Profil</a>
+        <a href="logout" class="btn-secondary nav-btn">Déconnexion</a>
       <?php else: ?>
         <div class="navbar-actions">
-          <a href="/login" class="btn-secondary nav-btn">Connexion</a>
+          <a href="login" class="btn-secondary nav-btn">Connexion</a>
         </div>
       <?php endif; ?>
     </div>
