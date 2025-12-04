@@ -114,5 +114,38 @@ class Application
 
         return $stmt->execute();
     }
+
+    public function updateStatus($application_id, $company_id, $status)
+    {
+        // 1. Vérification d'appartenance (Sécurité)
+        $checkQuery = "SELECT id FROM " . $this->table_name . " 
+                       WHERE id = :id AND company_id = :company_id";
+
+        $stmtCheck = $this->conn->prepare($checkQuery);
+        $stmtCheck->bindParam(':id', $application_id);
+        $stmtCheck->bindParam(':company_id', $company_id);
+        $stmtCheck->execute();
+
+        if ($stmtCheck->rowCount() === 0) {
+            return false; // Pas trouvé ou pas à vous
+        }
+
+        // 2. Mise à jour
+        $query = "UPDATE " . $this->table_name . " 
+                  SET status = :status, updated_at = NOW() 
+                  WHERE id = :id";
+
+        $stmt = $this->conn->prepare($query);
+
+        // On s'assure que le statut est valide
+        $allowed = ['accepted', 'rejected', 'entretien'];
+        if (!in_array($status, $allowed))
+            return false;
+
+        $stmt->bindParam(':status', $status);
+        $stmt->bindParam(':id', $application_id);
+
+        return $stmt->execute();
+    }
 }
 ?>

@@ -1,6 +1,6 @@
 // /public/assets/js/pro.js
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   // Animate stats on page load
   animateStatsOnLoad();
 
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Animate stats numbers
 function animateStatsOnLoad() {
   const statValues = document.querySelectorAll('.stat-value');
-  
+
   statValues.forEach(stat => {
     const finalValue = parseInt(stat.textContent);
     if (isNaN(finalValue)) return;
@@ -48,7 +48,7 @@ function setupOfferActions() {
   const viewBtns = document.querySelectorAll('.offer-item .btn-icon[title="Voir les candidatures"]');
 
   editBtns.forEach(btn => {
-    btn.addEventListener('click', function(e) {
+    btn.addEventListener('click', function (e) {
       e.preventDefault();
       const offerId = this.getAttribute('href').split('/')[2];
       console.log('Edit offer:', offerId);
@@ -58,7 +58,7 @@ function setupOfferActions() {
   });
 
   viewBtns.forEach(btn => {
-    btn.addEventListener('click', function(e) {
+    btn.addEventListener('click', function (e) {
       e.preventDefault();
       const offerId = this.getAttribute('href').split('/')[2];
       console.log('View applications for offer:', offerId);
@@ -89,7 +89,7 @@ function setupApplicationInteractions() {
       color: #10b981;
       margin-left: 8px;
     `;
-    
+
     // Reject application
     const rejectBtn = document.createElement('button');
     rejectBtn.className = 'btn-icon btn-danger';
@@ -113,7 +113,7 @@ function setupApplicationInteractions() {
       viewBtn.insertAdjacentElement('afterend', acceptBtn);
     }
 
-    acceptBtn.addEventListener('click', function() {
+    acceptBtn.addEventListener('click', function () {
       if (confirm('Accepter cette candidature ?')) {
         const name = item.querySelector('.app-info h4').textContent;
         console.log('Accept application:', name);
@@ -123,7 +123,7 @@ function setupApplicationInteractions() {
       }
     });
 
-    rejectBtn.addEventListener('click', function() {
+    rejectBtn.addEventListener('click', function () {
       if (confirm('Refuser cette candidature ?')) {
         const name = item.querySelector('.app-info h4').textContent;
         console.log('Reject application:', name);
@@ -138,13 +138,13 @@ function setupApplicationInteractions() {
 // Setup quick actions
 function setupQuickActions() {
   const actionCards = document.querySelectorAll('.action-card');
-  
+
   actionCards.forEach(card => {
-    card.addEventListener('click', function(e) {
+    card.addEventListener('click', function (e) {
       e.preventDefault();
       const href = this.getAttribute('href');
       console.log('Quick action:', href);
-      
+
       // TODO: Navigate or open modal
       // window.location.href = href;
     });
@@ -154,7 +154,7 @@ function setupQuickActions() {
 // Animate match scores (circular progress)
 function animateMatchScores() {
   const matchCircles = document.querySelectorAll('.match-circle');
-  
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -169,6 +169,82 @@ function animateMatchScores() {
   }, { threshold: 0.5 });
 
   matchCircles.forEach(circle => observer.observe(circle));
+}
+
+// assets/js/pro.js
+
+async function updateApplication(appId, status) {
+
+  // 1. Feedback visuel immédiat (Optimistic UI)
+  const card = document.getElementById(`app-card-${appId}`);
+  const actionsDiv = document.getElementById(`actions-${appId}`);
+  const statusLabel = document.getElementById(`status-label-${appId}`);
+
+  // On cache les boutons pour éviter le double clic
+  if (actionsDiv) actionsDiv.style.opacity = '0.5';
+
+  // 2. Token
+  const token = getCookie('authToken');
+  if (!token) {
+    alert("Session expirée.");
+    return;
+  }
+
+  try {
+    // 3. Appel API
+    const response = await fetch('api?action=update_application_status', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        application_id: appId,
+        status: status
+      })
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      // 4. Mise à jour de l'interface
+      if (actionsDiv) actionsDiv.style.display = 'none'; // On cache les boutons
+
+      if (statusLabel) {
+        if (status === 'accepted') {
+          statusLabel.textContent = 'Accepté';
+          statusLabel.className = 'status-badge-small status-success';
+          statusLabel.style.color = '#10b981';
+          statusLabel.style.background = 'rgba(16, 185, 129, 0.1)';
+        } else {
+          statusLabel.textContent = 'Refusé';
+          statusLabel.className = 'status-badge-small status-error';
+          statusLabel.style.color = '#ef4444';
+          statusLabel.style.background = 'rgba(239, 68, 68, 0.1)';
+        }
+      }
+
+      // Notification simple (ou ta fonction showNotification)
+      // alert(result.message); 
+
+    } else {
+      alert('Erreur : ' + result.message);
+      if (actionsDiv) actionsDiv.style.opacity = '1'; // On réactive si erreur
+    }
+
+  } catch (error) {
+    console.error(error);
+    alert('Erreur réseau.');
+    if (actionsDiv) actionsDiv.style.opacity = '1';
+  }
+}
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+  return null;
 }
 
 // Notification system
@@ -191,21 +267,21 @@ function showNotification(message, type = 'info') {
     animation: slideIn 0.3s ease-out;
     max-width: 400px;
   `;
-  
+
   notification.innerHTML = `
     <div style="display: flex; align-items: center; gap: 0.75rem;">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        ${type === 'success' 
-          ? '<polyline points="20 6 9 17 4 12"/>'
-          : '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>'
-        }
+        ${type === 'success'
+      ? '<polyline points="20 6 9 17 4 12"/>'
+      : '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>'
+    }
       </svg>
       <span>${message}</span>
     </div>
   `;
-  
+
   document.body.appendChild(notification);
-  
+
   setTimeout(() => {
     notification.style.animation = 'fadeOut 0.3s ease-out';
     setTimeout(() => notification.remove(), 300);

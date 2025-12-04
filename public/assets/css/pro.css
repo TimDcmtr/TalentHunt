@@ -388,6 +388,43 @@
   font-size: 0.9rem;
 }
 
+.status-badge-small {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--primary);
+}
+
+.status-success {
+  background: rgba(16, 185, 129, 0.1) !important;
+  color: #10b981 !important;
+}
+
+.status-error {
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #ef4444 !important;
+}
+
+.decision-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.decision-buttons button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.decision-buttons button:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .dashboard-grid {
@@ -403,7 +440,7 @@
   .dashboard-header {
     display: flex;
     justify-content: space-around;
-    align-items: center;  
+    align-items: center;
   }
 
   .dashboard-header .btn-primary {

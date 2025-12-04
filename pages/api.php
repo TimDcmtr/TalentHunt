@@ -287,5 +287,33 @@ switch ($action) {
         $appController = new ApplicationController();
         echo $appController->withdraw($data);
         break;
+
+    case 'update_application_status':
+        // 1. Auth Company
+        $headers = getallheaders();
+        $authHeader = $headers['Authorization'] ?? '';
+        $jwt = str_replace("Bearer ", "", $authHeader);
+
+        require_once ROOT_PATH . 'app/controllers/CompaniesController.php'; // Ou CompanyController selon ton nommage
+        $companyCtrl = new CompanyController();
+        $company = $companyCtrl->getCompanyFromToken($jwt);
+
+        if (!$company) {
+            http_response_code(401);
+            echo json_encode(["message" => "Non autorisé."]);
+            exit;
+        }
+
+        // 2. Data
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        // 3. Injection ID Company (Sécurité)
+        $data['company_id'] = $company['id'];
+
+        // 4. Appel
+        require_once ROOT_PATH . 'app/controllers/ApplicationController.php';
+        $appController = new ApplicationController();
+        echo $appController->updateStatus($data);
+        break;
 }
 ?>
