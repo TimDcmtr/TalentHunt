@@ -51,7 +51,7 @@
           <aside class="profil-sidebar">
             <!-- Logo Card -->
             <div class="company-logo-card glass-card">
-              <div class="company-logo-xl"><?php echo $entreprise['logo']; ?></div>
+              <div class="company-logo-xl"><?php echo strtoupper(substr($this->firstname, 0, 2)) ; ?></div>
               <h2 class="company-name"><?php echo $entreprise['name']; ?></h2>
               <p class="company-tagline"><?php echo $entreprise['short_description']; ?></p>
 
