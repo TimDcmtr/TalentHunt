@@ -16,4 +16,5 @@ function delete_cookie() {
 }
 
 delete_cookie()
+window.location = "https://dev.lemecha.fr/"
 </script>
