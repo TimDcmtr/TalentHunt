@@ -9,8 +9,8 @@ function get_cookie(name){
 function delete_cookie() {
   if( get_cookie( 'authToken' ) ) {
     document.cookie = name + "=" +
-      ((path) ? ";path="+'/':"")+
-      ((domain)?";domain="+'.dev.lemecha.fr':"") +
+      (('/') ? ";path="+'/':"")+
+      (('.dev.lemecha.fr')?";domain="+'.dev.lemecha.fr':"") +
       ";expires=Thu, 01 Jan 1970 00:00:01 GMT";
   }
 }
