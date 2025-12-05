@@ -106,7 +106,7 @@
           <div class="candidature-card glass-card" data-status="<?php echo $cand['status']; ?>">
             <div class="candidature-header">
               <div class="candidature-company">
-                <div class="company-logo-feed"><?php echo strtoupper(substr($this->firstname, 0, 2)) ; ?></div>
+                <div class="company-logo-feed"><?php echo strtoupper(substr($entreprise['name'], 0, 2)); ?></div>
                 <div class="candidature-info">
                   <h3><?php echo $cand['offre']; ?></h3>
                   <p><?php echo $cand['company']; ?></p>
