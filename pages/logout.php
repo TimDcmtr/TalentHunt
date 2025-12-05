@@ -1,32 +1,29 @@
 <?php
-// Supprime le cookie authToken avec TOUS les paramètres possibles
-setcookie('authToken', '', time() - 3600, '/');
-setcookie('authToken', '', time() - 3600, '/', $_SERVER['HTTP_HOST']);
-setcookie('authToken', '', time() - 3600, '/', '', false, true);
-
-// Nettoyage session par sécurité
+// Démarrer la session si pas déjà fait
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+// Supprimer toutes les variables de session
 $_SESSION = array();
+
+// Supprimer le cookie de session
 if (isset($_COOKIE[session_name()])) {
     setcookie(session_name(), '', time() - 3600, '/');
 }
+
+// Détruire la session
 session_destroy();
+
+// Supprimer le cookie authToken
+setcookie('authToken', '', time() - 3600, '/');
+setcookie('authToken', '', time() - 3600, '/', $_SERVER['HTTP_HOST'] ?? '');
+
+// Supprimer aussi companyAuthToken si applicable
+setcookie('companyAuthToken', '', time() - 3600, '/');
+setcookie('companyAuthToken', '', time() - 3600, '/', $_SERVER['HTTP_HOST'] ?? '');
+
+// Redirection immédiate côté serveur
+header('Location: /login');
+exit();
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Déconnexion...</title>
-</head>
-<body>
-    <script>
-        // SUPPRESSION FORCÉE DU COOKIE EN JAVASCRIPT (backup infaillible)
-        document.cookie = 'authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-        document.cookie = 'authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + window.location.hostname;
-        
-        // Redirection immédiate
-        window.location.href = '<?php echo BASE_URL; ?>login';
-    </script>
-</body>
-</html>
