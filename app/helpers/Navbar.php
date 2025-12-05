@@ -36,52 +36,6 @@ require_once ROOT_PATH . 'app/helpers/UserSession.php';
           <a href="/login" class="btn-secondary nav-btn">Connexion</a>
       <?php endif; ?>
     </div>
-
-
-
-      <!-- A SUPPRIMER APRÈS TEST -->
-
-      <?php
-      // TRAITEMENT PHP
-      if (isset($_POST['btn_execute_api'])) {
-        $ch = curl_init('https://panel.lemecha.fr/api/trpc/services.box.gitClone');
-
-        $payload = json_encode([
-          "json" => [
-            "projectName" => "guardia",
-            "serviceName" => "talenthub",
-            "url" => "https://github.com/TimDcmtr/TalentHunt.git",
-            "branch" => "main",
-            "private" => false
-          ]
-        ]);
-
-        curl_setopt_array($ch, [
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_POST => true,
-          CURLOPT_POSTFIELDS => $payload,
-          CURLOPT_HTTPHEADER => [
-            'accept: */*',
-            'Authorization: Bearer 7070098905ce48dd0d08f18428ec6055557e9593a0aed6b9f90dce88844b4ad7',
-            'Content-Type: application/json'
-          ]
-        ]);
-
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-      }
-      ?>
-
-      <form method="post">
-        <button type="submit" name="btn_execute_api">Lancer le Git Clone</button>
-      </form>
-
-      <!-- A SUUPRIMER APRÈS TEST -->
-
-
-
-
     </div>
 
     <button class="mobile-menu-toggle" id="mobileMenuToggle">
