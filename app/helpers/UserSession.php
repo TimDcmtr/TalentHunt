@@ -16,18 +16,18 @@ if (isset($_COOKIE['authToken'])) {
     // 3. On vérifie le token via la méthode qu'on a créée précédemment
     $userFromToken = $controller->getUserFromToken($_COOKIE['authToken']);
 
-    if ($userFromToken['role'] == 'student') {
+    if (!isset($userFromToken['role']) && $userFromToken['role'] == 'student') {
         // SUCCÈS : Le token est valide
         $currentUser = $userFromToken;
         $isAuthenticated = true;
     }
 }
 
-// Fonction utilitaire pour rediriger si pas connecté (Protection de page)
+// Rediriger si pas connecté
 function requireLogin() {
     global $isAuthenticated;
     if (!$isAuthenticated) {
-        header("Location: /login"); // Ou login.html
+        header("Location: /login");
         exit();
     }
 }
