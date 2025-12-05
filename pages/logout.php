@@ -1,29 +1,42 @@
 <?php
-// Démarrer la session si pas déjà fait
+// Démarrer la session
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Supprimer toutes les variables de session
+// Supprimer TOUTES les variables de session
 $_SESSION = array();
 
-// Supprimer le cookie de session
-if (isset($_COOKIE[session_name()])) {
-    setcookie(session_name(), '', time() - 3600, '/');
+// Détruire le cookie de session
+if (ini_get("session.use_cookies")) {
+    $params = session_get_cookie_params();
+    setcookie(session_name(), '', time() - 42000,
+        $params["path"], $params["domain"],
+        $params["secure"], $params["httponly"]
+    );
 }
 
 // Détruire la session
 session_destroy();
 
-// Supprimer le cookie authToken
-setcookie('authToken', '', time() - 3600, '/');
-setcookie('authToken', '', time() - 3600, '/', $_SERVER['HTTP_HOST'] ?? '');
+// Liste de tous les cookies à supprimer
+$cookiesToDelete = ['authToken', 'companyAuthToken'];
 
-// Supprimer aussi companyAuthToken si applicable
-setcookie('companyAuthToken', '', time() - 3600, '/');
-setcookie('companyAuthToken', '', time() - 3600, '/', $_SERVER['HTTP_HOST'] ?? '');
+// Supprimer avec TOUTES les combinaisons possibles
+foreach ($cookiesToDelete as $cookieName) {
+    // Méthode 1: Path racine
+    setcookie($cookieName, '', time() - 3600, '/');
+    
+    // Méthode 2: Avec domaine
+    if (isset($_SERVER['HTTP_HOST'])) {
+        setcookie($cookieName, '', time() - 3600, '/', $_SERVER['HTTP_HOST']);
+    }
+    
+    // Méthode 3: Sans domaine mais avec sécurité
+    setcookie($cookieName, '', time() - 3600, '/', '', false, true);
+}
 
-// Redirection vers la page d'accueil
+// Redirection
 header('Location: /');
 exit();
 ?>
