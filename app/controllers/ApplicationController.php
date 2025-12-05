@@ -4,7 +4,7 @@ require_once ROOT_PATH . 'app/models/Application.php';
 require_once ROOT_PATH . 'app/models/JobOffer.php';
 require_once ROOT_PATH . 'app/models/Company.php';
 require_once ROOT_PATH . 'app/models/User.php';
-
+MESSAGE = "Données manquantes.";
 class ApplicationController
 {
     private $db;
@@ -33,7 +33,7 @@ class ApplicationController
         if (!isset($data['user_id']) || !isset($data['offre_id'])) {
             http_response_code(400);
             return json_encode([
-                "message" => "Données manquantes.",
+                "message" => MESSAGE,
                 "debug" => $data // Pour voir ce qui manque si besoin
             ]);
         }
@@ -203,7 +203,7 @@ class ApplicationController
     {
         if (!isset($data['application_id']) || !isset($data['user_id'])) {
             http_response_code(400);
-            return json_encode(["message" => "Données manquantes."]);
+            return json_encode(["message" => MESSAGE]);
         }
 
         if ($this->application->delete($data['application_id'], $data['user_id'])) {
@@ -219,7 +219,7 @@ class ApplicationController
     {
         if (!isset($data['application_id']) || !isset($data['company_id']) || !isset($data['status'])) {
             http_response_code(400);
-            return json_encode(["message" => "Données manquantes."]);
+            return json_encode(["message" => MESSAGE]);
         }
 
         if ($this->application->updateStatus($data['application_id'], $data['company_id'], $data['status'])) {
