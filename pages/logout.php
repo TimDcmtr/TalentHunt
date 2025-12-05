@@ -23,7 +23,7 @@ setcookie('authToken', '', time() - 3600, '/', $_SERVER['HTTP_HOST'] ?? '');
 setcookie('companyAuthToken', '', time() - 3600, '/');
 setcookie('companyAuthToken', '', time() - 3600, '/', $_SERVER['HTTP_HOST'] ?? '');
 
-// Redirection immédiate côté serveur
-header('Location: /login');
+// Redirection vers la page d'accueil
+header('Location: /');
 exit();
 ?>
