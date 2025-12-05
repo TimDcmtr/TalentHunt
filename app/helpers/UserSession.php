@@ -16,7 +16,7 @@ if (isset($_COOKIE['authToken'])) {
     // 3. On vérifie le token via la méthode qu'on a créée précédemment
     $userFromToken = $controller->getUserFromToken($_COOKIE['authToken']);
 
-    if (!isset($userFromToken['role']) && $userFromToken['role'] == 'student') {
+    if ($userFromToken && ($userFromToken['role']) && $userFromToken['role'] == 'student') {
         // SUCCÈS : Le token est valide
         $currentUser = $userFromToken;
         $isAuthenticated = true;
